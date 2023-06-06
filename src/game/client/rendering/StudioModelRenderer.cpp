@@ -374,7 +374,7 @@ StudioGetAnim
 
 ====================
 */
-mstudioanim_t* CStudioModelRenderer::StudioGetAnim(model_t* m_pSubModel, mstudioseqdesc_t* pseqdesc)
+mstudioanim_t* CStudioModelRenderer::StudioGetAnim(model_t* subModel, mstudioseqdesc_t* pseqdesc)
 {
 	mstudioseqgroup_t* pseqgroup;
 	cache_user_t* paSequences;
@@ -386,12 +386,12 @@ mstudioanim_t* CStudioModelRenderer::StudioGetAnim(model_t* m_pSubModel, mstudio
 		return (mstudioanim_t*)((byte*)m_pStudioHeader + pseqdesc->animindex);
 	}
 
-	paSequences = (cache_user_t*)m_pSubModel->submodels;
+	paSequences = (cache_user_t*)subModel->submodels;
 
 	if (paSequences == nullptr)
 	{
 		paSequences = (cache_user_t*)IEngineStudio.Mem_Calloc(16, sizeof(cache_user_t)); // UNDONE: leak!
-		m_pSubModel->submodels = (dmodel_t*)paSequences;
+		subModel->submodels = (dmodel_t*)paSequences;
 	}
 
 	if (!IEngineStudio.Cache_Check((cache_user_t*)&(paSequences[pseqdesc->seqgroup])))
@@ -1034,7 +1034,7 @@ StudioMergeBones
 
 ====================
 */
-void CStudioModelRenderer::StudioMergeBones(model_t* m_pSubModel)
+void CStudioModelRenderer::StudioMergeBones(model_t* subModel)
 {
 	int i, j;
 	double f;
@@ -1061,7 +1061,7 @@ void CStudioModelRenderer::StudioMergeBones(model_t* m_pSubModel)
 		// Con_DPrintf("%f %f\n", m_pCurrentEntity->prevframe, f );
 	}
 
-	panim = StudioGetAnim(m_pSubModel, pseqdesc);
+	panim = StudioGetAnim(subModel, pseqdesc);
 	StudioCalcRotations(pos, q, pseqdesc, panim, f);
 
 	pbones = (mstudiobone_t*)((byte*)m_pStudioHeader + m_pStudioHeader->boneindex);

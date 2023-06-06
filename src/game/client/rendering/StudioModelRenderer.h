@@ -33,7 +33,7 @@ public:
 	//
 
 	// Look up animation data for sequence
-	virtual mstudioanim_t* StudioGetAnim(model_t* m_pSubModel, mstudioseqdesc_t* pseqdesc);
+	virtual mstudioanim_t* StudioGetAnim(model_t* subModel, mstudioseqdesc_t* pseqdesc);
 
 	// Interpolate model position and angles and set up matrices
 	virtual void StudioSetUpTransform(bool trivial_accept);
@@ -48,7 +48,7 @@ public:
 	virtual void StudioSaveBones();
 
 	// Merge cached bones with current bones for model
-	virtual void StudioMergeBones(model_t* m_pSubModel);
+	virtual void StudioMergeBones(model_t* subModel);
 
 	// Determine interpolation fraction
 	virtual float StudioEstimateInterpolant();

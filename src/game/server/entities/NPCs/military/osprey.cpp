@@ -394,16 +394,16 @@ void COsprey::Flight()
 
 	// float flSpeed = DotProduct( gpGlobals->v_forward, pev->velocity );
 
-	float m_flIdealtilt = (160 - flSpeed) / 10.0;
+	float idealtilt = (160 - flSpeed) / 10.0;
 
 	// AILogger->debug("{} {}", flSpeed, flIdealtilt);
-	if (m_flRotortilt < m_flIdealtilt)
+	if (m_flRotortilt < idealtilt)
 	{
 		m_flRotortilt += 0.5;
 		if (m_flRotortilt > 0)
 			m_flRotortilt = 0;
 	}
-	if (m_flRotortilt > m_flIdealtilt)
+	if (m_flRotortilt > idealtilt)
 	{
 		m_flRotortilt -= 0.5;
 		if (m_flRotortilt < -90)

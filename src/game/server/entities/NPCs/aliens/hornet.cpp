@@ -89,10 +89,6 @@ void CHornet::Spawn()
 	SetTouch(&CHornet::DieTouch);
 	SetThink(&CHornet::StartTrack);
 
-	CBaseEntity* pSoundEnt = GetOwner();
-	if (!pSoundEnt)
-		pSoundEnt = this;
-
 	if (!FNullEnt(pev->owner) && (pev->owner->v.flags & FL_CLIENT) != 0)
 	{
 		pev->dmg = GetSkillFloat("plr_hornet_dmg"sv);

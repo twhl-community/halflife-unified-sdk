@@ -24,7 +24,7 @@
 extern Vector vJumpOrigin;
 extern Vector vJumpAngles;
 
-void V_DropPunchAngle(float frametime, Vector& ev_punchangle);
+void V_DropPunchAngle(float frametime, Vector& punchangle);
 
 #include "r_studioint.h"
 #include "com_model.h"
@@ -474,7 +474,6 @@ V_CalcRefdef
 void V_CalcNormalRefdef(ref_params_t* pparams)
 {
 	cl_entity_t *ent, *view;
-	int i;
 	Vector angles;
 	float bob, waterOffset;
 	static viewinterp_t ViewInterp;
@@ -529,7 +528,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 	waterOffset = 0;
 	if (pparams->waterlevel >= WaterLevel::Waist)
 	{
-		int i, contents, waterDist, waterEntity;
+		int contents, waterDist, waterEntity;
 		Vector point;
 		waterDist = cl_waterdist->value;
 
@@ -556,7 +555,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 		if (pparams->waterlevel == WaterLevel::Waist)
 		{
 			point[2] -= waterDist;
-			for (i = 0; i < waterDist; i++)
+			for (int i = 0; i < waterDist; i++)
 			{
 				contents = gEngfuncs.PM_PointContents(point, nullptr);
 				if (contents > CONTENTS_WATER)
@@ -570,7 +569,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 			// eyes are under water.  Make sure we're far enough under
 			point[2] += waterDist;
 
-			for (i = 0; i < waterDist; i++)
+			for (int i = 0; i < waterDist; i++)
 			{
 				contents = gEngfuncs.PM_PointContents(point, nullptr);
 				if (contents <= CONTENTS_WATER)
@@ -595,7 +594,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 	// don't allow cheats in multiplayer
 	if (pparams->maxclients <= 1)
 	{
-		for (i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			pparams->vieworg[i] += scr_ofsx->value * pparams->forward[i] + scr_ofsy->value * pparams->right[i] + scr_ofsz->value * pparams->up[i];
 		}
@@ -613,7 +612,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 
 		AngleVectors(camAngles, camForward, camRight, camUp);
 
-		for (i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 		{
 			pparams->vieworg[i] += -ofs[2] * camForward[i];
 		}
@@ -633,7 +632,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 	// Let the viewmodel shake at about 10% of the amplitude
 	gEngfuncs.V_ApplyShake(view->origin, view->angles, 0.9);
 
-	for (i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		view->origin[i] += bob * 0.4 * pparams->forward[i];
 	}
@@ -727,7 +726,6 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 		(0 != pparams->smoothing && (pparams->maxclients > 1)))
 	{
 		int foundidx;
-		int i;
 		float t;
 
 		if (cl_vsmoothing->value < 0.0)
@@ -737,6 +735,7 @@ void V_CalcNormalRefdef(ref_params_t* pparams)
 
 		t = pparams->time - cl_vsmoothing->value;
 
+		int i;
 		for (i = 1; i < ORIGIN_MASK; i++)
 		{
 			foundidx = ViewInterp.CurrentOrigin - 1 - i;
@@ -1661,14 +1660,14 @@ V_DropPunchAngle
 
 =============
 */
-void V_DropPunchAngle(float frametime, Vector& ev_punchangle)
+void V_DropPunchAngle(float frametime, Vector& punchangle)
 {
 	float len;
 
-	len = VectorNormalize(ev_punchangle);
+	len = VectorNormalize(punchangle);
 	len -= (10.0 + len * 0.5) * frametime;
 	len = std::max(len, 0.0f);
-	ev_punchangle = ev_punchangle * len;
+	punchangle = punchangle * len;
 }
 
 /*

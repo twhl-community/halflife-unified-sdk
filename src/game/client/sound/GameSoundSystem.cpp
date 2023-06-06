@@ -509,9 +509,9 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, BufferReader& reade
 			return;
 		}
 
-		const SoundIndex soundIndex = m_PrecacheMap[absoluteSoundIndex];
+		const SoundIndex actualSoundIndex = m_PrecacheMap[absoluteSoundIndex];
 
-		const auto sound = m_SoundCache->GetSound(soundIndex);
+		const auto sound = m_SoundCache->GetSound(actualSoundIndex);
 
 		assert(sound);
 

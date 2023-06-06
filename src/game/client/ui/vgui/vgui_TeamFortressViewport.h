@@ -181,6 +181,11 @@ public:
 	bool m_bNoHighlight;
 
 public:
+	/**
+	 *	@brief special no bound to avoid leading spaces in name
+	 */
+	static constexpr char UnboundKey = static_cast<char>(255);
+
 	CommandButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight, bool bFlat);
 	// Constructors
 	CommandButton(const char* text, int x, int y, int wide, int tall, bool bNoHighlight = false);

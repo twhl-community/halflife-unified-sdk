@@ -156,7 +156,7 @@ void Con_SetPrintBufferingEnabled(bool enabled)
 
 				const std::size_t actualEndIndex = endIndex != std::string::npos ? endIndex : g_PrintBuffer.size();
 
-				const std::size_t count = actualEndIndex - startIndex;
+				// const std::size_t count = actualEndIndex - startIndex;
 
 				g_PrintBuffer[actualEndIndex] = '\0';
 

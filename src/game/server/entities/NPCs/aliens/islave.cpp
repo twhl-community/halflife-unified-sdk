@@ -427,6 +427,7 @@ bool CISlave::CheckRangeAttack2(float flDot, float flDist)
 {
 	return false;
 
+	/*
 	if (m_flNextAttack > gpGlobals->time)
 	{
 		return false;
@@ -463,6 +464,7 @@ bool CISlave::CheckRangeAttack2(float flDot, float flDist)
 		return true;
 	else
 		return false;
+	*/
 }
 
 void CISlave::StartTask(const Task_t* pTask)

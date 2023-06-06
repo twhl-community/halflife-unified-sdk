@@ -250,7 +250,7 @@ std::optional<std::vector<std::uint8_t>> NetworkDataSystem::TryLoadDataFromFile(
 	std::vector<std::uint8_t> fileData;
 	fileData.resize(sizeInBytes);
 
-	if (file.Read(fileData.data(), fileData.size()) != fileData.size())
+	if (static_cast<std::size_t>(file.Read(fileData.data(), fileData.size())) != fileData.size())
 	{
 		m_Logger->error("Error loading network data: read error");
 		return {};

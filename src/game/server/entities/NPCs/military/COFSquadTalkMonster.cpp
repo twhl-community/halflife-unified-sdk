@@ -598,7 +598,7 @@ COFSquadTalkMonster* COFSquadTalkMonster::MySquadMedic()
 
 COFSquadTalkMonster* COFSquadTalkMonster::FindSquadMedic(int searchRadius)
 {
-	for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius));)
+	for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius)) != nullptr;)
 	{
 		auto pMonster = pEntity->MySquadTalkMonsterPointer();
 

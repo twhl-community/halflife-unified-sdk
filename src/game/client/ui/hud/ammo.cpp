@@ -1043,8 +1043,6 @@ bool CHudAmmo::Draw(float flTime)
 	if (!m_pWeapon)
 		return false;
 
-	WEAPON* pw = m_pWeapon; // shorthand
-
 	// SPR_Draw Ammo
 	if (!m_pWeapon->AmmoTypes[0] && !m_pWeapon->AmmoTypes[1])
 		return false;

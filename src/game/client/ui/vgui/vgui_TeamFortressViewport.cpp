@@ -1301,7 +1301,7 @@ void TeamFortressViewport::UpdatePlayerMenu(int menuIndex)
 		SpectButton* pButton = new SpectButton(1, g_PlayerInfoList[pEnt->index].name,
 			XRES((15 + OPTIONS_BUTTON_X + 15) + 31), PANEL_HEIGHT + (i - 1) * CMENU_SIZE_X, flLabelSize, BUTTON_SIZE_Y / 2);
 
-		pButton->setBoundKey((char)255);
+		pButton->setBoundKey(CommandButton::UnboundKey);
 		pButton->setContentAlignment(vgui::Label::a_center);
 		m_pCommandMenus[menuIndex]->AddButton(pButton);
 		pButton->setParentMenu(m_pCommandMenus[menuIndex]);

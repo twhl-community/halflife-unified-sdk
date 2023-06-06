@@ -677,7 +677,7 @@ void CFuncTank::TrackTarget()
 	CBasePlayer* pPlayer = UTIL_FindClientInPVS(this);
 	bool updateTime = false, lineOfSight;
 	Vector angles, direction, targetPosition, barrelEnd;
-	CBaseEntity* pTarget;
+	CBaseEntity* pTarget = nullptr;
 
 	// Get a position to aim for
 	if (m_pController)
@@ -702,11 +702,9 @@ void CFuncTank::TrackTarget()
 		}
 
 		// Keep tracking the same target
-		if (m_hEnemy && m_hEnemy->IsAlive())
-		{
-			pTarget = m_hEnemy;
-		}
-		else
+		pTarget = m_hEnemy;
+
+		if (!pTarget || !pTarget->IsAlive())
 		{
 			pTarget = FindTarget(pPlayer);
 			if (!pTarget)

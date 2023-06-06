@@ -255,8 +255,6 @@ bool CGraph::HandleLinkEnt(int iNode, entvars_t* pevLinkEnt, int afCapMask, NODE
 		Logger->trace("Unhandled Ent in Path {}", entity->GetClassname());
 		return false;
 	}
-
-	return false;
 }
 
 #if 0
@@ -620,6 +618,7 @@ int CGraph::FindShortestPath(int* piPath, int iStart, int iDest, int iHull, int 
 
 		switch (iHull)
 		{
+		default:
 		case NODE_SMALL_HULL:
 			iHullMask = bits_LINK_SMALL_HULL;
 			break;
@@ -845,8 +844,6 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, CBaseEntity* pEntity)
 
 int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 {
-	int i;
-
 	if (0 == m_fGraphPresent || 0 == m_fGraphPointersSet)
 	{ // protect us in the case that the node graph isn't available
 		Logger->error("Graph not ready!");
@@ -915,7 +912,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 
 	int j;
 
-	for (i = halfX; i >= m_minX; i--)
+	for (int i = halfX; i >= m_minX; i--)
 	{
 		for (j = m_RangeStart[0][i]; j <= m_RangeEnd[0][i]; j++)
 		{
@@ -937,7 +934,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = std::max(m_minY, halfY + 1); i <= m_maxY; i++)
+	for (int i = std::max(m_minY, halfY + 1); i <= m_maxY; i++)
 	{
 		for (j = m_RangeStart[1][i]; j <= m_RangeEnd[1][i]; j++)
 		{
@@ -958,7 +955,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = std::min(m_maxZ, halfZ); i >= m_minZ; i--)
+	for (int i = std::min(m_maxZ, halfZ); i >= m_minZ; i--)
 	{
 		for (j = m_RangeStart[2][i]; j <= m_RangeEnd[2][i]; j++)
 		{
@@ -979,7 +976,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = std::max(m_minX, halfX + 1); i <= m_maxX; i++)
+	for (int i = std::max(m_minX, halfX + 1); i <= m_maxX; i++)
 	{
 		for (j = m_RangeStart[0][i]; j <= m_RangeEnd[0][i]; j++)
 		{
@@ -1001,7 +998,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = std::min(m_maxY, halfY); i >= m_minY; i--)
+	for (int i = std::min(m_maxY, halfY); i >= m_minY; i--)
 	{
 		for (j = m_RangeStart[1][i]; j <= m_RangeEnd[1][i]; j++)
 		{
@@ -1022,7 +1019,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 		}
 	}
 
-	for (i = std::max(m_minZ, halfZ + 1); i <= m_maxZ; i++)
+	for (int i = std::max(m_minZ, halfZ + 1); i <= m_maxZ; i++)
 	{
 		for (j = m_RangeStart[2][i]; j <= m_RangeEnd[2][i]; j++)
 		{
@@ -1049,7 +1046,7 @@ int CGraph::FindNearestNode(const Vector& vecOrigin, int afNodeTypes)
 	int iNearestCheck = -1;
 	m_flShortest = 8192;// find nodes within this radius
 
-	for (i = 0; i < m_cNodes; i++)
+	for (int i = 0; i < m_cNodes; i++)
 	{
 		float flDist = (vecOrigin - m_pNodes[i].m_vecOriginPeek).Length();
 
@@ -2907,7 +2904,7 @@ void CGraph::BuildRegionTables()
 			int jCode;
 			switch (i)
 			{
-			case 0:
+			default:
 				jCode = (jCodeX << 16) + (jCodeY << 8) + jCodeZ;
 				break;
 			case 1:
@@ -2927,7 +2924,7 @@ void CGraph::BuildRegionTables()
 				int kCode;
 				switch (i)
 				{
-				case 0:
+				default:
 					kCode = (kCodeX << 16) + (kCodeY << 8) + kCodeZ;
 					break;
 				case 1:
@@ -3010,7 +3007,7 @@ void CGraph::ComputeStaticRoutingTables()
 				int iCapMask;
 				switch (iCap)
 				{
-				case 0:
+				default:
 					iCapMask = 0;
 					break;
 
@@ -3309,7 +3306,7 @@ void CGraph::TestRoutingTables()
 				int iCapMask;
 				switch (iCap)
 				{
-				case 0:
+				default:
 					iCapMask = 0;
 					break;
 

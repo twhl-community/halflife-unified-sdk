@@ -78,7 +78,7 @@ bool CHudDebugInfo::Draw(float flTime)
 		const auto levelName = gEngfuncs.pfnGetLevelName();
 		const auto localPlayer = gEngfuncs.GetLocalPlayer();
 
-		if (const auto levelName = gEngfuncs.pfnGetLevelName(); levelName && '\0' != levelName[0] && localPlayer)
+		if (levelName && '\0' != levelName[0] && localPlayer)
 		{
 			lineDrawer(fmt::format("Renderer: {}", GetRendererName()));
 

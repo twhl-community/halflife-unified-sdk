@@ -220,13 +220,15 @@ void DisplayTeamFlags(CBasePlayer* pPlayer)
 
 	CTFGoalFlag* team1Flag = nullptr;
 
-	while ((team1Flag = static_cast<CTFGoalFlag*>(UTIL_FindEntityByClassname(team1Flag, "item_ctfflag"))) && team1Flag->m_iGoalNum != 1)
+	while ((team1Flag = static_cast<CTFGoalFlag*>(UTIL_FindEntityByClassname(team1Flag, "item_ctfflag"))) != nullptr &&
+		   team1Flag->m_iGoalNum != 1)
 	{
 	}
 
 	CTFGoalFlag* team2Flag = nullptr;
 
-	while ((team2Flag = static_cast<CTFGoalFlag*>(UTIL_FindEntityByClassname(team2Flag, "item_ctfflag"))) && team2Flag->m_iGoalNum != 2)
+	while ((team2Flag = static_cast<CTFGoalFlag*>(UTIL_FindEntityByClassname(team2Flag, "item_ctfflag"))) != nullptr &&
+		   team2Flag->m_iGoalNum != 2)
 	{
 	}
 
@@ -319,7 +321,7 @@ static void ForEachPlayerCTFPowerup(CBasePlayer* pPlayer, ItemCallback callback)
 	{
 		if (item.RespawnOrScatter && (pPlayer->m_iItems & item.Mask))
 		{
-			for (CItemCTF* pItem = nullptr; (pItem = static_cast<CItemCTF*>(UTIL_FindEntityByClassname(pItem, item.Name)));)
+			for (CItemCTF* pItem = nullptr; (pItem = static_cast<CItemCTF*>(UTIL_FindEntityByClassname(pItem, item.Name))) != nullptr;)
 			{
 				if (pItem->team_no == CTFTeam::None || pItem->team_no == pPlayer->m_iTeamNum)
 				{

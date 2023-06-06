@@ -130,7 +130,7 @@ int SentencesSystem::GetGroupIndex(CBaseEntity* entity, const char* szgroupname)
 
 	for (const auto& group : m_SentenceGroups)
 	{
-		if (szgroupname == m_SentenceGroups[i].GroupName)
+		if (szgroupname == group.GroupName)
 			return i;
 		++i;
 	}

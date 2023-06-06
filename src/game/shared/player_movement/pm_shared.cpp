@@ -1888,8 +1888,8 @@ void PM_Duck()
 	int buttonsChanged = (pmove->oldbuttons ^ pmove->cmd.buttons); // These buttons have changed this frame
 	int nButtonPressed = buttonsChanged & pmove->cmd.buttons;	   // The changed ones still down are "pressed"
 
-	bool duckchange = (buttonsChanged & IN_DUCK) != 0;
-	bool duckpressed = (nButtonPressed & IN_DUCK) != 0;
+	// const bool duckchange = (buttonsChanged & IN_DUCK) != 0;
+	// const bool duckpressed = (nButtonPressed & IN_DUCK) != 0;
 
 	if ((pmove->cmd.buttons & IN_DUCK) != 0)
 	{

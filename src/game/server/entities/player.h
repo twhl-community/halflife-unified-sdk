@@ -796,6 +796,11 @@ inline CPlayerEnumeratorWithStart UTIL_FindPlayers(CBasePlayer* pStartEntity)
 }
 
 /**
+ *	@brief Find a player with a case-insensitive name search.
+ */
+CBasePlayer* FindPlayerByName(const char* name);
+
+/**
  *	@brief Tag type to log player info in the form <tt>\"netname<userid><steamid><teamname>\"</tt>.
  */
 struct PlayerLogInfo

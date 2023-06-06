@@ -60,7 +60,7 @@
 
 extern engine_studio_api_t IEngineStudio;
 
-static int tracerCount[MAX_PLAYERS];
+static int g_tracerCount[MAX_PLAYERS];
 
 #include "pm_shared.h"
 
@@ -496,7 +496,7 @@ void EV_FireGlock1(event_args_t* args)
 
 	vecAiming = forward;
 
-	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
 
 void EV_FireGlock2(event_args_t* args)
@@ -541,7 +541,7 @@ void EV_FireGlock2(event_args_t* args)
 
 	vecAiming = forward;
 
-	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
 //======================
 //	   GLOCK END
@@ -596,12 +596,12 @@ void EV_FireShotGunDouble(event_args_t* args)
 	if (g_Skill.GetValue("shotgun_double_wide_spread") != 0)
 	{
 		EV_HLDM_FireBullets(idx, forward, right, up, 8, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0,
-			&tracerCount[idx - 1], VECTOR_CONE_DM_DOUBLESHOTGUN.x, VECTOR_CONE_DM_DOUBLESHOTGUN.y);
+			&g_tracerCount[idx - 1], VECTOR_CONE_DM_DOUBLESHOTGUN.x, VECTOR_CONE_DM_DOUBLESHOTGUN.y);
 	}
 	else
 	{
 		EV_HLDM_FireBullets(idx, forward, right, up, 12, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0,
-			&tracerCount[idx - 1], VECTOR_CONE_10DEGREES.x, VECTOR_CONE_10DEGREES.y);
+			&g_tracerCount[idx - 1], VECTOR_CONE_10DEGREES.x, VECTOR_CONE_10DEGREES.y);
 	}
 }
 
@@ -648,12 +648,12 @@ void EV_FireShotGunSingle(event_args_t* args)
 	if (g_Skill.GetValue("shotgun_single_tight_spread") != 0)
 	{
 		EV_HLDM_FireBullets(idx, forward, right, up, 4, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0,
-			&tracerCount[idx - 1], VECTOR_CONE_DM_SHOTGUN.x, VECTOR_CONE_DM_SHOTGUN.y);
+			&g_tracerCount[idx - 1], VECTOR_CONE_DM_SHOTGUN.x, VECTOR_CONE_DM_SHOTGUN.y);
 	}
 	else
 	{
 		EV_HLDM_FireBullets(idx, forward, right, up, 6, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0,
-			&tracerCount[idx - 1], VECTOR_CONE_10DEGREES.x, VECTOR_CONE_10DEGREES.y);
+			&g_tracerCount[idx - 1], VECTOR_CONE_10DEGREES.x, VECTOR_CONE_10DEGREES.y);
 	}
 }
 //======================
@@ -711,7 +711,7 @@ void EV_FireMP5(event_args_t* args)
 	EV_GetGunPosition(args, vecSrc, origin);
 	vecAiming = forward;
 
-	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
 
 // We only predict the animation and sound
@@ -792,7 +792,7 @@ void EV_FirePython(event_args_t* args)
 
 	vecAiming = forward;
 
-	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_357, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_357, 0, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
 //======================
 //	    PHYTON END
@@ -1028,22 +1028,19 @@ void EV_FireGauss(event_args_t* args)
 
 					if (0 == beam_tr.allsolid)
 					{
-						Vector delta;
-						float n;
-
 						// trace backwards to find exit point
 
 						gEngfuncs.pEventAPI->EV_PlayerTrace(beam_tr.endpos, tr.endpos, PM_STUDIO_BOX, -1, &beam_tr);
 
-						delta = beam_tr.endpos - tr.endpos;
+						const Vector delta = beam_tr.endpos - tr.endpos;
 
-						n = delta.Length();
+						float deltaLength = delta.Length();
 
-						if (n < flDamage)
+						if (deltaLength < flDamage)
 						{
-							if (n == 0)
-								n = 1;
-							flDamage -= n;
+							if (deltaLength == 0)
+								deltaLength = 1;
+							flDamage -= deltaLength;
 
 							// absorption balls
 							{

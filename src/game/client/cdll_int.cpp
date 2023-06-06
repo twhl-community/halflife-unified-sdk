@@ -70,7 +70,7 @@ HUD_ConnectionlessPacket
 int DLLEXPORT HUD_ConnectionlessPacket(const netadr_t* net_from, const char* args, char* response_buffer, int* response_buffer_size)
 {
 	// Parse stuff from args
-	int max_buffer_size = *response_buffer_size;
+	// int max_buffer_size = *response_buffer_size;
 
 	// Zero it out since we aren't going to respond.
 	// If we wanted to response, we'd write data into response_buffer

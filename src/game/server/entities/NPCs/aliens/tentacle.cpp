@@ -638,7 +638,7 @@ void CTentacle::Cycle()
 
 					switch (RANDOM_LONG(0, 1))
 					{
-					case 0:
+					default:
 						sound = "tentacle/te_sing1.wav";
 						break;
 					case 1:

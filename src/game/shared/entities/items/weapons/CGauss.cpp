@@ -424,15 +424,15 @@ void CGauss::Fire(Vector vecOrigSrc, Vector vecDir, float flDamage)
 						// trace backwards to find exit point
 						UTIL_TraceLine(beam_tr.vecEndPos, tr.vecEndPos, dont_ignore_monsters, pentIgnore, &beam_tr);
 
-						float n = (beam_tr.vecEndPos - tr.vecEndPos).Length();
+						float deltaLength = (beam_tr.vecEndPos - tr.vecEndPos).Length();
 
-						if (n < flDamage)
+						if (deltaLength < flDamage)
 						{
-							if (n == 0)
-								n = 1;
-							flDamage -= n;
+							if (deltaLength == 0)
+								deltaLength = 1;
+							flDamage -= deltaLength;
 
-							// WeaponsLogger->debug("punch {}", n);
+							// WeaponsLogger->debug("punch {}", deltaLength);
 							nTotal += 21;
 
 							// exit blast damage
@@ -526,7 +526,7 @@ void CGauss::WeaponIdle()
 		}
 
 		return;
-		SendWeaponAnim(iAnim);
+		// SendWeaponAnim(iAnim);
 	}
 }
 

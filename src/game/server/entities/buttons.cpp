@@ -181,10 +181,10 @@ void CMultiSource::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE u
 	if (IsTriggered(pActivator))
 	{
 		IOLogger->trace("Multisource {} enabled ({} inputs)", STRING(pev->targetname), m_iTotal);
-		USE_TYPE useType = USE_TOGGLE;
+		USE_TYPE targetUseType = USE_TOGGLE;
 		if (!FStringNull(m_globalstate))
-			useType = USE_ON;
-		SUB_UseTargets(nullptr, useType, 0);
+			targetUseType = USE_ON;
+		SUB_UseTargets(nullptr, targetUseType, 0);
 	}
 }
 

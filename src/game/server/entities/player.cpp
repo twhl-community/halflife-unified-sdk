@@ -3359,9 +3359,6 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		return;
 	}
 
-	CBaseEntity* pEntity;
-	TraceResult tr;
-
 	switch (iImpulse)
 	{
 	case 76:
@@ -3415,8 +3412,9 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		break;
 
 	case 103:
+	{
 		// What the hell are you doing?
-		pEntity = UTIL_FindEntityForward(this);
+		CBaseEntity* pEntity = UTIL_FindEntityForward(this);
 		if (pEntity)
 		{
 			CBaseMonster* pMonster = pEntity->MyMonsterPointer();
@@ -3424,6 +3422,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 				pMonster->ReportAIState();
 		}
 		break;
+	}
 
 	case 104:
 		// Dump all of the global state varaibles (and global entity names)
@@ -3446,8 +3445,9 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	}
 
 	case 106:
+	{
 		// Give me the classname and targetname of this entity.
-		pEntity = UTIL_FindEntityForward(this);
+		CBaseEntity* pEntity = UTIL_FindEntityForward(this);
 		if (pEntity)
 		{
 			Con_DPrintf("Classname: %s", pEntity->GetClassname());
@@ -3466,6 +3466,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 				Con_DPrintf("Globalname: %s\n", pEntity->GetGlobalname());
 		}
 		break;
+	}
 
 	case 107:
 	{
@@ -3505,7 +3506,10 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	}
 	break;
 	case 202: // Random blood splatter
+	{
 		UTIL_MakeVectors(pev->v_angle);
+
+		TraceResult tr;
 		UTIL_TraceLine(pev->origin + pev->view_ofs, pev->origin + pev->view_ofs + gpGlobals->v_forward * 128, ignore_monsters, edict(), &tr);
 
 		if (tr.flFraction != 1.0)
@@ -3514,14 +3518,17 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 			pBlood->Spawn(this);
 		}
 		break;
+	}
 	case 203: // remove creature.
-		pEntity = UTIL_FindEntityForward(this);
+	{
+		CBaseEntity* pEntity = UTIL_FindEntityForward(this);
 		if (pEntity)
 		{
 			if (0 != pEntity->pev->takedamage)
 				pEntity->SetThink(&CBaseEntity::SUB_Remove);
 		}
 		break;
+	}
 	}
 }
 
@@ -4249,7 +4256,7 @@ Vector CBasePlayer::GetAutoaimVectorFromPoint(const Vector& vecSrc, float flDelt
 
 	// always use non-sticky autoaim
 	// UNDONE: use sever variable to chose!
-	if (true || g_Skill.GetSkillLevel() == SkillLevel::Medium)
+	if (true /*|| g_Skill.GetSkillLevel() == SkillLevel::Medium*/)
 	{
 		m_vecAutoAim = Vector(0, 0, 0);
 		// flDelta *= 0.5;
@@ -5034,6 +5041,24 @@ void CBasePlayer::ToggleCheat(Cheat cheat)
 	default:
 		UTIL_ConsolePrint(this, "Bogus cheat value!\n");
 	}
+}
+
+CBasePlayer* FindPlayerByName(const char* name)
+{
+	for (int i = 1; i <= gpGlobals->maxClients; i++)
+	{
+		CBasePlayer* pEnt = UTIL_PlayerByIndex(i);
+		if (pEnt)
+		{
+			const char* pNetName = STRING(pEnt->pev->netname);
+			if (stricmp(pNetName, name) == 0)
+			{
+				return pEnt;
+			}
+		}
+	}
+
+	return nullptr;
 }
 
 class CDeadHEV : public CBaseMonster

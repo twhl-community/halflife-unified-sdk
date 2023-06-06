@@ -101,7 +101,7 @@ void CommandButton::RecalculateText()
 
 	if (m_cBoundKey != 0)
 	{
-		if (m_cBoundKey == (char)255)
+		if (m_cBoundKey == UnboundKey)
 		{
 			strcpy(szBuf, m_sMainText);
 		}

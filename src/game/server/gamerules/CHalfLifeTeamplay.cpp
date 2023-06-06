@@ -33,10 +33,10 @@ CHalfLifeTeamplay::CHalfLifeTeamplay()
 
 	m_MenuSelectCommand = g_ClientCommands.CreateScoped("menuselect", [](CBasePlayer* player, const auto& args)
 		{
-			if (CMD_ARGC() < 2)
+			if (args.Count() < 2)
 				return;
 
-			int slot = atoi(CMD_ARGV(1));
+			// int slot = atoi(args.Argument(1));
 
 			// select the item from the current menu
 		});
@@ -476,15 +476,15 @@ const char* CHalfLifeTeamplay::TeamWithFewestPlayers()
 
 void CHalfLifeTeamplay::RecountTeams(bool bResendInfo)
 {
-	char teamlist[TEAMPLAY_TEAMLISTLENGTH];
+	char newTeamList[TEAMPLAY_TEAMLISTLENGTH];
 
 	// loop through all teams, recounting everything
 	num_teams = 0;
 
 	// Copy all of the teams from the teamlist
 	// make a copy because strtok is destructive
-	strcpy(teamlist, m_szTeamList);
-	char* pName = teamlist;
+	strcpy(newTeamList, m_szTeamList);
+	char* pName = newTeamList;
 	pName = strtok(pName, ";");
 	while (pName != nullptr && '\0' != *pName)
 	{

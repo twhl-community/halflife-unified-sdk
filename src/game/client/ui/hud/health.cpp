@@ -359,8 +359,6 @@ bool CHudHealth::DrawPain(float flTime)
 
 bool CHudHealth::DrawDamage(float flTime)
 {
-	DAMAGE_IMAGE* pdmg;
-
 	if (0 == m_bitsDamage)
 		return true;
 
@@ -369,12 +367,11 @@ bool CHudHealth::DrawDamage(float flTime)
 	const auto color = gHUD.m_HudColor.Scale(a);
 
 	// Draw all the items
-	int i;
-	for (i = 0; i < NUM_DMG_TYPES; i++)
+	for (int i = 0; i < NUM_DMG_TYPES; i++)
 	{
 		if ((m_bitsDamage & g_DamageTypes[i].TypeFlags) != 0)
 		{
-			pdmg = &m_dmg[i];
+			DAMAGE_IMAGE* pdmg = &m_dmg[i];
 			SPR_Set(gHUD.GetSprite(pdmg->SpriteIndex), color);
 			SPR_DrawAdditive(0, pdmg->x, pdmg->y, &gHUD.GetSpriteRect(pdmg->SpriteIndex));
 		}
@@ -382,7 +379,7 @@ bool CHudHealth::DrawDamage(float flTime)
 
 
 	// check for bits that should be expired
-	for (i = 0; i < NUM_DMG_TYPES; i++)
+	for (int i = 0; i < NUM_DMG_TYPES; i++)
 	{
 		DAMAGE_IMAGE* pdmg = &m_dmg[i];
 

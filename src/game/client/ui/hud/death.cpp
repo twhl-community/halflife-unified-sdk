@@ -68,8 +68,6 @@ Vector* GetClientColor(int clientIndex)
 	default:
 		return &g_ColorGrey;
 	}
-
-	return nullptr;
 }
 
 bool CHudDeathNotice::Init()

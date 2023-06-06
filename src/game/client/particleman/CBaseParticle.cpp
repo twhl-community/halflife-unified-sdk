@@ -413,7 +413,7 @@ void CBaseParticle::CheckCollision(float time)
 
 		m_vOrigin = m_vPrevOrigin + m_vVelocity * (trace.fraction * frametime);
 
-		float bounce;
+		float bounce = 0;
 
 		bool dead = false;
 

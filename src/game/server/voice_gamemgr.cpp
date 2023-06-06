@@ -31,29 +31,6 @@ CPlayerBitVec g_bWantModEnable;
 cvar_t sv_alltalk = {"sv_alltalk", "0", FCVAR_SERVER};
 
 // ------------------------------------------------------------------------ //
-// Static helpers.
-// ------------------------------------------------------------------------ //
-
-// Find a player with a case-insensitive name search.
-static CBasePlayer* FindPlayerByName(const char* pTestName)
-{
-	for (int i = 1; i <= gpGlobals->maxClients; i++)
-	{
-		CBasePlayer* pEnt = UTIL_PlayerByIndex(i);
-		if (pEnt)
-		{
-			const char* pNetName = STRING(pEnt->pev->netname);
-			if (stricmp(pNetName, pTestName) == 0)
-			{
-				return pEnt;
-			}
-		}
-	}
-
-	return nullptr;
-}
-
-// ------------------------------------------------------------------------ //
 // CVoiceGameMgr.
 // ------------------------------------------------------------------------ //
 

@@ -65,16 +65,18 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 	// color schemes
 	int r, g, b, a;
 
-	// Create the title
-	Label* pLabel = new Label("", CLASSMENU_TITLE_X, CLASSMENU_TITLE_Y);
-	pLabel->setParent(this);
-	pLabel->setFont(pSchemes->getFont(hTitleScheme));
-	pSchemes->getFgColor(hTitleScheme, r, g, b, a);
-	pLabel->setFgColor(r, g, b, a);
-	pSchemes->getBgColor(hTitleScheme, r, g, b, a);
-	pLabel->setBgColor(r, g, b, a);
-	pLabel->setContentAlignment(vgui::Label::a_west);
-	pLabel->setText(gHUD.m_TextMessage.BufferedLocaliseTextString("#CTFTitle_SelectYourCharacter"));
+	{
+		// Create the title
+		Label* pLabel = new Label("", CLASSMENU_TITLE_X, CLASSMENU_TITLE_Y);
+		pLabel->setParent(this);
+		pLabel->setFont(pSchemes->getFont(hTitleScheme));
+		pSchemes->getFgColor(hTitleScheme, r, g, b, a);
+		pLabel->setFgColor(r, g, b, a);
+		pSchemes->getBgColor(hTitleScheme, r, g, b, a);
+		pLabel->setBgColor(r, g, b, a);
+		pLabel->setContentAlignment(vgui::Label::a_west);
+		pLabel->setText(gHUD.m_TextMessage.BufferedLocaliseTextString("#CTFTitle_SelectYourCharacter"));
+	}
 
 	// Create the Scroll panel
 	m_pScrollPanel = new CTFScrollPanel(CLASSMENU_WINDOW_X, CLASSMENU_WINDOW_Y, CLASSMENU_WINDOW_SIZE_X, CLASSMENU_WINDOW_SIZE_Y);
@@ -173,14 +175,14 @@ CClassMenuPanel::CClassMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 			pTextWindow->setBgColor(r, g, b, a);
 
 			// Resize the Info panel to fit it all
-			int wide, tall;
-			pTextWindow->getTextImage()->getTextSizeWrapped(wide, tall);
-			pTextWindow->setSize(wide, tall);
+			int textWide, textTall;
+			pTextWindow->getTextImage()->getTextSizeWrapped(textWide, textTall);
+			pTextWindow->setSize(textWide, textTall);
 
 			int xx, yy;
 			pTextWindow->getPos(xx, yy);
-			int maxX = xx + wide;
-			int maxY = yy + tall;
+			int maxX = xx + textWide;
+			int maxY = yy + textTall;
 
 			// check to see if the image goes lower than the text
 			// just use the red teams [0] images

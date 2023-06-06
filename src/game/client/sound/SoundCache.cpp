@@ -202,7 +202,7 @@ std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(const std::
 
 	data.resize(size);
 
-	if (fread(data.data(), 1, size, file.get()) != size)
+	if (fread(data.data(), 1, size, file.get()) != static_cast<std::size_t>(size))
 	{
 		m_Logger->error("Error reading file \"{}\"", fileName);
 		return {};

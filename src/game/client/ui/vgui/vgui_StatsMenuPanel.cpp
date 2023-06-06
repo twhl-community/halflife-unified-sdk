@@ -123,7 +123,7 @@ CStatsMenuPanel::CStatsMenuPanel(int iTrans, bool iRemoveMe, int x, int y, int w
 
 	// schemes
 	SchemeHandle_t hTitleScheme = pSchemes->getSchemeHandle("Title Font");
-	SchemeHandle_t hClassWindowText = pSchemes->getSchemeHandle("Briefing Text");
+	// SchemeHandle_t hClassWindowText = pSchemes->getSchemeHandle("Briefing Text");
 	SchemeHandle_t hStatsWindowText = pSchemes->getSchemeHandle("CommandMenu Text");
 
 	// color schemes

@@ -663,9 +663,9 @@ void CHudSpectator::DirectorMessage(BufferReader& reader)
 		g_iTeamNumber = 0;
 
 		// fake a InitHUD & ResetHUD message
-		BufferReader reader;
-		gHUD.MsgFunc_InitHUD(nullptr, reader);
-		gHUD.MsgFunc_ResetHUD(nullptr, reader);
+		BufferReader dummyReader;
+		gHUD.MsgFunc_InitHUD(nullptr, dummyReader);
+		gHUD.MsgFunc_ResetHUD(nullptr, dummyReader);
 
 		break;
 	}

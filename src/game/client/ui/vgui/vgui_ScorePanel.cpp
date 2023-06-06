@@ -799,7 +799,7 @@ void ScorePanel::FillGrid()
 			}
 			else
 			{
-				bool bShowClass = false;
+				// bool bShowClass = false;
 
 				switch (col)
 				{

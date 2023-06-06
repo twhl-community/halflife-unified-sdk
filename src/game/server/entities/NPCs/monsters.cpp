@@ -932,14 +932,13 @@ bool CBaseMonster::CheckEnemy(CBaseEntity* pEnemy)
 	flDistToEnemy = (vecEnemyPos - pev->origin).Length();
 	vecEnemyPos.z += pEnemy->pev->size.z * 0.5;
 	// distance to enemy's head
-	float flDistToEnemy2 = (vecEnemyPos - pev->origin).Length();
-	if (flDistToEnemy2 < flDistToEnemy)
+	if (float flDistToEnemy2 = (vecEnemyPos - pev->origin).Length(); flDistToEnemy2 < flDistToEnemy)
 		flDistToEnemy = flDistToEnemy2;
 	else
 	{
 		// distance to enemy's feet
 		vecEnemyPos.z -= pEnemy->pev->size.z;
-		float flDistToEnemy2 = (vecEnemyPos - pev->origin).Length();
+		flDistToEnemy2 = (vecEnemyPos - pev->origin).Length();
 		if (flDistToEnemy2 < flDistToEnemy)
 			flDistToEnemy = flDistToEnemy2;
 	}

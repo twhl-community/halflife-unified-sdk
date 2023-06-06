@@ -23,10 +23,10 @@ CHalfLifeCoopplay::CHalfLifeCoopplay()
 {
 	m_MenuSelectCommand = g_ClientCommands.CreateScoped("menuselect", [](CBasePlayer* player, const auto& args)
 		{
-			if (CMD_ARGC() < 2)
+			if (args.Count() < 2)
 				return;
 
-			int slot = atoi(CMD_ARGV(1));
+			// int slot = atoi(args.Argument(1));
 
 			// select the item from the current menu
 		});
