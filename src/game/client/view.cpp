@@ -18,6 +18,7 @@
 #include "shake.h"
 #include "hltv.h"
 #include "Exports.h"
+#include "tri.h"
 #include "view.h"
 
 extern Vector vJumpOrigin;
@@ -1611,6 +1612,9 @@ void DLLEXPORT V_CalcRefdef(ref_params_t* pparams)
 	// This is the earliest the engine will unconditionally call into the client
 	// after the connection state has changed to active and signon has reached state 2.
 	g_Client.ClientActivated();
+
+	// Configure fog parameters before anything is drawn to ensure that the engine checks fog state based on these parameters.
+	RenderFog();
 
 	g_Paused = pparams->paused != 0;
 	g_WaterLevel = pparams->waterlevel;

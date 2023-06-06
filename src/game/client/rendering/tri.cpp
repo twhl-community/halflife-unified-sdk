@@ -55,5 +55,6 @@ void DLLEXPORT HUD_DrawTransparentTriangles()
 	if (g_pParticleMan)
 		g_pParticleMan->Update();
 
-	RenderFog();
+	// Handled in V_CalcRefdef.
+	// RenderFog();
 }
