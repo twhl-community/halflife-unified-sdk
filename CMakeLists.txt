@@ -101,6 +101,7 @@ function(set_common_properties TARGET_NAME)
 		# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flifetime-dse for more information about the flifetime-dse flag
 		$<$<CXX_COMPILER_ID:GNU>:-flifetime-dse=1>
 		
+		# Can't set warning level to W4 until the compiler can deal with std::visit containing static_assert, which currently causes false positive "Unreachable code" warnings
 		$<$<CXX_COMPILER_ID:MSVC>:/W3 /MP>
 			
 		# These are all from the original Makefile
