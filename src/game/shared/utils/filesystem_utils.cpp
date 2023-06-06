@@ -101,12 +101,23 @@ std::string FileSystem_GetGameDirectory()
 #endif
 }
 
+static bool FileSystem_IsValidPath(const char* path)
+{
+	return strstr(path, "..") == nullptr;
+}
+
 std::vector<std::byte> FileSystem_LoadFileIntoBuffer(const char* fileName, FileContentFormat format, const char* pathID)
 {
 	assert(nullptr != g_pFileSystem);
 
 	if (nullptr == fileName)
 	{
+		return {};
+	}
+
+	if (!FileSystem_IsValidPath(fileName))
+	{
+		Con_DPrintf("FileSystem_LoadFileIntoBuffer: Invalid filename \"%s\"\n", fileName);
 		return {};
 	}
 
@@ -139,6 +150,12 @@ bool FileSystem_WriteTextToFile(const char* fileName, const char* text, const ch
 
 	if (nullptr == fileName || nullptr == text)
 	{
+		return false;
+	}
+
+	if (!FileSystem_IsValidPath(fileName))
+	{
+		Con_DPrintf("FileSystem_WriteTextToFile: Invalid filename \"%s\"\n", fileName);
 		return false;
 	}
 
