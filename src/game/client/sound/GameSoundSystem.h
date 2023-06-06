@@ -113,6 +113,8 @@ private:
 
 	ALuint m_Filter{0};
 
+	int m_CurrentGameFrame{0};
+
 	// Force a room type update on startup.
 	bool m_PreviousRoomOn{true};
 	int m_PreviousRoomType{-1};

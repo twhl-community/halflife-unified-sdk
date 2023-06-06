@@ -244,6 +244,8 @@ void GameSoundSystem::Update()
 		return;
 	}
 
+	++m_CurrentGameFrame;
+
 	Vector origin, forward, right, up;
 
 	if (UTIL_IsMapLoaded())
@@ -680,6 +682,7 @@ bool GameSoundSystem::SetupChannel(Channel& channel, int entityIndex, int channe
 	channel.EntityIndex = entityIndex;
 	channel.ChannelIndex = channelIndex;
 	channel.Pitch = pitch;
+	channel.CreatedOnFrame = m_CurrentGameFrame;
 
 	// If attenuation is 0 then the sound will play everywhere.
 	// If the entity is the current view entity then it should always sound like it's playing "here".
@@ -756,10 +759,16 @@ bool GameSoundSystem::SetupChannel(Channel& channel, int entityIndex, int channe
 					continue;
 				}
 
-				ALint offset = -1;
-				alGetSourcei(otherChannel.Source.Id, AL_BYTE_OFFSET, &offset);
+				if (otherChannel.CreatedOnFrame != channel.CreatedOnFrame)
+				{
+					continue;
+				}
 
-				if (offset == 0)
+				// Don't query this; it causes performance issues with HRTF enabled.
+				// ALint offset = -1;
+				// alGetSourcei(otherChannel.Source.Id, AL_BYTE_OFFSET, &offset);
+
+				// if (offset == 0)
 				{
 					ALint frequency = 0;
 					alGetBufferi(soundData.Buffer.Id, AL_FREQUENCY, &frequency);

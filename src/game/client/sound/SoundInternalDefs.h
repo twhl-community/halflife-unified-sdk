@@ -133,6 +133,7 @@ struct Channel
 	int EntityIndex{0};
 	int ChannelIndex{0};
 	int Pitch{PITCH_NORM};
+	int CreatedOnFrame{0};
 
 	OpenALSource Source;
 };
