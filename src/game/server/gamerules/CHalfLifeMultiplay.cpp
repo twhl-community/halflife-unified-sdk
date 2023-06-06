@@ -759,6 +759,11 @@ void CHalfLifeMultiplay::ChangeLevel()
 		CGameRules::Logger->debug("PLAYER COUNT:  min {} max {} current {}", item->MinPlayers, item->MaxPlayers, curplayers);
 	}
 
+	if (m_ClearGlobalState)
+	{
+		ResetGlobalState();
+	}
+
 	CHANGE_LEVEL(nextMap.c_str(), nullptr);
 }
 

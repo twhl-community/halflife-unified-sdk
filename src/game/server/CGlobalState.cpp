@@ -57,11 +57,11 @@ void CGlobalState::DumpGlobals()
 	static const char* estates[] = {"Off", "On", "Dead"};
 	globalentity_t* pTest;
 
-	CBaseEntity::Logger->debug("-- Globals --");
+	Con_Printf("-- Globals --\n");
 	pTest = m_pList;
 	while (pTest)
 	{
-		CBaseEntity::Logger->debug("{}: {} ({})", pTest->name, pTest->levelName, estates[pTest->state]);
+		Con_Printf("%s: %s (%s)\n", pTest->name, pTest->levelName, estates[pTest->state]);
 		pTest = pTest->pNext;
 	}
 }
@@ -145,7 +145,7 @@ bool CGlobalState::Restore(CRestore& restore)
 
 	for (int i = 0; i < listCount; i++)
 	{
-		if (!restore.ReadFields(&tmpEntity, *tmpEntity.GetDataMap(), *tmpEntity.GetDataMap()))
+		if (!restore.ReadFields(&tmpEntity, *globalentity_t::GetLocalDataMap(), *tmpEntity.GetDataMap()))
 			return false;
 		EntityAdd(MAKE_STRING(tmpEntity.name), MAKE_STRING(tmpEntity.levelName), tmpEntity.state);
 	}

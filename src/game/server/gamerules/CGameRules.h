@@ -324,7 +324,7 @@ public:
 	/**
 	 *	@brief Immediately end a multiplayer game
 	 */
-	virtual void EndMultiplayerGame() {}
+	virtual void EndMultiplayerGame(bool clearGlobalState) {}
 
 protected:
 	void SetupPlayerInventory(CBasePlayer* player);

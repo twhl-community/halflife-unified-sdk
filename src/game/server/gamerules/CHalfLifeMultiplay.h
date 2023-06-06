@@ -72,7 +72,11 @@ public:
 	bool PlayTextureSounds() override { return false; }
 	bool PlayFootstepSounds(CBasePlayer* pl, float fvol) override;
 
-	void EndMultiplayerGame() override { GoToIntermission(); }
+	void EndMultiplayerGame(bool clearGlobalState) override
+	{
+		m_ClearGlobalState = clearGlobalState;
+		GoToIntermission();
+	}
 
 protected:
 	/**
@@ -83,5 +87,6 @@ protected:
 	float m_flIntermissionStartTime = 0;
 	float m_flIntermissionEndTime = 0;
 	bool m_iEndIntermissionButtonHit;
+	bool m_ClearGlobalState = false;
 	void SendMOTDToClient(CBasePlayer* player);
 };
