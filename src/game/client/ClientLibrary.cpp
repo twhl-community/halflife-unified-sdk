@@ -287,6 +287,7 @@ void ClientLibrary::AddCheatCommands()
 {
 	// These need to show up in the console autocompletion list, but are handled on the server side.
 	AddForwardedCommand("cheat_god");
+	AddForwardedCommand("cheat_unkillable");
 	AddForwardedCommand("cheat_notarget");
 	AddForwardedCommand("cheat_noclip");
 	AddForwardedCommand("cheat_infiniteair");

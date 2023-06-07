@@ -682,6 +682,10 @@ void SV_CreateClientCommands()
 		{ player->ToggleCheat(Cheat::Godmode); },
 		{.Flags = ClientCommandFlag::Cheat});
 
+	g_ClientCommands.Create("cheat_unkillable", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::Unkillable); },
+		{.Flags = ClientCommandFlag::Cheat});
+
 	g_ClientCommands.Create("cheat_notarget", [](CBasePlayer* player, const CommandArgs& args)
 		{ player->ToggleCheat(Cheat::Notarget); },
 		{.Flags = ClientCommandFlag::Cheat});

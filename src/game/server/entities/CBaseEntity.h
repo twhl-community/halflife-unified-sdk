@@ -279,6 +279,12 @@ public:
 
 	void MaybeSetChildClassification(CBaseEntity* child);
 
+protected:
+	bool m_IsUnkillable = false;
+
+public:
+	bool IsUnkillable() const { return m_IsUnkillable; }
+
 	/**
 	 *	@brief Is this some kind of machine?
 	 */

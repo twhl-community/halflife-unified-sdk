@@ -5022,6 +5022,10 @@ void CBasePlayer::ToggleCheat(Cheat cheat)
 		pev->flags ^= FL_GODMODE;
 		UTIL_ConsolePrint(this, "godmode {}\n", (pev->flags & FL_GODMODE) != 0 ? "ON" : "OFF");
 		break;
+	case Cheat::Unkillable:
+		m_IsUnkillable = !m_IsUnkillable;
+		UTIL_ConsolePrint(this, "Unkillable: {}\n", m_IsUnkillable ? "ON" : "OFF");
+		break;
 	case Cheat::Notarget:
 		pev->flags ^= FL_NOTARGET;
 		UTIL_ConsolePrint(this, "notarget {}\n", (pev->flags & FL_NOTARGET) != 0 ? "ON" : "OFF");

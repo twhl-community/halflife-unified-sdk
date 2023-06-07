@@ -138,6 +138,8 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_HasCustomClassification, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_ChildClassificationName, FIELD_STRING),
 
+	DEFINE_FIELD(m_IsUnkillable, FIELD_BOOLEAN),
+
 	DEFINE_FIELD(m_InformedOwnerOfDeath, FIELD_BOOLEAN),
 
 	DEFINE_FIELD(m_pfnThink, FIELD_FUNCTIONPOINTER), // UNDONE: Build table of these!!!
@@ -202,6 +204,11 @@ bool CBaseEntity::KeyValue(KeyValueData* pkvd)
 	else if (FStrEq(pkvd->szKeyName, "child_classification"))
 	{
 		m_ChildClassificationName = ALLOC_STRING(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "unkillable"))
+	{
+		m_IsUnkillable = atoi(pkvd->szValue) != 0;
 		return true;
 	}
 

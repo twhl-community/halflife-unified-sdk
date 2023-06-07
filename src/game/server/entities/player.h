@@ -112,6 +112,7 @@ enum sbar_data
 enum Cheat
 {
 	Godmode = 0,
+	Unkillable,
 	Notarget,
 	Noclip,
 	InfiniteAir,

@@ -884,6 +884,11 @@ bool CBaseMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, flo
 	// do the damage
 	pev->health -= flTake;
 
+	if (IsUnkillable() && pev->health < 1)
+	{
+		// Adjust damage done to leave character barely alive.
+		pev->health = 1;
+	}
 
 	// HACKHACK Don't kill monsters in a script.  Let them break their scripts first
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
