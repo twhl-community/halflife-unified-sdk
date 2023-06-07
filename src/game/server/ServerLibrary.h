@@ -16,6 +16,8 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "GameLibrary.h"
 
@@ -111,6 +113,8 @@ private:
 
 	void SendFogMessage(CBasePlayer* player);
 
+	void LoadAllMaps();
+
 private:
 	cvar_t* m_AllowDownload{};
 	cvar_t* m_SendResources{};
@@ -127,6 +131,8 @@ private:
 	int m_SpawnCount = 0;
 
 	std::unique_ptr<MapState> m_MapState;
+
+	std::vector<std::string> m_MapsToLoad;
 };
 
 inline ServerLibrary g_Server;

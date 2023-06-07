@@ -114,6 +114,9 @@ bool ServerLibrary::Initialize()
 		{ PrintMultiplayerGameModes(); },
 		CommandLibraryPrefix::No);
 
+	g_ConCommands.CreateCommand("load_all_maps", [this](const auto&)
+		{ LoadAllMaps(); });
+
 	RegisterCommandWhitelistSchema();
 
 	LoadCommandWhitelist();
@@ -160,6 +163,15 @@ void ServerLibrary::RunFrame()
 	ForceCvarToValue(m_AllowDLFile, 1);
 
 	g_Bots.RunFrame();
+
+	// If we're loading all maps then change maps after 4 seconds to give the game time to generate files.
+	if (!m_MapsToLoad.empty() && gpGlobals->time > 5)
+	{
+		const std::string mapName = std::move(m_MapsToLoad.back());
+		m_MapsToLoad.pop_back();
+
+		CHANGE_LEVEL(mapName.c_str(), nullptr);
+	}
 }
 
 // Note: don't return after calling this to ensure that server state is still mostly correct.
@@ -393,7 +405,7 @@ void ServerLibrary::DefineSkillVariables()
 		{.Minimum = ChargerRechargeDelayNever, .Type = SkillVarType::Integer});
 
 	g_Skill.DefineVariable("weapon_respawn_time", ITEM_NEVER_RESPAWN_DELAY,
-		{.Minimum = - 1, .Type = SkillVarType::Integer});
+		{.Minimum = -1, .Type = SkillVarType::Integer});
 	g_Skill.DefineVariable("ammo_respawn_time", ITEM_NEVER_RESPAWN_DELAY,
 		{.Minimum = -1, .Type = SkillVarType::Integer});
 	g_Skill.DefineVariable("pickupitem_respawn_time", ITEM_NEVER_RESPAWN_DELAY,
@@ -580,4 +592,36 @@ void ServerLibrary::SendFogMessage(CBasePlayer* player)
 	}
 
 	MESSAGE_END();
+}
+
+void ServerLibrary::LoadAllMaps()
+{
+	if (!m_MapsToLoad.empty())
+	{
+		Con_Printf("Already loading all maps\n");
+		return;
+	}
+
+	FileFindHandle_t handle = FILESYSTEM_INVALID_FIND_HANDLE;
+
+	const char* fileName = g_pFileSystem->FindFirst("maps/*.bsp", &handle);
+
+	if (fileName != nullptr)
+	{
+		do
+		{
+			std::string mapName = fileName;
+			mapName.resize(mapName.size() - 4);
+
+			if (std::find_if(m_MapsToLoad.begin(), m_MapsToLoad.end(), [=](const auto& candidate)
+					{ return 0 == stricmp(candidate.c_str(), mapName.c_str()); }) == m_MapsToLoad.end())
+			{
+				m_MapsToLoad.push_back(std::move(mapName));
+			}
+		} while ((fileName = g_pFileSystem->FindNext(handle)) != nullptr);
+
+		g_pFileSystem->FindClose(handle);
+	}
+
+	Con_Printf("Loading %u maps one at a time to generate files\n", m_MapsToLoad.size());
 }
