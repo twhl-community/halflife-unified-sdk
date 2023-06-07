@@ -157,6 +157,44 @@ const char* ServerSoundSystem::CheckForSoundReplacement(CBaseEntity* entity, con
 	return CheckForSoundReplacement(soundName);
 }
 
+static void BuildSoundMessage(int entityIndex, int channel, int soundIndex, int volumeInt, float attenuation,
+	int flags, int pitch, const Vector& origin)
+{
+	// TODO: can compress this down by writing bits instead of bytes.
+	WRITE_BYTE(flags);
+
+	if ((flags & SND_VOLUME) != 0)
+	{
+		WRITE_BYTE(volumeInt);
+	}
+
+	if ((flags & SND_ATTENUATION) != 0)
+	{
+		WRITE_BYTE(static_cast<int>(attenuation * 64));
+	}
+
+	WRITE_BYTE(channel);
+	WRITE_SHORT(entityIndex);
+
+	if (soundIndex > std::numeric_limits<std::uint8_t>::max())
+	{
+		// This controls the maximum number of sounds and sentences.
+		// The cast to signed short is needed to ensure the engine writes values > 32767 properly.
+		WRITE_SHORT(static_cast<std::int16_t>(soundIndex));
+	}
+	else
+	{
+		WRITE_BYTE(soundIndex);
+	}
+
+	WRITE_COORD_VECTOR(origin);
+
+	if ((flags & SND_PITCH) != 0)
+	{
+		WRITE_BYTE(pitch);
+	}
+}
+
 void ServerSoundSystem::EmitSoundCore(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,
 	int flags, int pitch, const Vector& origin, bool alwaysBroadcast)
 {
@@ -226,62 +264,53 @@ void ServerSoundSystem::EmitSoundCore(CBaseEntity* entity, int channel, const ch
 		flags |= SND_LARGE_INDEX;
 	}
 
-	if ((flags & SND_SPAWNING) != 0)
+	if ((flags & SND_NOTHOST) == 0)
 	{
-		MESSAGE_BEGIN(MSG_INIT, gmsgEmitSound);
-	}
-	else if (alwaysBroadcast)
-	{
-		MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
-	}
-	else if (channel != CHAN_STATIC && (flags & SND_STOP) == 0)
-	{
-		MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, origin);
-	}
-	else if (!g_pGameRules->IsMultiplayer())
-	{
-		MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
-	}
-	else
-	{
-		MESSAGE_BEGIN(MSG_ALL, gmsgEmitSound);
+		if ((flags & SND_SPAWNING) != 0)
+		{
+			MESSAGE_BEGIN(MSG_INIT, gmsgEmitSound);
+		}
+		else if (alwaysBroadcast)
+		{
+			MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
+		}
+		else if (channel != CHAN_STATIC && (flags & SND_STOP) == 0)
+		{
+			MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, origin);
+		}
+		else if (!g_pGameRules->IsMultiplayer())
+		{
+			MESSAGE_BEGIN(MSG_BROADCAST, gmsgEmitSound);
+		}
+		else
+		{
+			MESSAGE_BEGIN(MSG_ALL, gmsgEmitSound);
+		}
+
+		BuildSoundMessage(entityIndex, channel, soundIndex, volumeInt, attenuation, flags, pitch, origin);
+
+		MESSAGE_END();
+		return;
 	}
 
-	// TODO: can compress this down by writing bits instead of bytes.
-	WRITE_BYTE(flags);
-
-	if ((flags & SND_VOLUME) != 0)
+	if (entityIndex <= 0 || entityIndex > gpGlobals->maxClients)
 	{
-		WRITE_BYTE(volumeInt);
+		m_Logger->error("EmitSound: Entity is not a player, cannot use SND_NOTHOST");
+		return;
 	}
 
-	if ((flags & SND_ATTENUATION) != 0)
+	// These messages are used by player physics code only.
+	for (auto player : UTIL_FindPlayers())
 	{
-		WRITE_BYTE(static_cast<int>(attenuation * 64));
+		if (player == entity || !player->IsConnected() || !player->IsNetClient())
+		{
+			continue;
+		}
+
+		MESSAGE_BEGIN(MSG_ONE_UNRELIABLE, gmsgEmitSound, nullptr, player);
+		BuildSoundMessage(entityIndex, channel, soundIndex, volumeInt, attenuation, flags, pitch, origin);
+		MESSAGE_END();
 	}
-
-	WRITE_BYTE(channel);
-	WRITE_SHORT(entityIndex);
-
-	if (soundIndex > std::numeric_limits<std::uint8_t>::max())
-	{
-		// This controls the maximum number of sounds and sentences.
-		// The cast to signed short is needed to ensure the engine writes values > 32767 properly.
-		WRITE_SHORT(static_cast<std::int16_t>(soundIndex));
-	}
-	else
-	{
-		WRITE_BYTE(soundIndex);
-	}
-
-	WRITE_COORD_VECTOR(origin);
-
-	if ((flags & SND_PITCH) != 0)
-	{
-		WRITE_BYTE(pitch);
-	}
-
-	MESSAGE_END();
 }
 
 void ServerSoundSystem::EmitSoundSentence(CBaseEntity* entity, int channel, const char* sample, float volume, float attenuation,
@@ -304,12 +333,18 @@ void EMIT_SOUND_PREDICTED(CBaseEntity* entity, int channel, const char* sample, 
 	// If entity is not a player this will return false.
 	if (0 != g_engfuncs.pfnCanSkipPlayer(entity->edict()))
 	{
-		pmove->PM_PlaySound(channel, sample, volume, attenuation, flags, pitch);
+		if (sound::g_ServerSound.ShouldUseOpenAL())
+		{
+			flags |= SND_NOTHOST;
+		}
+		else
+		{
+			pmove->PM_PlaySound(channel, sample, volume, attenuation, flags, pitch);
+			return;
+		}
 	}
-	else
-	{
-		sound::g_ServerSound.EmitSound(entity, channel, sample, volume, attenuation, flags, pitch);
-	}
+
+	sound::g_ServerSound.EmitSound(entity, channel, sample, volume, attenuation, flags, pitch);
 }
 
 void EMIT_SOUND_SUIT(CBaseEntity* entity, const char* sample)

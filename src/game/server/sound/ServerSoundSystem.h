@@ -34,6 +34,8 @@ public:
 
 	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
 
+	bool ShouldUseOpenAL() const { return m_UseOpenAl->value != 0; }
+
 	/**
 	 *	@details Use this to set the pitch of a sound.
 	 *	Pitch of 100 is no pitch shift.
