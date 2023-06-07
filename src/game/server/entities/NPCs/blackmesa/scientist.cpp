@@ -992,6 +992,8 @@ public:
 	void OnCreate() override;
 	void Spawn() override;
 
+	bool HasHumanGibs() override { return true; }
+
 	bool KeyValue(KeyValueData* pkvd) override;
 	int m_iPose; // which sequence to display
 	static const char* m_szPoses[7];
