@@ -402,6 +402,11 @@ bool CDisplacerBall::ClassifyTarget(CBaseEntity* pTarget)
 	if (!pTarget || pTarget->IsPlayer())
 		return false;
 
+	if (pTarget->IsUnkillable())
+	{
+		return false;
+	}
+
 	for (size_t uiIndex = 0; uiIndex < std::size(displace); ++uiIndex)
 	{
 		if (strcmp(STRING(pTarget->pev->classname), displace[uiIndex]) == 0)
