@@ -228,6 +228,9 @@ private:
 	EntityClassification m_Classification = ENTCLASS_NONE; // Not saved; reset on load.
 	bool m_HasCustomClassification = false;
 
+	// For entities that create other entities; stores the classification they get.
+	string_t m_ChildClassificationName;
+
 public:
 	const char* GetClassificationName() const
 	{
@@ -259,6 +262,12 @@ public:
 		}
 	}
 
+	void SetCustomClassification(std::string_view name)
+	{
+		SetClassification(name);
+		m_HasCustomClassification = true;
+	}
+
 	/**
 	 *	@brief returns the type of group (i.e, "houndeye", or "human military") so that monsters
 	 *	with different classnames still realize that they are teammates. (overridden for monsters that form groups)
@@ -267,6 +276,8 @@ public:
 	{
 		return m_Classification;
 	}
+
+	void MaybeSetChildClassification(CBaseEntity* child);
 
 	/**
 	 *	@brief Is this some kind of machine?

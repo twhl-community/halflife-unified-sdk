@@ -246,7 +246,12 @@ CBaseMonster* COsprey::MakeGrunt(Vector vecSrc)
 			{
 				m_hGrunt[i]->SUB_StartFadeOut();
 			}
-			pEntity = Create(monsterClassname, vecSrc, pev->angles);
+			pEntity = Create(monsterClassname, vecSrc, pev->angles, nullptr, false);
+
+			MaybeSetChildClassification(pEntity);
+
+			DispatchSpawn(pEntity->edict());
+
 			pGrunt = pEntity->MyMonsterPointer();
 			pGrunt->pev->movetype = MOVETYPE_FLY;
 			pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));

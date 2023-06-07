@@ -136,6 +136,7 @@ DEFINE_FIELD(m_pGoalEnt, FIELD_CLASSPTR),
 
 	DEFINE_FIELD(m_ClassificationName, FIELD_STRING),
 	DEFINE_FIELD(m_HasCustomClassification, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_ChildClassificationName, FIELD_STRING),
 
 	DEFINE_FIELD(m_InformedOwnerOfDeath, FIELD_BOOLEAN),
 
@@ -195,8 +196,12 @@ bool CBaseEntity::KeyValue(KeyValueData* pkvd)
 	}
 	else if (FStrEq(pkvd->szKeyName, "classification"))
 	{
-		SetClassification(pkvd->szValue);
-		m_HasCustomClassification = true;
+		SetCustomClassification(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "child_classification"))
+	{
+		m_ChildClassificationName = ALLOC_STRING(pkvd->szValue);
 		return true;
 	}
 
@@ -267,6 +272,46 @@ void CBaseEntity::PostRestore()
 		SetSize(mins, maxs); // Reset them
 	}
 #endif
+}
+
+void CBaseEntity::MaybeSetChildClassification(CBaseEntity* child)
+{
+	if (FStringNull(m_ChildClassificationName))
+	{
+		return;
+	}
+
+	const char* classification = STRING(m_ChildClassificationName);
+
+	// Special classifications start with !
+	if (classification[0] == '!')
+	{
+		if (FStrEq(classification, "!owner"))
+		{
+			// Inherit my classification.
+			child->SetCustomClassification(GetClassificationName());
+		}
+		else if (FStrEq(classification, "!owner_or_default"))
+		{
+			// If my classification was overridden use that, otherwise leave child class at default.
+			// Needed so Ospreys can spawn children that use their default class,
+			// which differs from the Osprey's default class.
+
+			if (HasCustomClassification())
+			{
+				child->SetCustomClassification(GetClassificationName());
+			}
+		}
+		else
+		{
+			Logger->error("{}:{}:{}: Invalid child classification \"{}\"",
+				GetClassname(), entindex(), GetTargetname(), classification);
+		}
+
+		return;
+	}
+
+	child->SetCustomClassification(classification);
 }
 
 void CBaseEntity::MaybeNotifyOwnerOfDeath()

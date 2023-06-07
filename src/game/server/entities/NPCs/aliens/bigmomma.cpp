@@ -558,7 +558,11 @@ bool CBigMomma::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float 
 
 void CBigMomma::LayHeadcrab()
 {
-	CBaseEntity* pChild = CBaseEntity::Create(BIG_CHILDCLASS, pev->origin, pev->angles, this);
+	CBaseEntity* pChild = CBaseEntity::Create(BIG_CHILDCLASS, pev->origin, pev->angles, this, false);
+
+	MaybeSetChildClassification(pChild);
+
+	DispatchSpawn(pChild->edict());
 
 	pChild->pev->spawnflags |= SF_MONSTER_FALL_TO_GROUND;
 
