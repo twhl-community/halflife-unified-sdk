@@ -102,7 +102,7 @@ void V_NormalizeAngles( Vector& angles )
 			angles[i] += 360.0;
 		}
 	}
-}
+}*/
 
 /*
 ===================

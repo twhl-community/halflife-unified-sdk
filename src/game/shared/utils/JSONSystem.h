@@ -91,7 +91,7 @@ public:
 	void RegisterSchema(std::string&& name, std::function<std::string()>&& getSchemaFunction);
 
 	/**
-	 *	@copydoc RegisterSchema(std::string&&, std::function<json()>&&)
+	 *	@copydoc RegisterSchema(std::string&&, std::function<std::string()>&&)
 	 */
 	void RegisterSchema(std::string_view name, std::function<std::string()>&& getSchemaFunction)
 	{

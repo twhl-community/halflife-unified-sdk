@@ -478,6 +478,7 @@ public:
 
 	/**
 	 *	@brief add sentence to suit playlist queue.
+	 *	@param name Name of the sentence or sentence group to play. If null, clears out the playlist queue.
 	 *	@param fgroup if true, then name is a sentence group (HEV_AA),
 	 *		otherwise name is a specific sentence name ie: !HEV_AA0.
 	 *	@param iNoRepeat if specified, then we won't repeat playback of this word or sentence
@@ -801,7 +802,7 @@ inline CPlayerEnumeratorWithStart UTIL_FindPlayers(CBasePlayer* pStartEntity)
 CBasePlayer* FindPlayerByName(const char* name);
 
 /**
- *	@brief Tag type to log player info in the form <tt>\"netname<userid><steamid><teamname>\"</tt>.
+ *	@brief Tag type to log player info in the form <tt>\"netname&lt;userid&gt;&lt;steamid&gt;&lt;teamname&gt;\"</tt>.
  */
 struct PlayerLogInfo
 {

@@ -453,6 +453,8 @@ public:
 	 *	that is trying to possess it.
 	 *	@param fDisregardState If set, the monster will be sucked into the script no matter what state it is in.
 	 *		ONLY Scripted AI ents should allow this.
+	 *	@param interruptLevel Interrupt level of the current sequence play request
+	 *		@see SS_INTERRUPT
 	 */
 	virtual bool CanPlaySequence(bool fDisregardState, int interruptLevel);
 
@@ -558,7 +560,11 @@ public:
 
 	/**
 	 *	@brief tries to overcome local obstacles by triangulating a path around them.
-	 *	@param pApex is how far the obstruction that we are trying to triangulate around is from the monster.
+	 *	@param vecStart Path start point.
+	 *	@param vecEnd Path end point.
+	 *	@param flDist Distance to move in current movement operation.
+	 *	@param pTargetEnt Optional. Entity we've moving towards.
+	 *	@param pApex How far the obstruction that we are trying to triangulate around is from the monster.
 	 */
 	virtual bool FTriangulate(const Vector& vecStart, const Vector& vecEnd, float flDist, CBaseEntity* pTargetEnt, Vector* pApex);
 
@@ -784,11 +790,9 @@ public:
 	bool GiveHealth(float flHealth, int bitsDamageType) override;
 
 	/**
-	 *	@brief The damage is coming from inflictor, but get mad at attacker
-	 *	This should be the only function that ever reduces health.
+	 *	@copydoc CBaseEntity::TakeDamage()
 	 *	@details Time-based damage: only occurs while the monster is within the trigger_hurt.
 	 *	When a monster is poisoned via an arrow etc it takes all the poison damage at once.
-	 *	@param bitsDamageType indicates the type of damage sustained, ie: DMG_SHOCK
 	 */
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 

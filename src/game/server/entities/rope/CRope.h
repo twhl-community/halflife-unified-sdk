@@ -74,13 +74,13 @@ public:
 
 	/**
 	 *	Computes forces on the given sample list.
-	 *	@param pSystem List of sample data. m_NumSamples Elements large.
+	 *	@param pSystem List of sample data. CRope::m_NumSamples elements large.
 	 */
 	void ComputeForces(RopeSampleData* pSystem);
 
 	/**
 	 *	Computes forces on the given sample list.
-	 *	@param pSystem List of samples. m_NumSamples Elements large.
+	 *	@param ppSystem List of samples. CRope::m_NumSamples elements large.
 	 */
 	void ComputeForces(CRopeSample** ppSystem);
 

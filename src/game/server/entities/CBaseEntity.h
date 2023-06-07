@@ -283,6 +283,10 @@ public:
 
 	/**
 	 *	@brief inflict damage on this entity.
+	 *	This should be the only function that ever reduces health.
+	 *	@param inflictor The entity doing the damage
+	 *	@param attacker The entity actually attacking
+	 *	@param flDamage Damage done
 	 *	@param bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
 	 */
 	virtual bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType);

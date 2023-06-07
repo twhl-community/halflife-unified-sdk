@@ -16,7 +16,9 @@
 #pragma once
 
 /**
- *	@file CTF gamemode definitions
+ *	@file
+ *
+ *	CTF gamemode definitions
  */
 
 enum class CTFTeam
