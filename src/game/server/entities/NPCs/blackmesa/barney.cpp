@@ -483,7 +483,6 @@ void CBarney::Killed(CBaseEntity* attacker, int iGib)
 		DropWeapon();
 	}
 
-	SetUse(nullptr);
 	CTalkMonster::Killed(attacker, iGib);
 }
 

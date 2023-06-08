@@ -2164,7 +2164,6 @@ void CBaseHGruntAlly::Killed(CBaseEntity* attacker, int iGib)
 			medic->HealMe(nullptr);
 	}
 
-	SetUse(nullptr);
 	COFSquadTalkMonster::Killed(attacker, iGib);
 }
 

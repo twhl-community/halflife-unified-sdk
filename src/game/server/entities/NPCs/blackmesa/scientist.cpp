@@ -681,12 +681,6 @@ void CScientist::DeathSound()
 	PainSound();
 }
 
-void CScientist::Killed(CBaseEntity* attacker, int iGib)
-{
-	SetUse(nullptr);
-	CTalkMonster::Killed(attacker, iGib);
-}
-
 void CScientist::SetActivity(Activity newActivity)
 {
 	int iSequence;

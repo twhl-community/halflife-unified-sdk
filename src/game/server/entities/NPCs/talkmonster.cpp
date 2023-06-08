@@ -585,7 +585,6 @@ void CTalkMonster::Killed(CBaseEntity* attacker, int iGib)
 	m_hTargetEnt = nullptr;
 	// Don't finish that sentence
 	StopTalking();
-	SetUse(nullptr);
 	CBaseMonster::Killed(attacker, iGib);
 }
 

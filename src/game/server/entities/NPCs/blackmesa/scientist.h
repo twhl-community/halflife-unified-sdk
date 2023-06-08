@@ -121,8 +121,6 @@ public:
 
 	void TalkInit() override;
 
-	void Killed(CBaseEntity* attacker, int iGib) override;
-
 protected:
 	float m_painTime;
 	float m_healTime;

@@ -621,6 +621,12 @@ void CBaseMonster::CallGibMonster()
 
 void CBaseMonster::Killed(CBaseEntity* attacker, int iGib)
 {
+	// If this NPC is using the follower use function, remove it to prevent players from using it.
+	if (m_pfnUse == &CBaseMonster::FollowerUse)
+	{
+		SetUse(nullptr);
+	}
+
 	if (HasMemory(bits_MEMORY_KILLED))
 	{
 		if (ShouldGibMonster(iGib))
