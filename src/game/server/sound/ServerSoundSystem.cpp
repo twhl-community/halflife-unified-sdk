@@ -276,7 +276,28 @@ void ServerSoundSystem::EmitSoundCore(CBaseEntity* entity, int channel, const ch
 		}
 		else if (channel != CHAN_STATIC && (flags & SND_STOP) == 0)
 		{
-			MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, origin);
+			if (entity->m_SoundOffset != vec3_origin)
+			{
+				Vector adjustedOrigin = origin;
+
+				Vector angles = entity->pev->angles;
+				angles.x = -angles.x;
+
+				float rmatrix[3][4];
+
+				AngleMatrix(angles, rmatrix);
+
+				Vector adjustedOffset;
+				VectorTransform(entity->m_SoundOffset, rmatrix, adjustedOffset);
+
+				adjustedOrigin = adjustedOrigin + adjustedOffset;
+
+				MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, adjustedOrigin);
+			}
+			else
+			{
+				MESSAGE_BEGIN(MSG_PAS, gmsgEmitSound, origin);
+			}
 		}
 		else if (!g_pGameRules->IsMultiplayer())
 		{

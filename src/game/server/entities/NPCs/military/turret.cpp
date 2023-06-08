@@ -244,6 +244,8 @@ void CBaseTurret::OnCreate()
 	BaseClass::OnCreate();
 
 	SetClassification("machine");
+
+	m_SoundOffset.z = 1;
 }
 
 void CBaseTurret::Spawn()

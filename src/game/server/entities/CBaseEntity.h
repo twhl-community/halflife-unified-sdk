@@ -606,6 +606,15 @@ public:
 	Vector m_CustomHullMax{vec3_origin};
 	bool m_HasCustomHullMin{false};
 	bool m_HasCustomHullMax{false};
+
+	/**
+	 *	@brief If not a zero vector, the entity's origin will be offset by this much when performing PAS checks.
+	 *	Used by entities that were originally designed to have their origin flush with a surface
+	 *	which causes MSG_PAS messages to skip them in multiplayer.
+	 *	This should be set in the entity's CBaseEntity::OnCreate method.
+	 *	@details The entity's angles affect this offset.
+	 */
+	Vector m_SoundOffset{};
 };
 
 inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent->edict()); }

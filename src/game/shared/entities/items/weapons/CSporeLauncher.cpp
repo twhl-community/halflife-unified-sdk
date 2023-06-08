@@ -360,6 +360,7 @@ public:
 		m_AmmoAmount = AMMO_SPORE_GIVE;
 		m_AmmoName = MAKE_STRING("spores");
 		pev->model = MAKE_STRING("models/spore_ammo.mdl");
+		m_SoundOffset.z = 1;
 	}
 
 	void Precache() override
