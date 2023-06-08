@@ -124,7 +124,8 @@ bool SoundCache::LoadSound(Sound& sound)
 
 	m_Logger->trace("Loading sound {} into buffer {}", absolutePath, sound.Buffer.Id);
 
-	alBufferData(sound.Buffer.Id, format, data.samples.data(), data.samples.size() * sizeof(float), data.sampleRate);
+	alBufferData(sound.Buffer.Id, format,
+		data.samples.data(), data.samples.size() * sizeof(float), data.sampleRate);
 
 	// See https://openal-soft.org/openal-extensions/SOFT_loop_points.txt
 	const auto cuePoints = TryLoadCuePoints(absolutePath, data.samples.size());
@@ -137,7 +138,8 @@ bool SoundCache::LoadSound(Sound& sound)
 
 	if (const auto error = alGetError(); error != AL_NO_ERROR)
 	{
-		m_Logger->error("OpenAL error {} ({}) while initializing buffer", alGetString(error), error);
+		m_Logger->error("OpenAL error {} ({}) while initializing buffer for \"{}\"",
+			alGetString(error), error, absolutePath);
 		sound.Buffer.Delete();
 		return false;
 	}
