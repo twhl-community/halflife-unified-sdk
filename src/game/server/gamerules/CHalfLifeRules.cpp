@@ -42,6 +42,12 @@ bool CHalfLifeRules::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWeapon
 		return false;
 	}
 
+	// Never switch
+	if (pPlayer->m_AutoWepSwitch == WeaponSwitchMode::Never)
+	{
+		return false;
+	}
+
 	return true;
 }
 

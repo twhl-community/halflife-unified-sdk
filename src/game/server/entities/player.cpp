@@ -3381,6 +3381,9 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	{
 		const bool hasActiveWeapon = m_pActiveWeapon != nullptr;
 
+		const WeaponSwitchMode savedWepSwitch = m_AutoWepSwitch;
+		m_AutoWepSwitch = WeaponSwitchMode::Never;
+
 		SetHasSuit(true);
 
 		pev->armorvalue = MAX_NORMAL_BATTERY;
@@ -3401,6 +3404,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		{
 			SelectItem("weapon_9mmar");
 		}
+
+		m_AutoWepSwitch = savedWepSwitch;
 
 		break;
 	}
@@ -3863,15 +3868,15 @@ void CBasePlayer::UpdateClientData()
 		m_FireSpawnTarget = false;
 
 		// In case a game_player_equip is triggered, this ensures the player equips the last weapon given.
-		const int savedAutoWepSwitch = m_iAutoWepSwitch;
-		m_iAutoWepSwitch = 1;
+		const WeaponSwitchMode savedAutoWepSwitch = m_AutoWepSwitch;
+		m_AutoWepSwitch = WeaponSwitchMode::IfBetter;
 
 		// This counts as spawning, it suppresses weapon pickup notifications.
 		m_bIsSpawning = true;
 		FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
 		m_bIsSpawning = false;
 
-		m_iAutoWepSwitch = savedAutoWepSwitch;
+		m_AutoWepSwitch = savedAutoWepSwitch;
 	}
 
 	if (m_iHideHUD != m_iClientHideHUD)
@@ -4897,13 +4902,15 @@ void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
 {
 	const char* value = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_autowepswitch");
 
-	if ('\0' != *value)
+	if (g_pGameRules->IsMultiplayer() && '\0' != *value)
 	{
-		m_iAutoWepSwitch = atoi(value);
+		m_AutoWepSwitch = std::clamp(static_cast<WeaponSwitchMode>(atoi(value)),
+			WeaponSwitchMode::Never,
+			WeaponSwitchMode::IfBetterAndNotAttacking);
 	}
 	else
 	{
-		m_iAutoWepSwitch = 1;
+		m_AutoWepSwitch = WeaponSwitchMode::IfBetter;
 	}
 }
 

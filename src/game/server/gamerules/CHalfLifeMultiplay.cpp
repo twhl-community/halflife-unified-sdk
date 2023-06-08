@@ -184,13 +184,13 @@ bool CHalfLifeMultiplay::FShouldSwitchWeapon(CBasePlayer* pPlayer, CBasePlayerWe
 	}
 
 	// Never switch
-	if (pPlayer->m_iAutoWepSwitch == 0)
+	if (pPlayer->m_AutoWepSwitch == WeaponSwitchMode::Never)
 	{
 		return false;
 	}
 
 	// Only switch if not attacking
-	if (pPlayer->m_iAutoWepSwitch == 2 && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)) != 0)
+	if (pPlayer->m_AutoWepSwitch == WeaponSwitchMode::IfBetter && (pPlayer->m_afButtonLast & (IN_ATTACK | IN_ATTACK2)) != 0)
 	{
 		return false;
 	}

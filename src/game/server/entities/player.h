@@ -119,6 +119,13 @@ enum Cheat
 	InfiniteArmor,
 };
 
+enum class WeaponSwitchMode
+{
+	Never = 0,
+	IfBetter,
+	IfBetterAndNotAttacking
+};
+
 class CBasePlayer : public CBaseMonster
 {
 	DECLARE_CLASS(CBasePlayer, CBaseMonster);
@@ -568,7 +575,7 @@ public:
 
 	void SetPrefsFromUserinfo(char* infobuffer);
 
-	int m_iAutoWepSwitch;
+	WeaponSwitchMode m_AutoWepSwitch;
 
 	bool m_Connected = false;
 	float m_ConnectTime = 0;
