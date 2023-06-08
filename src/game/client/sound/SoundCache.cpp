@@ -128,7 +128,7 @@ bool SoundCache::LoadSound(Sound& sound)
 		data.samples.data(), data.samples.size() * sizeof(float), data.sampleRate);
 
 	// See https://openal-soft.org/openal-extensions/SOFT_loop_points.txt
-	const auto cuePoints = TryLoadCuePoints(absolutePath, data.samples.size());
+	const auto cuePoints = TryLoadCuePoints(absolutePath, data.samples.size(), data.channelCount);
 
 	if (cuePoints)
 	{
@@ -171,7 +171,8 @@ SoundIndex SoundCache::MakeSoundIndex(const Sound* sound) const
 	return SoundIndex{(sound - m_Sounds.data()) + 1};
 }
 
-std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(const std::string& fileName, ALint sampleCount)
+std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(
+	const std::string& fileName, ALint sampleCount, int channelCount)
 {
 	m_Logger->trace("Trying to load loop info from file \"{}\"", fileName);
 
@@ -246,7 +247,7 @@ std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(const std::
 		return {};
 	}
 
-	const int width = bitDepth / 8;
+	const int width = (bitDepth / 8) * channelCount;
 
 	chunkReader = fileReader.GetChunkReader();
 
@@ -277,7 +278,7 @@ std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(const std::
 	const int cuePositionInBytes = *reinterpret_cast<const int*>(cueChunk->Data + 4 + 20);
 
 	// Convert loop start from bytes to 32 bit float samples.
-	std::tuple<ALint, ALint> loopPoints = {convertRawSampleCount(cuePositionInBytes), sampleCount};
+	std::tuple<ALint, ALint> loopPoints = {convertRawSampleCount(cuePositionInBytes), sampleCount / channelCount};
 
 	m_Logger->trace("Loaded loop start point {} from file \"{}\"", std::get<0>(loopPoints), fileName);
 

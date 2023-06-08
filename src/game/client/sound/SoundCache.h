@@ -52,7 +52,8 @@ public:
 private:
 	SoundIndex MakeSoundIndex(const Sound* sound) const;
 
-	std::optional<std::tuple<ALint, ALint>> TryLoadCuePoints(const std::string& fileName, ALint sampleCount);
+	std::optional<std::tuple<ALint, ALint>> TryLoadCuePoints(
+		const std::string& fileName, ALint sampleCount, int channelCount);
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
