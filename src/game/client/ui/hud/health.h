@@ -40,19 +40,34 @@ public:
 	bool Draw(float fTime) override;
 	void Reset() override;
 	void MsgFunc_Health(const char* pszName, BufferReader& reader);
+	void MsgFunc_Battery(const char* pszName, BufferReader& reader);
 	void MsgFunc_Damage(const char* pszName, BufferReader& reader);
 	int m_iHealth;
 	int m_HUD_cross;
 	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;
 	RGB24 GetPainColor();
-	float m_fFade;
+	float m_HealthFade;
 
 private:
-	HSPRITE m_hSprite;
-	HSPRITE m_hDamage;
+	HSPRITE m_DamageDirectionsSprite;
 
 	DAMAGE_IMAGE m_dmg[NUM_DMG_TYPES];
 	int m_bitsDamage;
+
+	// Armor HUD
+	HSPRITE m_ArmorSprite1;
+	HSPRITE m_ArmorSprite2;
+	Rect* m_ArmorSprite1Rect;
+	Rect* m_ArmorSprite2Rect;
+	int m_iBat;
+	int m_iBatMax;
+	float m_ArmorFade;
+
+	/**
+	 *	@brief Returns X coordinate for armor HUD.
+	 */
+	int DrawHealth();
+	void DrawArmor(int startX);
 	bool DrawPain(float fTime);
 	bool DrawDamage(float fTime);
 	void CalcDamageDirection(Vector vecFrom);

@@ -345,28 +345,6 @@ private:
 //
 //-----------------------------------------------------
 //
-class CHudBattery : public CHudBase
-{
-public:
-	bool Init() override;
-	bool VidInit() override;
-	bool Draw(float flTime) override;
-	void MsgFunc_Battery(const char* pszName, BufferReader& reader);
-
-private:
-	HSPRITE m_hSprite1;
-	HSPRITE m_hSprite2;
-	Rect* m_prc1;
-	Rect* m_prc2;
-	int m_iBat;
-	int m_iBatMax;
-	float m_fFade;
-};
-
-
-//
-//-----------------------------------------------------
-//
 class CHudFlashlight : public CHudBase
 {
 private:
@@ -809,7 +787,6 @@ public:
 	CHudHealth m_Health;
 	CHudSpectator m_Spectator;
 	CHudGeiger m_Geiger;
-	CHudBattery m_Battery;
 	CHudTrain m_Train;
 	CHudFlashlight m_Flash;
 	CHudMessage m_Message;
