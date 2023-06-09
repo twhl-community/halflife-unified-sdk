@@ -119,7 +119,7 @@ public:
 	bool m_fHealAudioPlaying;
 
 	float m_flFollowCheckTime;
-	bool m_fFollowChecking;
+	EntityHandle<CBasePlayer> m_PlayerToFollow;
 	bool m_fFollowChecked;
 
 	float m_flLastRejectAudio;
@@ -144,7 +144,7 @@ LINK_ENTITY_TO_CLASS(monster_human_medic_ally, COFMedicAlly);
 
 BEGIN_DATAMAP(COFMedicAlly)
 DEFINE_FIELD(m_flFollowCheckTime, FIELD_FLOAT),
-	DEFINE_FIELD(m_fFollowChecking, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_PlayerToFollow, FIELD_EHANDLE),
 	DEFINE_FIELD(m_fFollowChecked, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_flLastRejectAudio, FIELD_FLOAT),
 	DEFINE_FIELD(m_iHealCharge, FIELD_INTEGER),
@@ -299,7 +299,7 @@ void COFMedicAlly::Spawn()
 	m_fUseHealing = false;
 	m_fHealing = false;
 	m_fFollowChecked = false;
-	m_fFollowChecking = false;
+	m_PlayerToFollow = nullptr;
 
 	if (0 == pev->weapons)
 	{
@@ -400,7 +400,7 @@ void COFMedicAlly::StartTask(const Task_t* pTask)
 			StopSound(CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
 
 			m_fFollowChecked = false;
-			m_fFollowChecking = false;
+			m_PlayerToFollow = nullptr;
 
 			if (m_movementGoal == MOVEGOAL_TARGETENT)
 				RouteClear();
@@ -418,7 +418,7 @@ void COFMedicAlly::StartTask(const Task_t* pTask)
 		StopSound(CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
 
 		m_fFollowChecked = false;
-		m_fFollowChecking = false;
+		m_PlayerToFollow = nullptr;
 
 		if (m_movementGoal == MOVEGOAL_TARGETENT)
 			RouteClear();
@@ -643,14 +643,12 @@ void COFMedicAlly::Killed(CBaseEntity* attacker, int iGib)
 void COFMedicAlly::MonsterThink()
 {
 	// Check if we need to start following the player again after healing them
-	if (m_fFollowChecking && !m_fFollowChecked && gpGlobals->time - m_flFollowCheckTime > 0.5)
+	if (m_PlayerToFollow && !m_fFollowChecked && gpGlobals->time - m_flFollowCheckTime > 0.5)
 	{
-		m_fFollowChecking = false;
+		auto player = m_PlayerToFollow.Get();
+		m_PlayerToFollow = nullptr;
 
-		// TODO: not suited for multiplayer
-		auto pPlayer = UTIL_GetLocalPlayer();
-
-		FollowerUse(pPlayer, pPlayer, USE_TOGGLE, 0);
+		FollowerUse(player, player, USE_TOGGLE, 0);
 	}
 
 	CBaseHGruntAlly::MonsterThink();
@@ -769,15 +767,15 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 		return;
 	}
 
-	if (m_fFollowChecked || m_fFollowChecking)
+	if (m_fFollowChecked || m_PlayerToFollow)
 	{
-		if (!m_fFollowChecked && m_fFollowChecking)
+		if (!m_fFollowChecked && m_PlayerToFollow)
 		{
 			if (gpGlobals->time - m_flFollowCheckTime < 0.3)
 				return;
 
 			m_fFollowChecked = true;
-			m_fFollowChecking = false;
+			m_PlayerToFollow = nullptr;
 		}
 
 		const auto newTarget = !m_fUseHealing && nullptr != m_hTargetEnt && m_fHealing;
@@ -839,7 +837,7 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 		else
 		{
 			m_fFollowChecked = false;
-			m_fFollowChecking = false;
+			m_PlayerToFollow = nullptr;
 
 			if (gpGlobals->time - m_flLastRejectAudio > 4.0 && m_iHealCharge <= 0 && !m_fHealing)
 			{
@@ -852,8 +850,12 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 		return;
 	}
 
-	m_fFollowChecking = true;
-	m_flFollowCheckTime = gpGlobals->time;
+	// Only try to follow players.
+	if (auto player = ToBasePlayer(pActivator); player)
+	{
+		m_PlayerToFollow = player;
+		m_flFollowCheckTime = gpGlobals->time;
+	}
 }
 
 /**
