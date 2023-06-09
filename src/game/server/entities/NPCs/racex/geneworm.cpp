@@ -1137,19 +1137,27 @@ void COFGeneWorm::DyingThink()
 
 	if (gpGlobals->time - m_flDeathStart >= 15)
 	{
-		auto pPlayer = UTIL_GetLocalPlayer();
-
-		if (pPlayer)
+		if (g_pGameRules->IsMultiplayer())
 		{
-			// Teleport the player to the end script
-			// TODO: this really shouldn't be hardcoded
-			for (auto pTeleport : UTIL_FindEntitiesByTargetname("GeneWormTeleport"))
-			{
-				pTeleport->Touch(pPlayer);
-				AILogger->debug("Touching Target GeneWormTeleport");
-			}
+			// Fire this so level designers can respond to this at the right time.
+			FireTargets("GeneWormTeleport", this, this, USE_ON, 1);
+		}
+		else
+		{
+			auto pPlayer = UTIL_GetLocalPlayer();
 
-			FireTargets("GeneWormTeleport", pPlayer, pPlayer, USE_ON, 1);
+			if (pPlayer)
+			{
+				// Teleport the player to the end script
+				// TODO: this really shouldn't be hardcoded
+				for (auto pTeleport : UTIL_FindEntitiesByTargetname("GeneWormTeleport"))
+				{
+					pTeleport->Touch(pPlayer);
+					AILogger->debug("Touching Target GeneWormTeleport");
+				}
+
+				FireTargets("GeneWormTeleport", pPlayer, pPlayer, USE_ON, 1);
+			}
 		}
 
 		m_flDeathStart = gpGlobals->time + 999;
