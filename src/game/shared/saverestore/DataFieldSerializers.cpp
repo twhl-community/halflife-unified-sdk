@@ -306,10 +306,7 @@ void DataFieldFunctionPointerSerializer::Deserialize(CRestore& restore, std::byt
 		}
 		else
 		{
-			// HACK: get around language rules to convert the pointer.
-			// TODO: get rid of this when the function table is set up.
-			auto functionAddress = DataMap_FindFunctionAddress(*dataMap, readAddress);
-			*address = *reinterpret_cast<BASEPTR*>(&functionAddress);
+			*address = DataMap_FindFunctionAddress(*dataMap, readAddress);
 		}
 
 		readAddress += length + 1;
