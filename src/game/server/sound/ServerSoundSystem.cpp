@@ -360,6 +360,7 @@ void EMIT_SOUND_PREDICTED(CBaseEntity* entity, int channel, const char* sample, 
 		}
 		else
 		{
+			sample = sound::g_ServerSound.CheckForSoundReplacement(sample);
 			pmove->PM_PlaySound(channel, sample, volume, attenuation, flags, pitch);
 			return;
 		}

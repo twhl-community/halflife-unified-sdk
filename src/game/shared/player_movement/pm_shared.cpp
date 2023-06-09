@@ -85,8 +85,6 @@ void PM_PlaySound(int channel, const char* sample, float volume, float attenuati
 	// It's possible for this to execute before the client has received the replacement map.
 	// The engine will load the sound even if it wasn't precached, so it's not a problem.
 #ifndef CLIENT_DLL
-	sample = sound::g_ServerSound.CheckForSoundReplacement(sample);
-
 	EMIT_SOUND_PREDICTED(UTIL_PlayerByIndex(pmove->player_index + 1), channel, sample, volume, attenuation, fFlags, pitch);
 #else
 	if (pmove->runfuncs)
