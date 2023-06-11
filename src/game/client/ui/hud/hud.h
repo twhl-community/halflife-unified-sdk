@@ -454,6 +454,10 @@ public:
 	void Reset() override;
 
 private:
+	cvar_t* m_CustomMessageText{};
+	cvar_t* m_CustomMessageX{};
+	cvar_t* m_CustomMessageY{};
+
 	client_textmessage_t* m_pMessages[maxHUDMessages];
 	float m_startTime[maxHUDMessages];
 	message_parms_t m_parms;

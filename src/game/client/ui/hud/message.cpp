@@ -29,12 +29,19 @@ constexpr std::string_view NetMessagePrefix{"__NETMESSAGE__"sv};
 
 bool CHudMessage::Init()
 {
+	m_CustomMessageText = g_ConCommands.CreateCVar("custom_message_text", "");
+	m_CustomMessageX = g_ConCommands.CreateCVar("custom_message_x", "0.1");
+	m_CustomMessageY = g_ConCommands.CreateCVar("custom_message_y", "-1");
+
 	g_ClientUserMessages.RegisterHandler("HudText", &CHudMessage::MsgFunc_HudText, this);
 	g_ClientUserMessages.RegisterHandler("GameTitle", &CHudMessage::MsgFunc_GameTitle, this);
 
 	gHUD.AddHudElem(this);
 
 	Reset();
+
+	// Always run so custom messages can draw.
+	m_iFlags |= HUD_ACTIVE;
 
 	return true;
 }
@@ -316,11 +323,9 @@ void CHudMessage::MessageDrawScan(client_textmessage_t* pMessage, float time)
 
 bool CHudMessage::Draw(float fTime)
 {
-	int i, drawn;
+	int i;
 	client_textmessage_t* pMessage;
 	float endTime;
-
-	drawn = 0;
 
 	if (m_gameTitleTime > 0)
 	{
@@ -351,8 +356,6 @@ bool CHudMessage::Draw(float fTime)
 
 			SPR_Set(gHUD.GetSprite(m_TitleToDisplay->Right), color);
 			SPR_DrawAdditive(0, x + halfWidth, y, &gHUD.GetSpriteRect(m_TitleToDisplay->Right));
-
-			drawn = 1;
 		}
 	}
 	// Fixup level transitions
@@ -397,8 +400,6 @@ bool CHudMessage::Draw(float fTime)
 				// effect 1 is flickery credits
 				// effect 2 is write out (training room)
 				MessageDrawScan(pMessage, messageTime);
-
-				drawn++;
 			}
 			else
 			{
@@ -408,11 +409,33 @@ bool CHudMessage::Draw(float fTime)
 		}
 	}
 
+	if (m_CustomMessageText->string[0] != '\0')
+	{
+		client_textmessage_t customMessage
+		{
+			.effect = 0,
+			.r1 = 255,
+			.g1 = 255,
+			.b1 = 255,
+			.a1 = 0,
+			.r2 = 0,
+			.g2 = 0,
+			.b2 = 0,
+			.a2 = 0,
+			.x = m_CustomMessageX->value,
+			.y = m_CustomMessageY->value,
+			.fadein = 0,
+			.fadeout = 0,
+			.holdtime = 0,
+			.pName = "#CustomMessage",
+			.pMessage = m_CustomMessageText->string
+		};
+
+		MessageDrawScan(&customMessage, 0);
+	}
+
 	// Remember the time -- to fix up level transitions
 	m_parms.time = gHUD.m_flTime;
-	// Don't call until we get another message
-	if (0 == drawn)
-		m_iFlags &= ~HUD_ACTIVE;
 
 	return true;
 }
@@ -499,10 +522,6 @@ void CHudMessage::MsgFunc_HudText(const char* pszName, BufferReader& reader)
 	MessageAdd(pString, gHUD.m_flTime);
 	// Remember the time -- to fix up level transitions
 	m_parms.time = gHUD.m_flTime;
-
-	// Turn on drawing
-	if ((m_iFlags & HUD_ACTIVE) == 0)
-		m_iFlags |= HUD_ACTIVE;
 }
 
 
@@ -542,20 +561,12 @@ void CHudMessage::MsgFunc_GameTitle(const char* pszName, BufferReader& reader)
 		}
 
 		m_gameTitleTime = gHUD.m_flTime;
-
-		// Turn on drawing
-		if ((m_iFlags & HUD_ACTIVE) == 0)
-			m_iFlags |= HUD_ACTIVE;
 	}
 }
 
 void CHudMessage::MessageAdd(client_textmessage_t* newMessage)
 {
 	m_parms.time = gHUD.m_flTime;
-
-	// Turn on drawing
-	if ((m_iFlags & HUD_ACTIVE) == 0)
-		m_iFlags |= HUD_ACTIVE;
 
 	for (int i = 0; i < maxHUDMessages; i++)
 	{
