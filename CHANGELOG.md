@@ -16,6 +16,7 @@ Many changes have been made since 2019. All changes made after [[this|https://gi
 * Fixed Health Charger recharge time not using the correct value in Co-op
 * Fixed Desert Eagle laser position not updating when holding down reload button [#95](https://github.com/SamVanheer/halflife-op4-updated/issues/95) (Thanks Ronin4862)
 * Fixed Voltigore creating beams on death connecting to wrong entity [#97](https://github.com/SamVanheer/halflife-op4-updated/issues/97) (Thanks LambdaLuke87)
+* Fixed ropes breaking at high framerates
 
 ## Changes in V1.0.0 Beta 011
 
