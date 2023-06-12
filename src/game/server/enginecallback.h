@@ -81,7 +81,6 @@ inline void WRITE_FLOAT(float value)
 #define CVAR_SET_FLOAT (*g_engfuncs.pfnCVarSetFloat)
 #define CVAR_SET_STRING (*g_engfuncs.pfnCVarSetString)
 #define CVAR_GET_POINTER (*g_engfuncs.pfnCVarGetPointer)
-#define ALLOC_PRIVATE (*g_engfuncs.pfnPvAllocEntPrivateData)
 inline void* GET_PRIVATE(edict_t* pent)
 {
 	if (pent)
@@ -97,7 +96,6 @@ inline T* GET_PRIVATE(edict_t* pent)
 	return nullptr;
 }
 
-#define FREE_PRIVATE (*g_engfuncs.pfnFreeEntPrivateData)
 #define GETENTITYILLUM (*g_engfuncs.pfnGetEntityIllum)
 #define FIND_ENTITY_IN_SPHERE (*g_engfuncs.pfnFindEntityInSphere)
 #define EMIT_AMBIENT_SOUND (*g_engfuncs.pfnEmitAmbientSound)

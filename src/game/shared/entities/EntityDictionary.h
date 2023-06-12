@@ -136,7 +136,7 @@ protected:
 			pev = &CREATE_ENTITY()->v;
 		}
 
-		// Replicate the ALLOC_PRIVATE engine function's behavior.
+		// Replicate the pfnPvAllocEntPrivateData engine function's behavior.
 		pev->pContainingEntity->pvPrivateData = entity;
 
 		entity->pev = pev;

@@ -753,14 +753,14 @@ void CHalfLifeCTFplay::ClientDisconnected(edict_t* pClient)
 			// free( v2->ip );
 			// v2->ip = nullptr;
 
-			free(pszPlayerIPs[g_engfuncs.pfnIndexOfEdict(pClient)]);
+			free(pszPlayerIPs[ENTINDEX(pClient)]);
 
-			pszPlayerIPs[g_engfuncs.pfnIndexOfEdict(pClient)] = nullptr;
+			pszPlayerIPs[ENTINDEX(pClient)] = nullptr;
 
 			v2->RemoveAllItems(true);
 
 			MESSAGE_BEGIN(MSG_ALL, gmsgSpectator);
-			g_engfuncs.pfnWriteByte(g_engfuncs.pfnIndexOfEdict(pClient));
+			g_engfuncs.pfnWriteByte(ENTINDEX(pClient));
 			g_engfuncs.pfnWriteByte(0);
 			g_engfuncs.pfnMessageEnd();
 
@@ -868,7 +868,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 		UTIL_TraceLine(vecSrc, vecSrc + 1280.0 * gpGlobals->v_forward, dont_ignore_monsters, pPlayer->edict(), &tr);
 	}
 
-	if (0 != gmsgPlayerBrowse && tr.flFraction < 1.0 && pPlayer->m_iLastPlayerTrace != g_engfuncs.pfnIndexOfEdict(tr.pHit))
+	if (0 != gmsgPlayerBrowse && tr.flFraction < 1.0 && pPlayer->m_iLastPlayerTrace != ENTINDEX(tr.pHit))
 	{
 		auto pOther = ToBasePlayer(tr.pHit);
 
@@ -896,7 +896,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 			g_engfuncs.pfnMessageEnd();
 		}
 
-		pPlayer->m_iLastPlayerTrace = g_engfuncs.pfnIndexOfEdict(tr.pHit);
+		pPlayer->m_iLastPlayerTrace = ENTINDEX(tr.pHit);
 	}
 	CHalfLifeMultiplay::PlayerThink(pPlayer);
 }
