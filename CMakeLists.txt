@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 
+include(CheckIPOSupported)
+
 if (MSVC)
 	set(CMAKE_SYSTEM_VERSION 10.0)
 endif()
@@ -47,6 +49,12 @@ if(RELEASE_TYPE_INDEX EQUAL -1)
 	message(FATAL_ERROR "HalfLife_RELEASE_TYPE must be one of: ${RELEASE_TYPE}")
 endif()
 
+option(HalfLife_LTO "Enable Link-Time Optimization" OFF)
+
+if(HalfLife_LTO)
+	check_ipo_supported()
+endif()
+
 # Find dependencies
 find_package(Threads REQUIRED)
 find_package(Git REQUIRED)
@@ -65,6 +73,10 @@ function(set_common_properties TARGET_NAME)
 	
 	# Enable use of Clang-Tidy in code analysis. See [repo_root]/.clang-tidy for the checks used in the project.
 	set_target_properties(${TARGET_NAME} PROPERTIES VS_GLOBAL_EnableClangTidyCodeAnalysis true)
+	
+	if(HalfLife_LTO)
+		set_target_properties(${TARGET_NAME} PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+	endif()
 	
 	target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 		
