@@ -76,7 +76,7 @@ bool ClientUserMessages::DispatchUserMessage(const char* pszName, int iSize, voi
 	{
 		BufferReader reader{{reinterpret_cast<std::byte*>(pbuf), static_cast<std::size_t>(iSize)}};
 		it->second.Handler(pszName, reader);
-		return 1;
+		return true;
 	}
 
 	// Don't spawn the console with error messages; this is a developer error.
@@ -84,5 +84,5 @@ bool ClientUserMessages::DispatchUserMessage(const char* pszName, int iSize, voi
 
 	assert(!"No user message handler for message");
 
-	return 0;
+	return false;
 }

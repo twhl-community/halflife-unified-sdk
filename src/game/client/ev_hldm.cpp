@@ -767,7 +767,7 @@ void EV_FirePython(event_args_t* args)
 
 	if (EV_IsLocal(idx))
 	{
-		const auto body = g_Skill.GetValue("revolver_laser_sight") ? 1 : 0;
+		const int body = g_Skill.GetValue("revolver_laser_sight") != 0 ? 1 : 0;
 
 		// Add muzzle flash to current weapon model
 		EV_MuzzleFlash();

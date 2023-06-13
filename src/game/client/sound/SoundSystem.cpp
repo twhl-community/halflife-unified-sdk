@@ -456,7 +456,7 @@ void CL_TempEntPlaySound(TEMPENTITY* pTemp, float damp)
 
 	if (isShell && bounceSpeed < 200)
 	{
-		if (gEngfuncs.pfnRandomLong(0, 3))
+		if (gEngfuncs.pfnRandomLong(0, 3) != 0)
 			return;
 	}
 
@@ -476,7 +476,7 @@ void CL_TempEntPlaySound(TEMPENTITY* pTemp, float damp)
 
 	int pitch = PITCH_NORM;
 
-	if (!gEngfuncs.pfnRandomLong(0, 3) && !isShell)
+	if (gEngfuncs.pfnRandomLong(0, 3) == 0 && !isShell)
 	{
 		pitch = gEngfuncs.pfnRandomLong(90, 124);
 	}

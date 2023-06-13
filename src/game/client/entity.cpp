@@ -829,7 +829,7 @@ static void CL_ParseGunshotDecal(BufferReader& reader)
 		return;
 	}
 
-	if (r_decals->value)
+	if (r_decals->value != 0)
 	{
 		const int decalIndex = gEngfuncs.pEfxAPI->Draw_DecalIndex(decalId);
 		gEngfuncs.pEfxAPI->R_DecalShoot(decalIndex, entityIndex, 0, pos, 0);

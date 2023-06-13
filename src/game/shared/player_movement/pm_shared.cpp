@@ -87,7 +87,7 @@ void PM_PlaySound(int channel, const char* sample, float volume, float attenuati
 #ifndef CLIENT_DLL
 	EMIT_SOUND_PREDICTED(UTIL_PlayerByIndex(pmove->player_index + 1), channel, sample, volume, attenuation, fFlags, pitch);
 #else
-	if (pmove->runfuncs)
+	if (pmove->runfuncs != 0)
 	{
 		CL_StartSound(pmove->player_index + 1, channel, sample, pmove->origin, volume, attenuation, pitch, fFlags);
 	}

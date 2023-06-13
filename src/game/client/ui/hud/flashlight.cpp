@@ -125,7 +125,7 @@ bool CHudFlashlight::Draw(float flTime)
 	{ // draw the flashlight beam
 		x = ScreenWidth - data->m_iWidth / 2;
 
-		if (data->m_hBeam)
+		if (data->m_hBeam != 0)
 		{
 			SPR_Set(data->m_hBeam, color);
 			SPR_DrawAdditive(0, x, y, data->m_prcBeam);

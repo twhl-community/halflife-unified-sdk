@@ -3740,7 +3740,7 @@ void CBasePlayer::ItemPostFrame()
 
 	const bool canUseItem = m_flNextAttack <= UTIL_WeaponTimeBase();
 
-	if (canUseItem || GetSkillFloat("allow_use_while_busy"))
+	if (canUseItem || GetSkillFloat("allow_use_while_busy") != 0)
 	{
 		// Handle use events
 		PlayerUse();

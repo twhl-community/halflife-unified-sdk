@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <span>
 #include <string>
 #include <type_traits>
@@ -296,10 +297,10 @@ public:                                      \
 	BEGIN_DATAMAP(thisClass)            \
 	END_DATAMAP()
 
-#define RAW_DEFINE_FIELD(fieldName, fieldType, serializer, count, flags)                \
-	DataFieldDescription                                                                \
-	{                                                                                   \
-		fieldType, serializer, #fieldName, offsetof(ThisClass, fieldName), count, flags \
+#define RAW_DEFINE_FIELD(fieldName, fieldType, serializer, count, flags)                     \
+	DataFieldDescription                                                                     \
+	{                                                                                        \
+		fieldType, serializer, #fieldName, int(offsetof(ThisClass, fieldName)), count, flags \
 	}
 
 #define DEFINE_FIELD(fieldName, fieldType) \

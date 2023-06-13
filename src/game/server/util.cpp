@@ -1497,5 +1497,5 @@ Vector VecBModelOrigin(CBaseEntity* bModel)
 bool UTIL_IsMultiplayer()
 {
 	// Can be null during weapon registration.
-	return g_pGameRules && g_pGameRules->IsMultiplayer();
+	return g_pGameRules != nullptr && g_pGameRules->IsMultiplayer();
 }
