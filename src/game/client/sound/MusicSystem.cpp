@@ -45,9 +45,19 @@ MusicSystem::~MusicSystem()
 	}
 }
 
-bool MusicSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device)
+bool MusicSystem::Create(std::shared_ptr<spdlog::logger> logger)
 {
 	m_Logger = logger;
+
+	m_Device.reset(alcOpenDevice(nullptr));
+
+	if (!m_Device)
+	{
+		m_Logger->error("Couldn't open OpenAL device for MusicSystem");
+		return false;
+	}
+
+	m_Logger->trace("OpenAL device opened for MusicSystem");
 
 	m_VolumeCvar = gEngfuncs.pfnGetCvarPointer("MP3Volume");
 	m_FadeTimeCvar = gEngfuncs.pfnGetCvarPointer("MP3FadeTime");
@@ -58,12 +68,13 @@ bool MusicSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* devi
 		return false;
 	}
 
-	if (!CheckOpenALContextExtension(device, "ALC_EXT_thread_local_context", *m_Logger))
+	if (!CheckOpenALContextExtension(m_Device.get(), "ALC_EXT_thread_local_context", *m_Logger))
 	{
 		return false;
 	}
 
-	m_Context.reset(alcCreateContext(device, nullptr));
+	// TODO: see if any context attributes can be used to reduce memory usage for this context.
+	m_Context.reset(alcCreateContext(m_Device.get(), nullptr));
 
 	if (!m_Context)
 	{

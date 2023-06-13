@@ -131,7 +131,7 @@ private:
 public:
 	~MusicSystem() override;
 
-	bool Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device);
+	bool Create(std::shared_ptr<spdlog::logger> logger);
 
 	void Play(std::string&& fileName, bool looping) override;
 	void Stop() override;
@@ -179,6 +179,7 @@ private:
 
 	bool m_Blocked{false};
 
+	std::unique_ptr<ALCdevice, DeleterWrapper<alcCloseDevice>> m_Device;
 	std::unique_ptr<ALCcontext, DeleterWrapper<alcDestroyContext>> m_Context;
 
 	std::vector<OpenALBuffer> m_Buffers;

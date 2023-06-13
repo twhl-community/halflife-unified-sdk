@@ -56,7 +56,7 @@ GameSoundSystem::~GameSoundSystem()
 	m_CacheLogger.reset();
 }
 
-bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* device)
+bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger)
 {
 	m_Logger = logger;
 	m_CacheLogger = g_Logging.CreateLogger("sound.cache");
@@ -91,7 +91,17 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 		return false;
 	}
 
-	if (!CheckOpenALContextExtension(device, "ALC_EXT_EFX", *m_Logger))
+	m_Device.reset(alcOpenDevice(nullptr));
+
+	if (!m_Device)
+	{
+		m_Logger->error("Couldn't open OpenAL device for GameSoundSystem");
+		return false;
+	}
+
+	m_Logger->trace("OpenAL device opened for GameSoundSystem");
+
+	if (!CheckOpenALContextExtension(m_Device.get(), "ALC_EXT_EFX", *m_Logger))
 	{
 		return false;
 	}
@@ -102,7 +112,7 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 	attribs[0] = ALC_MAX_AUXILIARY_SENDS;
 	attribs[1] = 1;
 
-	m_Context.reset(alcCreateContext(device, attribs));
+	m_Context.reset(alcCreateContext(m_Device.get(), attribs));
 
 	if (!m_Context)
 	{
@@ -134,7 +144,7 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 	}
 
 	ALCint auxSendsCount = 0;
-	alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &auxSendsCount);
+	alcGetIntegerv(m_Device.get(), ALC_MAX_AUXILIARY_SENDS, 1, &auxSendsCount);
 
 	if (auxSendsCount < 1)
 	{
@@ -201,6 +211,22 @@ bool GameSoundSystem::Create(std::shared_ptr<spdlog::logger> logger, ALCdevice* 
 	m_SoundCache = std::make_unique<SoundCache>(m_CacheLogger);
 	m_Sentences = std::make_unique<SentencesSystem>(m_SentencesLogger, m_SoundCache.get());
 
+	m_HRTFEnabled = g_ConCommands.CreateCVar("snd_hrtf_enabled", "0", FCVAR_ARCHIVE);
+	m_HRTFImplementation = g_ConCommands.CreateCVar("snd_hrtf_implementation", "", FCVAR_ARCHIVE);
+	g_ConCommands.CreateCommand("snd_hrtf_list_implementations", [this](const auto&)
+		{ PrintHRTFImplementations(); });
+
+	m_SupportsHRTF = alcIsExtensionPresent(m_Device.get(), "ALC_SOFT_HRTF") != ALC_FALSE;
+
+	if (m_SupportsHRTF)
+	{
+		m_Logger->trace("HRTF is supported");
+	}
+	else
+	{
+		m_Logger->trace("HRTF is not supported");
+	}
+
 	return true;
 }
 
@@ -245,6 +271,15 @@ void GameSoundSystem::Update()
 	}
 
 	++m_CurrentGameFrame;
+
+	if (m_SupportsHRTF)
+	{
+		if (const bool hrtfEnabled = m_HRTFEnabled->value != 0; m_CachedHRTFEnabled != hrtfEnabled)
+		{
+			m_CachedHRTFEnabled = hrtfEnabled;
+			ConfigureHRTF(hrtfEnabled);
+		}
+	}
 
 	Vector origin, forward, right, up;
 
@@ -545,6 +580,87 @@ bool GameSoundSystem::MakeCurrent()
 	}
 
 	return true;
+}
+
+void GameSoundSystem::PrintHRTFImplementations()
+{
+	ALCint numHRTF;
+	alcGetIntegerv(m_Device.get(), ALC_NUM_HRTF_SPECIFIERS_SOFT, 1, &numHRTF);
+
+	if (numHRTF == 0)
+	{
+		Con_Printf("No HRTF implementations found\n");
+		return;
+	}
+
+	Con_Printf("%d HRTF implementations found\n", numHRTF);
+
+	for (ALCint j = 0; j < numHRTF; ++j)
+	{
+		const ALCchar* name = alcGetStringiSOFT(m_Device.get(), ALC_HRTF_SPECIFIER_SOFT, j);
+
+		Con_Printf("%d: %s\n", j, name);
+	}
+}
+
+void GameSoundSystem::ConfigureHRTF(bool enabled)
+{
+	ALCint numHRTF;
+	alcGetIntegerv(m_Device.get(), ALC_NUM_HRTF_SPECIFIERS_SOFT, 1, &numHRTF);
+
+	if (numHRTF == 0)
+	{
+		m_Logger->debug("No HRTF implementations found");
+		return;
+	}
+
+	ALCint attribs[5]{0};
+
+	int i = 0;
+	attribs[i++] = ALC_HRTF_SOFT;
+	attribs[i++] = enabled ? ALC_TRUE : ALC_FALSE;
+
+	if (enabled)
+	{
+		ALCint implementationIndex = -1;
+
+		if (m_HRTFImplementation->string[0] != '\0')
+		{
+			for (ALCint j = 0; j < numHRTF; ++j)
+			{
+				const ALCchar* name = alcGetStringiSOFT(m_Device.get(), ALC_HRTF_SPECIFIER_SOFT, j);
+
+				if (strcmp(m_HRTFImplementation->string, name) == 0)
+				{
+					implementationIndex = j;
+					break;
+				}
+			}
+
+			if (implementationIndex == -1)
+			{
+				m_Logger->error("HRTF implementation \"{}\" not found", m_HRTFImplementation->string);
+			}
+		}
+
+		if (implementationIndex != -1)
+		{
+			m_Logger->debug("Using HRTF implementation \"{}\" (index {})", m_HRTFImplementation->string, implementationIndex);
+			attribs[i++] = ALC_HRTF_ID_SOFT;
+			attribs[i++] = implementationIndex;
+		}
+		else
+		{
+			m_Logger->debug("Using default HRTF implementation");
+		}
+	}
+
+	attribs[i++] = 0;
+
+	if (ALC_FALSE == alcResetDeviceSOFT(m_Device.get(), attribs))
+	{
+		m_Logger->error("Failed to reset device: {}", alcGetString(m_Device.get(), alcGetError(m_Device.get())));
+	}
 }
 
 void GameSoundSystem::SetVolume()
