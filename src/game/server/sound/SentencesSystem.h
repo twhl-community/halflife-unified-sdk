@@ -83,7 +83,7 @@ private:
 	/**
 	 *	@brief randomize list of sentence name indices
 	 */
-	void InitLRU(unsigned char* plru, int count) const;
+	static void InitLRU(eastl::fixed_vector<unsigned char, CSENTENCE_LRU_MAX>& lru);
 
 	/**
 	 *	@brief Given sentence group rootname (name without number suffix), get sentence group index (isentenceg).
@@ -116,7 +116,7 @@ private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 
 	std::vector<Sentence> m_Sentences;
-	std::vector<SENTENCEG> m_SentenceGroups;
+	std::vector<SentenceGroup> m_SentenceGroups;
 };
 
 inline SentencesSystem g_Sentences;

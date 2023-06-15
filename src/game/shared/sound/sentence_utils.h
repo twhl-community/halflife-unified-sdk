@@ -24,6 +24,7 @@
 #include <spdlog/logger.h>
 
 #include <EASTL/fixed_string.h>
+#include <EASTL/fixed_vector.h>
 
 #include "cbase.h"
 
@@ -56,11 +57,11 @@ using SentenceIndexName = eastl::fixed_string<char, CBSENTENCENAME_MAX + 1>;
 /**
  *	@brief group of related sentences
  */
-struct SENTENCEG
+struct SentenceGroup
 {
 	SentenceName GroupName;
-	int count = 1;
-	unsigned char rgblru[CSENTENCE_LRU_MAX]{};
+	eastl::fixed_vector<int, CSENTENCE_LRU_MAX> Sentences{};
+	eastl::fixed_vector<unsigned char, CSENTENCE_LRU_MAX> LeastRecentlyUsed{};
 };
 
 /**
