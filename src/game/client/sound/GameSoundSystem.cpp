@@ -386,36 +386,6 @@ void GameSoundSystem::StartSound(
 	int entityIndex, int channelIndex,
 	const char* soundOrSentence, const Vector& origin, float volume, float attenuation, int pitch, int flags)
 {
-	if (g_cl_snd_openal->value == 0)
-	{
-		// Convert sentences back into an index.
-		Filename sentenceIndexString;
-
-		if (soundOrSentence[0] == '!')
-		{
-			const auto sentenceIndex = m_Sentences->FindSentence(soundOrSentence + 1);
-
-			if (sentenceIndex == SentencesSystem::InvalidIndex)
-			{
-				return;
-			}
-
-			if (sentenceIndex >= sentences::EngineMaxSentences)
-			{
-				m_Logger->warn("cl_snd_openal is 0: Sentence \"{}\" has index greater than {}, engine doesn't support this",
-					soundOrSentence, (sentences::EngineMaxSentences - 1));
-				return;
-			}
-
-			fmt::format_to(std::back_inserter(sentenceIndexString), "!{}", sentenceIndex);
-
-			soundOrSentence = sentenceIndexString.c_str();
-		}
-
-		gEngfuncs.pEventAPI->EV_PlaySound(entityIndex, origin, channelIndex, soundOrSentence, volume, attenuation, flags, pitch);
-		return;
-	}
-
 	if (!MakeCurrent())
 	{
 		return;

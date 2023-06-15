@@ -19,7 +19,6 @@
 #include "networking/NetworkDataSystem.h"
 
 class CBaseEntity;
-struct cvar_t;
 
 namespace sound
 {
@@ -33,8 +32,6 @@ public:
 	void Shutdown() override;
 
 	void HandleNetworkDataBlock(NetworkDataBlock& block) override;
-
-	bool ShouldUseOpenAL() const { return m_UseOpenAl->value != 0; }
 
 	/**
 	 *	@details Use this to set the pitch of a sound.
@@ -62,7 +59,6 @@ private:
 
 private:
 	std::shared_ptr<spdlog::logger> m_Logger;
-	cvar_t* m_UseOpenAl{};
 };
 
 inline ServerSoundSystem g_ServerSound;

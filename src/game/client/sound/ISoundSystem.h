@@ -48,7 +48,6 @@ struct ISoundSystem
 
 inline std::unique_ptr<ISoundSystem> g_SoundSystem;
 
-inline cvar_t* g_cl_snd_openal = nullptr;
 inline cvar_t* g_cl_snd_room_off = nullptr;
 
 /**

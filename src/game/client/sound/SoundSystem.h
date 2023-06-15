@@ -50,10 +50,6 @@ public:
 	const std::shared_ptr<spdlog::logger>& GetLogger() { return m_Logger; }
 
 private:
-	void PrintHRTFImplementations();
-	void ConfigureHRTF(bool enabled);
-
-private:
 	std::shared_ptr<spdlog::logger> m_Logger;
 
 	std::unique_ptr<GameSoundSystem> m_GameSoundSystem;

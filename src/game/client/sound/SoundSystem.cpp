@@ -175,7 +175,6 @@ static void S_PlayDynamicSound(const CommandArgs& args)
 
 void CreateSoundSystem()
 {
-	g_cl_snd_openal = g_ConCommands.CreateCVar("snd_openal", "1", FCVAR_ARCHIVE);
 	g_cl_snd_room_off = g_ConCommands.CreateCVar("snd_room_off", "0", FCVAR_ARCHIVE);
 
 	g_SoundSystem = []() -> std::unique_ptr<ISoundSystem>
