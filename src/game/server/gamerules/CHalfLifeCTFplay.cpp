@@ -1291,7 +1291,7 @@ void CHalfLifeCTFplay::ChangePlayerTeam(CBasePlayer* pPlayer, const char* pCharN
 		pPlayer->m_iNewTeamNum = CTFTeam::None;
 		pPlayer->m_iCurrentMenu = MENU_NONE;
 		pPlayer->m_iTeamNum = CTFTeam::None;
-		pPlayer->SetSuitUpdate(nullptr, false, SUIT_REPEAT_OK);
+		pPlayer->SetSuitUpdate(nullptr, SUIT_REPEAT_OK);
 		pPlayer->m_iClientHealth = 100;
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgHealth, nullptr, pPlayer);

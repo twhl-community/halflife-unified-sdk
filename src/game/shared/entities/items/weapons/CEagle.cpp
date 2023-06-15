@@ -217,7 +217,7 @@ void CEagle::PrimaryAttack()
 	if (0 == GetMagazine1())
 	{
 		if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
-			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
+			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_REPEAT_OK);
 	}
 
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10.0, 15.0);

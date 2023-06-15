@@ -382,11 +382,6 @@ void EMIT_SOUND_PREDICTED(CBaseEntity* entity, int channel, const char* sample, 
 void EMIT_SOUND_SUIT(CBaseEntity* entity, const char* sample);
 
 /**
- *	@brief play a sentence, randomly selected from the passed in group id, over the HEV suit speaker
- */
-void EMIT_GROUPID_SUIT(CBaseEntity* entity, int isentenceg);
-
-/**
  *	@brief play a sentence, randomly selected from the passed in groupname
  */
 void EMIT_GROUPNAME_SUIT(CBaseEntity* entity, const char* groupname);

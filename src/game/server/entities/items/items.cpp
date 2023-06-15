@@ -65,7 +65,7 @@ public:
 	{
 		if (m_PlayPickupSound)
 		{
-			player->SetSuitUpdate("!HEV_DET4", false, SUIT_NEXT_IN_1MIN);
+			player->SetSuitUpdate("!HEV_DET4", SUIT_NEXT_IN_1MIN);
 		}
 
 		player->m_rgItems[ITEM_ANTIDOTE] += 1;
@@ -263,7 +263,7 @@ protected:
 					sprintf(szcharge, "!HEV_%1dP", pct);
 
 					// EMIT_SOUND_SUIT(this, szcharge);
-					player->SetSuitUpdate(szcharge, false, SUIT_NEXT_IN_30SEC);
+					player->SetSuitUpdate(szcharge, SUIT_NEXT_IN_30SEC);
 				}
 			}
 

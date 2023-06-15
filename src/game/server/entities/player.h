@@ -66,9 +66,6 @@ constexpr int MAX_ITEMS = ITEM_ANTIDOTE + 1; // hard coded item types
 
 #define CSUITPLAYLIST 4 // max of 4 suit sentences queued up at any time
 
-#define SUIT_GROUP true
-#define SUIT_SENTENCE false
-
 #define SUIT_REPEAT_OK 0
 #define SUIT_NEXT_IN_30SEC 30
 #define SUIT_NEXT_IN_1MIN 60
@@ -201,13 +198,13 @@ public:
 	float m_flDuckTime;		  // how long we've been ducking
 	float m_flWallJumpTime;	  // how long until next walljump
 
-	float m_flSuitUpdate;						 // when to play next suit update
-	int m_rgSuitPlayList[CSUITPLAYLIST];		 // next sentencenum to play for suit update
-	int m_iSuitPlayNext;						 // next sentence slot for queue storage;
-	int m_rgiSuitNoRepeat[CSUITNOREPEAT];		 // suit sentence no repeat list
-	float m_rgflSuitNoRepeatTime[CSUITNOREPEAT]; // how long to wait before allowing repeat
-	int m_lastDamageAmount;						 // Last damage taken
-	float m_tbdPrev;							 // Time-based damage timer
+	float m_flSuitUpdate;							// when to play next suit update
+	string_t m_rgSuitPlayList[CSUITPLAYLIST];		// next sentencenum to play for suit update
+	int m_iSuitPlayNext;							// next sentence slot for queue storage;
+	string_t m_rgiSuitNoRepeat[CSUITNOREPEAT];		// suit sentence no repeat list
+	float m_rgflSuitNoRepeatTime[CSUITNOREPEAT];	// how long to wait before allowing repeat
+	int m_lastDamageAmount;							// Last damage taken
+	float m_tbdPrev;								// Time-based damage timer
 
 	float m_flgeigerRange; // range to nearest radiation source
 	float m_flgeigerDelay; // delay per update of range msg to client
@@ -487,12 +484,10 @@ public:
 	/**
 	 *	@brief add sentence to suit playlist queue.
 	 *	@param name Name of the sentence or sentence group to play. If null, clears out the playlist queue.
-	 *	@param fgroup if true, then name is a sentence group (HEV_AA),
-	 *		otherwise name is a specific sentence name ie: !HEV_AA0.
-	 *	@param iNoRepeat if specified, then we won't repeat playback of this word or sentence
+	 *	@param iNoRepeatTime if specified, then we won't repeat playback of this word or sentence
 	 *		for at least that number of seconds.
 	 */
-	void SetSuitUpdate(const char* name, bool fgroup, int iNoRepeat);
+	void SetSuitUpdate(const char* name, int iNoRepeatTime);
 
 	void UpdateGeigerCounter();
 	void CheckTimeBasedDamage();

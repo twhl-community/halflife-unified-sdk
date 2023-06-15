@@ -165,16 +165,6 @@ int SentencesSystem::LookupSentence(CBaseEntity* entity, const char* sample, Sen
 	return -1;
 }
 
-int SentencesSystem::PlayRndI(CBaseEntity* entity, int isentenceg, float volume, float attenuation, int flags, int pitch)
-{
-	SentenceIndexName name;
-
-	const int ipick = Pick(isentenceg, name);
-	if (ipick > 0 && !name.empty())
-		sound::g_ServerSound.EmitSound(entity, CHAN_VOICE, name.c_str(), volume, attenuation, flags, pitch);
-	return ipick;
-}
-
 int SentencesSystem::PlayRndSz(CBaseEntity* entity, const char* szgroupname,
 	float volume, float attenuation, int flags, int pitch)
 {

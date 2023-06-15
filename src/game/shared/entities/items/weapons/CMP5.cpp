@@ -148,7 +148,7 @@ void CMP5::PrimaryAttack()
 
 	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", 0);
 
 	m_flNextPrimaryAttack = GetNextAttackDelay(0.1);
 
@@ -207,7 +207,7 @@ void CMP5::SecondaryAttack()
 
 	if (0 == m_pPlayer->GetAmmoCountByIndex(m_iSecondaryAmmoType))
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", 0);
 }
 
 void CMP5::Reload()

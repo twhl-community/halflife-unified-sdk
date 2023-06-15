@@ -261,7 +261,7 @@ void CBasePlayer::PreThink() {}
 void CBasePlayer::CheckTimeBasedDamage() {}
 void CBasePlayer::UpdateGeigerCounter() {}
 void CBasePlayer::CheckSuitUpdate() {}
-void CBasePlayer::SetSuitUpdate(const char* name, bool fgroup, int iNoRepeatTime) {}
+void CBasePlayer::SetSuitUpdate(const char* name, int iNoRepeatTime) {}
 void CBasePlayer::UpdatePlayerSound() {}
 void CBasePlayer::PostThink() {}
 void CBasePlayer::Precache() {}

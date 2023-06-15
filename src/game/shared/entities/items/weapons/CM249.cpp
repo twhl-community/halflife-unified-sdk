@@ -213,7 +213,7 @@ void CM249::PrimaryAttack()
 	{
 		if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		{
-			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_SENTENCE, SUIT_REPEAT_OK);
+			m_pPlayer->SetSuitUpdate("!HEV_AMO0", SUIT_REPEAT_OK);
 		}
 	}
 

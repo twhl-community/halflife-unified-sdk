@@ -170,7 +170,7 @@ void CPython::PrimaryAttack()
 
 	if (0 == GetMagazine1() && m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) <= 0)
 		// HEV suit - indicate out of ammo condition
-		m_pPlayer->SetSuitUpdate("!HEV_AMO0", false, 0);
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", 0);
 
 	m_flNextPrimaryAttack = 0.75;
 	m_flTimeWeaponIdle = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);

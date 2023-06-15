@@ -382,19 +382,6 @@ void EMIT_SOUND_SUIT(CBaseEntity* entity, const char* sample)
 		sound::g_ServerSound.EmitSound(entity, CHAN_STATIC, sample, fvol, ATTN_NORM, 0, pitch);
 }
 
-void EMIT_GROUPID_SUIT(CBaseEntity* entity, int isentenceg)
-{
-	float fvol;
-	int pitch = PITCH_NORM;
-
-	fvol = CVAR_GET_FLOAT("suitvolume");
-	if (RANDOM_LONG(0, 1))
-		pitch = RANDOM_LONG(0, 6) + 98;
-
-	if (fvol > 0.05)
-		sentences::g_Sentences.PlayRndI(entity, isentenceg, fvol, ATTN_NORM, 0, pitch);
-}
-
 void EMIT_GROUPNAME_SUIT(CBaseEntity* entity, const char* groupname)
 {
 	float fvol;
