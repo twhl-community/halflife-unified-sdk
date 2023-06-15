@@ -70,12 +70,14 @@ class CCineMonster : public CBaseMonster
 public:
 	static inline std::shared_ptr<spdlog::logger> AIScriptLogger;
 
+	void OnCreate() override;
 	void Spawn() override;
 	bool KeyValue(KeyValueData* pkvd) override;
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 	void Blocked(CBaseEntity* pOther) override;
 	void Touch(CBaseEntity* pOther) override;
-	int ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	// Don't allow player to +use this.
+	int ObjectCaps() override { return (CBaseMonster::ObjectCaps() & ~(FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE)); }
 
 	/**
 	 *	@brief Find an entity that I'm interested in and precache the sounds he'll need in the sequence.

@@ -82,6 +82,12 @@ LINK_ENTITY_TO_CLASS(scripted_sequence, CCineMonster);
 
 LINK_ENTITY_TO_CLASS(aiscripted_sequence, CCineAI);
 
+void CCineMonster::OnCreate()
+{
+	BaseClass::OnCreate();
+	m_AllowFollow = false; // So nothing gets confused about what we can do.
+}
+
 void CCineMonster::Spawn()
 {
 	// pev->solid = SOLID_TRIGGER;
