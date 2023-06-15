@@ -501,7 +501,7 @@ void ServerLibrary::LoadServerConfigFiles()
 	ServerConfigContext context{.State = *m_MapState};
 
 	// Initialize file lists to their defaults.
-	context.SentencesFiles.push_back("sound/sentences.txt");
+	context.SentencesFiles.push_back("sound/sentences.json");
 	context.MaterialsFiles.push_back("sound/materials.json");
 	context.SkillFiles.push_back("cfg/skill.json");
 

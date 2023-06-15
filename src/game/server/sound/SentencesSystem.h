@@ -78,8 +78,6 @@ public:
 	void Stop(CBaseEntity* entity, int isentenceg, int ipick);
 
 private:
-	void LoadSentences(const std::string& fileName);
-
 	/**
 	 *	@brief randomize list of sentence name indices
 	 */
