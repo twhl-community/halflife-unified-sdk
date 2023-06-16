@@ -85,13 +85,9 @@ r_studio_interface_t studio =
 		R_StudioDrawPlayer,
 };
 
-/*
-====================
-HUD_GetStudioModelInterface
-
-Export this function for the engine to use the studio renderer class to render objects.
-====================
-*/
+/**
+ *	@brief Export this function for the engine to use the studio renderer class to render objects.
+ */
 int DLLEXPORT HUD_GetStudioModelInterface(int version, r_studio_interface_t** ppinterface, engine_studio_api_t* pstudio)
 {
 	if (version != STUDIO_INTERFACE_VERSION)

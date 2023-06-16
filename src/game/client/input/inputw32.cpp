@@ -36,8 +36,8 @@
 bool g_iVisibleMouse = false;
 
 /**
-*	@brief Tells the input code to reset the mouse position to center.
-*/
+ *	@brief Tells the input code to reset the mouse position to center.
+ */
 bool g_ResetMousePosition = false;
 
 extern bool iMouseInUse;
@@ -163,11 +163,6 @@ cvar_t* joy_wwhack2;
 
 bool joy_avail, joy_advancedinit, joy_haspov;
 
-/*
-===========
-Force_CenterView_f
-===========
-*/
 void Force_CenterView_f()
 {
 	Vector viewangles;
@@ -243,11 +238,6 @@ void MousePos_ThreadFunction()
 }
 #endif
 
-/*
-===========
-IN_ActivateMouse
-===========
-*/
 void DLLEXPORT IN_ActivateMouse()
 {
 	// This is the first function called after the engine has initialized itself, allowing us to do some post-init work.
@@ -312,11 +302,6 @@ void DLLEXPORT IN_DeactivateMouse()
 	SDL_SetRelativeMouseMode(SDL_FALSE);
 }
 
-/*
-===========
-IN_StartupMouse
-===========
-*/
 void IN_StartupMouse()
 {
 	if (0 != gEngfuncs.CheckParm("-nomouse", nullptr))
@@ -349,11 +334,6 @@ void IN_StartupMouse()
 	mouse_buttons = MOUSE_BUTTON_COUNT;
 }
 
-/*
-===========
-IN_Shutdown
-===========
-*/
 void IN_Shutdown()
 {
 	// Reset flag in case we're reloading due to video setting change.
@@ -376,25 +356,17 @@ void IN_Shutdown()
 #endif
 }
 
-/*
-===========
-IN_GetMousePos
-
-Ask for mouse position from engine
-===========
-*/
+/**
+ *	@brief Ask for mouse position from engine
+ */
 void IN_GetMousePos(int* mx, int* my)
 {
 	gEngfuncs.GetMousePosition(mx, my);
 }
 
-/*
-===========
-IN_ResetMouse
-
-FIXME: Call through to engine?
-===========
-*/
+/**
+ *	@brief FIXME: Call through to engine?
+ */
 void IN_ResetMouse()
 {
 	// no work to do in SDL
@@ -415,11 +387,6 @@ void IN_ResetMouse()
 #endif
 }
 
-/*
-===========
-IN_MouseEvent
-===========
-*/
 void DLLEXPORT IN_MouseEvent(int mstate)
 {
 	int i;
@@ -446,12 +413,9 @@ void DLLEXPORT IN_MouseEvent(int mstate)
 	mouse_oldbuttonstate = mstate;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: Allows modulation of mouse scaling/senstivity value and application
-//  of custom algorithms.
-// Input  : *x -
-//			*y -
-//-----------------------------------------------------------------------------
+/**
+ *	@brief Allows modulation of mouse scaling/senstivity value and application of custom algorithms.
+ */
 void IN_ScaleMouse(float& x, float& y)
 {
 	float mx = x;
@@ -495,11 +459,6 @@ void IN_ScaleMouse(float& x, float& y)
 	}
 }
 
-/*
-===========
-IN_MouseMove
-===========
-*/
 void IN_MouseMove(float frametime, usercmd_t* cmd)
 {
 	Point pos;
@@ -638,11 +597,6 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 	*/
 }
 
-/*
-===========
-IN_Accumulate
-===========
-*/
 void DLLEXPORT IN_Accumulate()
 {
 	// only accumulate mouse if we are not moving the camera with the mouse
@@ -676,11 +630,6 @@ void DLLEXPORT IN_Accumulate()
 	}
 }
 
-/*
-===================
-IN_ClearStates
-===================
-*/
 void DLLEXPORT IN_ClearStates()
 {
 	if (!mouseactive)
@@ -691,11 +640,6 @@ void DLLEXPORT IN_ClearStates()
 	mouse_oldbuttonstate = 0;
 }
 
-/*
-===============
-IN_StartupJoystick
-===============
-*/
 void IN_StartupJoystick()
 {
 	// abort startup if user requests no joystick
@@ -738,7 +682,6 @@ void IN_StartupJoystick()
 	}
 }
 
-
 int RawValuePointer(int axis)
 {
 	switch (axis)
@@ -755,11 +698,6 @@ int RawValuePointer(int axis)
 	}
 }
 
-/*
-===========
-Joy_AdvancedUpdate_f
-===========
-*/
 void Joy_AdvancedUpdate_f()
 {
 
@@ -816,12 +754,6 @@ void Joy_AdvancedUpdate_f()
 	}
 }
 
-
-/*
-===========
-IN_Commands
-===========
-*/
 void IN_Commands()
 {
 	int i, key_index;
@@ -888,24 +820,12 @@ void IN_Commands()
 	}
 }
 
-
-/*
-===============
-IN_ReadJoystick
-===============
-*/
 bool IN_ReadJoystick()
 {
 	SDL_JoystickUpdate();
 	return true;
 }
 
-
-/*
-===========
-IN_JoyMove
-===========
-*/
 void IN_JoyMove(float frametime, usercmd_t* cmd)
 {
 	float speed, aspeed;
@@ -1087,11 +1007,6 @@ void IN_JoyMove(float frametime, usercmd_t* cmd)
 	gEngfuncs.SetViewAngles(viewangles);
 }
 
-/*
-===========
-IN_Move
-===========
-*/
 void IN_Move(float frametime, usercmd_t* cmd)
 {
 	if (g_ResetMousePosition)
@@ -1108,11 +1023,6 @@ void IN_Move(float frametime, usercmd_t* cmd)
 	IN_JoyMove(frametime, cmd);
 }
 
-/*
-===========
-IN_Init
-===========
-*/
 void IN_Init()
 {
 	m_filter = gEngfuncs.pfnRegisterVariable("m_filter", "0", FCVAR_ARCHIVE);

@@ -44,13 +44,9 @@
 
 unsigned int g_ulFrameCount;
 
-/*
-===========
-ClientConnect
-
-called when a player connects to a server
-============
-*/
+/**
+ *	@brief called when a player connects to a server
+ */
 qboolean ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
 {
 	return static_cast<qboolean>(g_pGameRules->ClientConnected(pEntity, pszName, pszAddress, szRejectReason));
@@ -61,15 +57,9 @@ qboolean ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAdd
 }
 
 
-/*
-===========
-ClientDisconnect
-
-called when a player disconnects from a server
-
-GLOBALS ASSUMED SET:  g_fGameOver
-============
-*/
+/**
+ *	@brief called when a player disconnects from a server
+ */
 void ClientDisconnect(edict_t* pEntity)
 {
 	if (g_fGameOver)
@@ -117,7 +107,9 @@ void ClientDisconnect(edict_t* pEntity)
 }
 
 
-// called by ClientKill and DeadThink
+/**
+ *	@brief called by ClientKill and DeadThink
+ */
 void respawn(CBasePlayer* player, bool fCopyCorpse)
 {
 	if (g_pGameRules->IsMultiplayer())
@@ -137,13 +129,9 @@ void respawn(CBasePlayer* player, bool fCopyCorpse)
 	}
 }
 
-/*
-============
-ClientKill
-
-Player entered the suicide command
-============
-*/
+/**
+ *	@brief Player entered the suicide command
+ */
 void ClientKill(edict_t* pEntity)
 {
 	CBasePlayer* pl = ToBasePlayer(pEntity);
@@ -169,13 +157,9 @@ void ClientKill(edict_t* pEntity)
 	//	respawn( pev );
 }
 
-/*
-===========
-ClientPutInServer
-
-called each time a player is spawned
-============
-*/
+/**
+ *	@brief called each time a player is spawned
+ */
 void ClientPutInServer(edict_t* pEntity)
 {
 	auto pPlayer = g_EntityDictionary->Create<CBasePlayer>("player", &pEntity->v);
@@ -202,8 +186,6 @@ void ClientPutInServer(edict_t* pEntity)
 #include "voice_gamemgr.h"
 extern CVoiceGameMgr g_VoiceGameMgr;
 
-
-
 #if defined(_MSC_VER) || defined(WIN32)
 typedef wchar_t uchar16;
 typedef unsigned int uchar32;
@@ -212,9 +194,9 @@ typedef unsigned short uchar16;
 typedef wchar_t uchar32;
 #endif
 
-//-----------------------------------------------------------------------------
-// Purpose: determine if a uchar32 represents a valid Unicode code point
-//-----------------------------------------------------------------------------
+/**
+ *	@brief determine if a uchar32 represents a valid Unicode code point
+ */
 bool Q_IsValidUChar32(uchar32 uVal)
 {
 	// Values > 0x10FFFF are explicitly invalid; ditto for UTF-16 surrogate halves,
@@ -222,9 +204,11 @@ bool Q_IsValidUChar32(uchar32 uVal)
 	return (uVal < 0x110000u) && ((uVal - 0x00D800u) > 0x7FFu) && ((uVal & 0xFFFFu) < 0xFFFEu) && ((uVal - 0x00FDD0u) > 0x1Fu);
 }
 
-
-// Decode one character from a UTF-8 encoded string. Treats 6-byte CESU-8 sequences
-// as a single character, as if they were a correctly-encoded 4-byte UTF-8 sequence.
+/*
+ *	@brief Decode one character from a UTF-8 encoded string.
+ *	@details Treats 6-byte CESU-8 sequences as a single character,
+ *	as if they were a correctly-encoded 4-byte UTF-8 sequence.
+ */
 int Q_UTF8ToUChar32(const char* pUTF8_, uchar32& uValueOut, bool& bErrorOut)
 {
 	const uint8* pUTF8 = (const uint8*)pUTF8_;
@@ -296,11 +280,9 @@ decodeFinishedMaybeCESU8:
 	goto decodeFinished;
 }
 
-
-
-//-----------------------------------------------------------------------------
-// Purpose: Returns true if UTF-8 string contains invalid sequences.
-//-----------------------------------------------------------------------------
+/**
+ *	@brief Returns true if UTF-8 string contains invalid sequences.
+ */
 bool Q_UnicodeValidate(const char* pUTF8)
 {
 	bool bError = false;
@@ -317,12 +299,15 @@ bool Q_UnicodeValidate(const char* pUTF8)
 	return true;
 }
 
-//// HOST_SAY
-// String comes in as
-// say blah blah blah
-// or as
-// blah blah blah
-//
+/**
+ *	@brief Handles incoming @c say and @c say_team commands and sends them to other players.
+ *	<pre>
+ *	String comes in as
+ *	say blah blah blah
+ *	or as
+ *	blah blah blah
+ *	</pre>
+ */
 void Host_Say(CBasePlayer* player, bool teamonly)
 {
 	int j;
@@ -994,8 +979,7 @@ void SV_CreateClientCommands()
 					UTIL_ConsolePrint(player, "NPC fell out of level\n");
 					UTIL_Remove(entity);
 				}
-			}
-		},
+			} },
 		{.Flags = ClientCommandFlag::Cheat});
 }
 
@@ -1010,13 +994,10 @@ bool UTIL_CheatsAllowed(CBasePlayer* player, std::string_view name)
 	return true;
 }
 
-/*
-===========
-ClientCommand
-called each time a player uses a "cmd" command
-============
-*/
-// Use CMD_ARGV,  CMD_ARGV, and CMD_ARGC to get pointers the character string command.
+/**
+ *	@brief called each time a player uses a @c "cmd" command
+ *	@details Use CMD_ARGV, CMD_ARGV, and CMD_ARGC to get pointers the character string command.
+ */
 void ExecuteClientCommand(edict_t* pEntity)
 {
 	// Is the client spawned yet?
@@ -1049,13 +1030,9 @@ void ExecuteClientCommand(edict_t* pEntity)
 }
 
 
-/*
-========================
-ClientUserInfoChanged
-
-called after the player changes
-userinfo - gives dll a chance to modify it before
-it gets sent into the rest of the engine.
+/**
+*	@brief called after the player changes userinfo.
+*	gives dll a chance to modify it before it gets sent into the rest of the engine.
 ========================
 */
 void ClientUserInfoChanged(edict_t* pEntity, char* infobuffer)
@@ -1152,13 +1129,9 @@ void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 }
 
 
-/*
-================
-PlayerPreThink
-
-Called every frame before physics are run
-================
-*/
+/**
+ *	@brief Called every frame before physics are run
+ */
 void PlayerPreThink(edict_t* pEntity)
 {
 	CBasePlayer* pPlayer = ToBasePlayer(pEntity);
@@ -1167,13 +1140,9 @@ void PlayerPreThink(edict_t* pEntity)
 		pPlayer->PreThink();
 }
 
-/*
-================
-PlayerPostThink
-
-Called every frame after physics are run
-================
-*/
+/**
+ *	@brief Called every frame after physics are run
+ */
 void PlayerPostThink(edict_t* pEntity)
 {
 	CBasePlayer* pPlayer = ToBasePlayer(pEntity);
@@ -1182,12 +1151,9 @@ void PlayerPostThink(edict_t* pEntity)
 		pPlayer->PostThink();
 }
 
-
-
 void ParmsNewLevel()
 {
 }
-
 
 void ParmsChangeLevel()
 {
@@ -1197,7 +1163,6 @@ void ParmsChangeLevel()
 	if (pSaveData)
 		pSaveData->connectionCount = CChangeLevel::ChangeList(pSaveData->levelList, MAX_LEVEL_CONNECTIONS);
 }
-
 
 //
 // GLOBALS ASSUMED SET:  g_ulFrameCount
@@ -1214,7 +1179,6 @@ void StartFrame()
 
 	g_ulFrameCount++;
 }
-
 
 void ClientPrecache()
 {
@@ -1346,13 +1310,9 @@ void ClientPrecache()
 		UTIL_PrecacheOther("monster_human_grunt");
 }
 
-/*
-===============
-GetGameDescription
-
-Returns the descriptive name of this .dll.  E.g., Half-Life, or Team Fortress 2
-===============
-*/
+/**
+ *	@brief Returns the descriptive name of this .dll. E.g., <tt>Half-Life</tt>, or <tt>Team Fortress 2</tt>
+ */
 const char* GetGameDescription()
 {
 	if (g_pGameRules) // this function may be called before the world has spawned, and the game rules initialized
@@ -1361,27 +1321,18 @@ const char* GetGameDescription()
 		return "Half-Life";
 }
 
-/*
-================
-Sys_Error
-
-Engine is going to shut down, allows setting a breakpoint in game .dll to catch that occasion
-================
-*/
+/**
+ *	@brief Engine is going to shut down, allows setting a breakpoint in game .dll to catch that occasion
+ */
 void Sys_Error(const char* error_string)
 {
 	// Default case, do nothing.  MOD AUTHORS:  Add code ( e.g., _asm { int 3 }; here to cause a breakpoint for debugging your game .dlls
 }
 
-/*
-================
-PlayerCustomization
-
-A new player customization has been registered on the server
-UNDONE:  This only sets the # of frames of the spray can logo
-animation right now.
-================
-*/
+/**
+ *	@brief A new player customization has been registered on the server
+ *	@details UNDONE: This only sets the # of frames of the spray can logo animation right now.
+ */
 void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 {
 	CBasePlayer* pPlayer = ToBasePlayer(pEntity);
@@ -1418,20 +1369,19 @@ void PlayerCustomization(edict_t* pEntity, customization_t* pCust)
 // PAS and PVS routines for client messaging
 //
 
-/*
-================
-SetupVisibility
-
-A client can have a separate "view entity" indicating that his/her view should depend on the origin of that
-view entity.  If that's the case, then pViewEntity will be non-nullptr and will be used.  Otherwise, the current
-entity's origin is used.  Either is offset by the view_ofs to get the eye position.
-
-From the eye position, we set up the PAS and PVS to use for filtering network messages to the client.  At this point, we could
- override the actual PAS or PVS values, or use a different origin.
-
-NOTE:  Do not cache the values of pas and pvs, as they depend on reusable memory in the engine, they are only good for this one frame
-================
-*/
+/**
+ *	@brief A client can have a separate "view entity" indicating that his/her view should depend on the origin of that
+ *	view entity.
+ *	If that's the case, then pViewEntity will be non-nullptr and will be used.
+ *	Otherwise, the current entity's origin is used.
+ *	Either is offset by the view_ofs to get the eye position.
+ *
+ *	From the eye position, we set up the PAS and PVS to use for filtering network messages to the client.
+ *	At this point, we could override the actual PAS or PVS values, or use a different origin.
+ *
+ *	NOTE: Do not cache the values of pas and pvs, as they depend on reusable memory in the engine,
+ *	they are only good for this one frame
+ */
 void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs, unsigned char** pas)
 {
 	Vector org;
@@ -1462,19 +1412,21 @@ void SetupVisibility(edict_t* pViewEntity, edict_t* pClient, unsigned char** pvs
 
 #include "entity_state.h"
 
-/*
-AddToFullPack
-
-Return 1 if the entity state has been filled in for the ent and the entity will be propagated to the client, 0 otherwise
-
-state is the server maintained copy of the state info that is transmitted to the client
-a MOD could alter values copied into state to send the "host" a different look for a particular entity update, etc.
-e and ent are the entity that is being added to the update, if 1 is returned
-host is the player's edict of the player whom we are sending the update to
-player is 1 if the ent/e is a player and 0 otherwise
-pSet is either the PAS or PVS that we previous set up.  We can use it to ask the engine to filter the entity against the PAS or PVS.
-we could also use the pas/ pvs that we set in SetupVisibility, if we wanted to.  Caching the value is valid in that case, but still only for the current frame
-*/
+/**
+ *	@brief Return 1 if the entity state has been filled in for the ent and the entity will be propagated to the client,
+ *	0 otherwise
+ *	@param state the server maintained copy of the state info that is transmitted to the client
+ *		a MOD could alter values copied into state to send the "host" a different look for a particular entity update, etc.
+ *	@param e index of the entity that is being added to the update, if 1 is returned
+ *	@param ent the entity that is being added to the update, if 1 is returned
+ *	@param host is the player's edict of the player whom we are sending the update to
+ *	@param hostflags 1 if the host has <tt>cl_lw</tt> enabled, 0 otherwise
+ *	@param player 1 if the ent/e is a player and 0 otherwise
+ *	@param pSet either the PAS or PVS that we previous set up.
+ *		We can use it to ask the engine to filter the entity against the PAS or PVS.
+ *		we could also use the pas/ pvs that we set in SetupVisibility, if we wanted to.
+ *		Caching the value is valid in that case, but still only for the current frame
+ */
 int AddToFullPack(entity_state_t* state, int e, edict_t* ent, edict_t* host, int hostflags, int player, unsigned char* pSet)
 {
 	// Entities with an index greater than this will corrupt the client's heap because
@@ -1684,13 +1636,10 @@ int AddToFullPack(entity_state_t* state, int e, edict_t* ent, edict_t* host, int
 	return 1;
 }
 
-/*
-===================
-CreateBaseline
-
-Creates baselines used for network encoding, especially for player data since players are not spawned until connect time.
-===================
-*/
+/**
+ *	@brief Creates baselines used for network encoding,
+ *	especially for player data since players are not spawned until connect time.
+ */
 void CreateBaseline(int player, int eindex, entity_state_t* baseline, edict_t* entity, int playermodelindex, Vector* player_mins, Vector* player_maxs)
 {
 	baseline->origin = entity->v.origin;
@@ -1770,14 +1719,10 @@ void Entity_FieldInit(delta_t* pFields)
 	entity_field_alias[FIELD_ANGLES2].field = DELTA_FINDFIELD(pFields, entity_field_alias[FIELD_ANGLES2].name);
 }
 
-/*
-==================
-Entity_Encode
-
-Callback for sending entity_state_t info over network.
-FIXME:  Move to script
-==================
-*/
+/**
+ *	@brief Callback for sending entity_state_t info over network.
+ *	FIXME: Move to script
+ */
 void Entity_Encode(delta_t* pFields, const unsigned char* from, const unsigned char* to)
 {
 	entity_state_t *f, *t;
@@ -1841,13 +1786,9 @@ void Player_FieldInit(delta_t* pFields)
 	player_field_alias[FIELD_ORIGIN2].field = DELTA_FINDFIELD(pFields, player_field_alias[FIELD_ORIGIN2].name);
 }
 
-/*
-==================
-Player_Encode
-
-Callback for sending entity_state_t for players info over network.
-==================
-*/
+/**
+ *	@brief Callback for sending entity_state_t for players info over network.
+ */
 void Player_Encode(delta_t* pFields, const unsigned char* from, const unsigned char* to)
 {
 	entity_state_t *f, *t;
@@ -1922,14 +1863,10 @@ void Custom_Entity_FieldInit(delta_t* pFields)
 	custom_entity_field_alias[CUSTOMFIELD_ANIMTIME].field = DELTA_FINDFIELD(pFields, custom_entity_field_alias[CUSTOMFIELD_ANIMTIME].name);
 }
 
-/*
-==================
-Custom_Encode
-
-Callback for sending entity_state_t info ( for custom entities ) over network.
-FIXME:  Move to script
-==================
-*/
+/**
+ *	@brief Callback for sending entity_state_t info ( for custom entities ) over network.
+ *	FIXME: Move to script
+ */
 void Custom_Encode(delta_t* pFields, const unsigned char* from, const unsigned char* to)
 {
 	entity_state_t *f, *t;
@@ -1975,13 +1912,10 @@ void Custom_Encode(delta_t* pFields, const unsigned char* from, const unsigned c
 	}
 }
 
-/*
-=================
-RegisterEncoders
-
-Allows game .dll to override network encoding of certain types of entities and tweak values, etc.
-=================
-*/
+/**
+ *	@brief Allows game .dll to override network encoding of certain types of entities and tweak values, etc.
+ *	@details See the mod's @c delta.lst configuration file for relevant encoding settings.
+ */
 void RegisterEncoders()
 {
 	DELTA_ADDENCODER("Entity_Encode", Entity_Encode);
@@ -2044,14 +1978,10 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 	return 1;
 }
 
-/*
-=================
-UpdateClientData
-
-Data sent to current client only
-engine sets cd to 0 before calling.
-=================
-*/
+/**
+ *	@brief Data sent to current client only
+ *	@param cd zeroed out by engine before call.
+ */
 void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 {
 	if (!ent)
@@ -2162,14 +2092,10 @@ void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 #endif
 }
 
-/*
-=================
-CmdStart
-
-We're about to run this usercmd for the specified player.  We can set up groupinfo and masking here, etc.
-This is the time to examine the usercmd for anything extra.  This call happens even if think does not.
-=================
-*/
+/**
+ *	@brief We're about to run this usercmd for the specified player. We can set up groupinfo and masking here, etc.
+ *	This is the time to examine the usercmd for anything extra. This call happens even if think does not.
+ */
 void CmdStart(const edict_t* player, const usercmd_t* cmd, unsigned int random_seed)
 {
 	auto pl = ToBasePlayer(const_cast<edict_t*>(player));
@@ -2185,13 +2111,9 @@ void CmdStart(const edict_t* player, const usercmd_t* cmd, unsigned int random_s
 	pl->random_seed = random_seed;
 }
 
-/*
-=================
-CmdEnd
-
-Each cmdstart is exactly matched with a cmd end, clean up any group trace flags, etc. here
-=================
-*/
+/**
+ *	@brief Each cmdstart is exactly matched with a cmd end, clean up any group trace flags, etc. here
+ */
 void CmdEnd(const edict_t* player)
 {
 	auto pl = ToBasePlayer(const_cast<edict_t*>(player));
@@ -2204,14 +2126,14 @@ void CmdEnd(const edict_t* player)
 	}
 }
 
-/*
-================================
-ConnectionlessPacket
-
- Return 1 if the packet is valid.  Set response_buffer_size if you want to send a response packet.  Incoming, it holds the max
-  size of the response_buffer, so you must zero it out if you choose not to respond.
-================================
-*/
+/**
+ *	@brief Return 1 if the packet is valid.
+ *	@param net_from Address of the sender.
+ *	@param args Argument string.
+ *	@param response_buffer Buffer to write a response message to.
+ *	@param[in,out] response_buffer_size Initially holds the maximum size of @p response_buffer.
+ *		Set to size of response message or 0 if sending no response.
+ */
 int ConnectionlessPacket(const netadr_t* net_from, const char* args, char* response_buffer, int* response_buffer_size)
 {
 	// Parse stuff from args
@@ -2226,26 +2148,19 @@ int ConnectionlessPacket(const netadr_t* net_from, const char* args, char* respo
 	return 0;
 }
 
-/*
-================================
-GetHullBounds
-
-  Engine calls this to enumerate player collision hulls, for prediction.  Return 0 if the hullnumber doesn't exist.
-================================
-*/
+/**
+ *	@brief Engine calls this to enumerate player collision hulls, for prediction.
+ *	@return 0 if the hullnumber doesn't exist, 1 otherwise.
+ */
 int GetHullBounds(int hullnumber, float* mins, float* maxs)
 {
 	return static_cast<int>(PM_GetHullBounds(hullnumber, mins, maxs));
 }
 
-/*
-================================
-CreateInstancedBaselines
-
-Create pseudo-baselines for items that aren't placed in the map at spawn time, but which are likely
-to be created during play ( e.g., grenades, ammo packs, projectiles, corpses, etc. )
-================================
-*/
+/**
+ *	@brief Create pseudo-baselines for items that aren't placed in the map at spawn time, but which are likely
+ *	to be created during play ( e.g., grenades, ammo packs, projectiles, corpses, etc. )
+ */
 void CreateInstancedBaselines()
 {
 	// int iret = 0;
@@ -2260,14 +2175,11 @@ void CreateInstancedBaselines()
 	// UTIL_Remove( pc );
 }
 
-/*
-================================
-InconsistentFile
-
-One of the ENGINE_FORCE_UNMODIFIED files failed the consistency check for the specified player
- Return 0 to allow the client to continue, 1 to force immediate disconnection ( with an optional disconnect message of up to 256 characters )
-================================
-*/
+/**
+ *	@brief One of the ENGINE_FORCE_UNMODIFIED files failed the consistency check for the specified player
+ *	@return 0 to allow the client to continue, 1 to force immediate disconnection
+ *		( with an optional disconnect message of up to 256 characters )
+ */
 int InconsistentFile(const edict_t* player, const char* filename, char* disconnect_message)
 {
 	// Server doesn't care?
@@ -2281,17 +2193,12 @@ int InconsistentFile(const edict_t* player, const char* filename, char* disconne
 	return 1;
 }
 
-/*
-================================
-AllowLagCompensation
-
- The game .dll should return 1 if lag compensation should be allowed ( could also just set
-  the sv_unlag cvar.
- Most games right now should return 0, until client-side weapon prediction code is written
-  and tested for them ( note you can predict weapons, but not do lag compensation, too,
-  if you want.
-================================
-*/
+/**
+ *	@brief The game .dll should return 1 if lag compensation should be allowed ( must also set the sv_unlag cvar ).
+ *	@details Most games right now should return 0,
+ *	until client-side weapon prediction code is written and tested for them
+ *	( note you can predict weapons, but not do lag compensation, too, if you want ).
+ */
 int AllowLagCompensation()
 {
 	return 1;

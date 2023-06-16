@@ -13,14 +13,9 @@
 
 #include "Exports.h"
 
-/*
-==========================
-HUD_ChatInputPosition
-
-Sets the location of the input for chat text
-==========================
-*/
-
+/**
+ *	@brief Sets the location of the input for chat text
+ */
 void DLLEXPORT HUD_ChatInputPosition(int* x, int* y)
 {
 	*y = gHUD.m_SayText.GetChatYInputPosition();

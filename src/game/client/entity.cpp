@@ -36,12 +36,9 @@ static TEMPENTITY gTempEnts[MAX_TEMPENTS];
 static TEMPENTITY* gpTempEntFree = nullptr;
 static TEMPENTITY* gpTempEntActive = nullptr;
 
-/*
-========================
-HUD_AddEntity
-	Return 0 to filter entity from visible list for rendering
-========================
-*/
+/**
+ *	@brief Return 0 to filter entity from visible list for rendering
+ */
 int DLLEXPORT HUD_AddEntity(int type, cl_entity_t* ent, const char* modelname)
 {
 	switch (type)
@@ -72,15 +69,12 @@ int DLLEXPORT HUD_AddEntity(int type, cl_entity_t* ent, const char* modelname)
 	return 1;
 }
 
-/*
-=========================
-HUD_TxferLocalOverrides
-
-The server sends us our origin with extra precision as part of the clientdata structure, not during the normal
-playerstate update in entity_state_t.  In order for these overrides to eventually get to the appropriate playerstate
-structure, we need to copy them into the state structure at this point.
-=========================
-*/
+/**
+ *	@brief The server sends us our origin with extra precision as part of the clientdata structure,
+ *	not during the normal playerstate update in entity_state_t.
+ *	In order for these overrides to eventually get to the appropriate playerstate structure,
+ *	we need to copy them into the state structure at this point.
+ */
 void DLLEXPORT HUD_TxferLocalOverrides(entity_state_t* state, const clientdata_t* client)
 {
 	state->origin = client->origin;
@@ -96,14 +90,10 @@ void DLLEXPORT HUD_TxferLocalOverrides(entity_state_t* state, const clientdata_t
 	state->iuser4 = client->iuser4;
 }
 
-/*
-=========================
-HUD_ProcessPlayerState
-
-We have received entity_state_t for this player over the network.  We need to copy appropriate fields to the
-playerstate structure
-=========================
-*/
+/**
+ *	@brief We have received entity_state_t for this player over the network.
+ *	We need to copy appropriate fields to the playerstate structure
+ */
 void DLLEXPORT HUD_ProcessPlayerState(entity_state_t* dst, const entity_state_t* src)
 {
 	// Copy in network data
@@ -161,16 +151,13 @@ void DLLEXPORT HUD_ProcessPlayerState(entity_state_t* dst, const entity_state_t*
 	}
 }
 
-/*
-=========================
-HUD_TxferPredictionData
-
-Because we can predict an arbitrary number of frames before the server responds with an update, we need to be able to copy client side prediction data in
- from the state that the server ack'd receiving, which can be anywhere along the predicted frame path ( i.e., we could predict 20 frames into the future and the server ack's
- up through 10 of those frames, so we need to copy persistent client-side only state from the 10th predicted frame to the slot the server
- update is occupying.
-=========================
-*/
+/**
+ *	@brief Because we can predict an arbitrary number of frames before the server responds with an update,
+ *	we need to be able to copy client side prediction data in from the state that the server ack'd receiving,
+ *	which can be anywhere along the predicted frame path ( i.e., we could predict 20 frames into the future
+ *	and the server ack's up through 10 of those frames ), so we need to copy persistent client-side only state
+ *	from the 10th predicted frame to the slot the server update is occupying.
+ */
 void DLLEXPORT HUD_TxferPredictionData(entity_state_t* ps, const entity_state_t* pps, clientdata_t* pcd, const clientdata_t* ppcd, weapon_data_t* wd, const weapon_data_t* pwd)
 {
 	ps->oldbuttons = pps->oldbuttons;
@@ -296,13 +283,9 @@ void Beams()
 }
 #endif
 
-/*
-=========================
-HUD_CreateEntities
-
-Gives us a chance to add additional entities to the render this frame
-=========================
-*/
+/**
+ *	@brief Gives us a chance to add additional entities to the render this frame
+ */
 void DLLEXPORT HUD_CreateEntities()
 {
 #if defined(BEAM_TEST)
@@ -315,15 +298,10 @@ void DLLEXPORT HUD_CreateEntities()
 	GetClientVoiceMgr()->CreateEntities();
 }
 
-
-/*
-=========================
-HUD_StudioEvent
-
-The entity's studio model description indicated an event was
-fired during this frame, handle the event by it's tag ( e.g., muzzleflash, sound )
-=========================
-*/
+/**
+ *	@brief The entity's studio model description indicated an event was fired during this frame,
+ *	handle the event by it's tag ( e.g., muzzleflash, sound )
+ */
 void DLLEXPORT HUD_StudioEvent(const mstudioevent_t* event, const cl_entity_t* entity)
 {
 	bool iMuzzleFlash = true;
@@ -364,14 +342,20 @@ void DLLEXPORT HUD_StudioEvent(const mstudioevent_t* event, const cl_entity_t* e
 
 /**
  *	@brief Simulation and cleanup of temporary entities
+ *	@param frametime Simulation time
+ *	@param client_time Absolute time on client
+ *	@param cl_gravity True gravity on client
+ *	@param ppTempEntFree List of freed temporary ents
+ *	@param ppTempEntActive List of active temporary ents
+ *	@param Callback_AddVisibleEntity Callback to add an entity to the list of visible entities to draw this frame
  *	@param Callback_TempEntPlaySound Obsolete. Use CL_TempEntPlaySound instead.
  */
 void DLLEXPORT HUD_TempEntUpdate(
-	double frametime,			  // Simulation time
-	double client_time,			  // Absolute time on client
-	double cl_gravity,			  // True gravity on client
-	TEMPENTITY** ppTempEntFree,	  // List of freed temporary ents
-	TEMPENTITY** ppTempEntActive, // List
+	double frametime,
+	double client_time,
+	double cl_gravity,
+	TEMPENTITY** ppTempEntFree,
+	TEMPENTITY** ppTempEntActive,
 	int (*Callback_AddVisibleEntity)(cl_entity_t* pEntity),
 	void (*Callback_TempEntPlaySound)(TEMPENTITY* pTemp, float damp))
 {
@@ -737,17 +721,12 @@ finish:
 	gEngfuncs.pEventAPI->EV_PopPMStates();
 }
 
-/*
-=================
-HUD_GetUserEntity
-
-If you specify negative numbers for beam start and end point entities, then
-  the engine will call back into this function requesting a pointer to a cl_entity_t
-  object that describes the entity to attach the beam onto.
-
-Indices must start at 1, not zero.
-=================
-*/
+/**
+ *	@brief If you specify negative numbers for beam start and end point entities,
+ *	then the engine will call back into this function requesting a pointer to a cl_entity_t object
+ *	that describes the entity to attach the beam onto.
+ *	Indices must start at 1, not zero.
+ */
 cl_entity_t DLLEXPORT* HUD_GetUserEntity(int index)
 {
 #if defined(BEAM_TEST)

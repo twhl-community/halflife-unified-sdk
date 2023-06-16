@@ -47,26 +47,23 @@ void InitInput();
 void EV_HookEvents();
 void IN_Commands();
 
-/*
-================================
-HUD_GetHullBounds
-
-  Engine calls this to enumerate player collision hulls, for prediction.  Return 0 if the hullnumber doesn't exist.
-================================
-*/
+/**
+ *	@brief Engine calls this to enumerate player collision hulls, for prediction.
+ *	@return 0 if the hullnumber doesn't exist, 1 otherwise.
+ */
 int DLLEXPORT HUD_GetHullBounds(int hullnumber, float* mins, float* maxs)
 {
 	return static_cast<int>(PM_GetHullBounds(hullnumber, mins, maxs));
 }
 
-/*
-================================
-HUD_ConnectionlessPacket
-
- Return 1 if the packet is valid.  Set response_buffer_size if you want to send a response packet.  Incoming, it holds the max
-  size of the response_buffer, so you must zero it out if you choose not to respond.
-================================
-*/
+/**
+ *	@brief Return 1 if the packet is valid.
+ *	@param net_from Address of the sender.
+ *	@param args Argument string.
+ *	@param response_buffer Buffer to write a response message to.
+ *	@param[in,out] response_buffer_size Initially holds the maximum size of @p response_buffer.
+ *		Set to size of response message or 0 if sending no response.
+ */
 int DLLEXPORT HUD_ConnectionlessPacket(const netadr_t* net_from, const char* args, char* response_buffer, int* response_buffer_size)
 {
 	// Parse stuff from args
@@ -119,17 +116,10 @@ int DLLEXPORT Initialize(cl_enginefunc_t* pEnginefuncs, int iVersion)
 	return 1;
 }
 
-
-/*
-==========================
-	HUD_VidInit
-
-Called when the game initializes
-and whenever the vid_mode is changed
-so the HUD can reinitialize itself.
-==========================
-*/
-
+/**
+ *	@brief Called whenever the client connects to a server. Reinitializes all the hud variables.
+ *	@details The original documentation for this and HUD_Init() were swapped.
+ */
 int DLLEXPORT HUD_VidInit()
 {
 	g_Client.VidInit();
@@ -143,16 +133,10 @@ int DLLEXPORT HUD_VidInit()
 	return 1;
 }
 
-/*
-==========================
-	HUD_Init
-
-Called whenever the client connects
-to a server.  Reinitializes all
-the hud variables.
-==========================
-*/
-
+/**
+ *	@brief Called when the game initializes and whenever the vid_mode is changed so the HUD can reinitialize itself.
+ *	@details The original documentation for this and HUD_VidInit() were swapped.
+ */
 void DLLEXPORT HUD_Init()
 {
 	g_Client.HudInit();
@@ -161,16 +145,9 @@ void DLLEXPORT HUD_Init()
 	Scheme_Init();
 }
 
-
-/*
-==========================
-	HUD_Redraw
-
-called every screen frame to
-redraw the HUD.
-===========================
-*/
-
+/**
+ *	@brief called every screen frame to redraw the HUD.
+ */
 int DLLEXPORT HUD_Redraw(float time, int intermission)
 {
 	gHUD.Redraw(time, 0 != intermission);
@@ -178,19 +155,11 @@ int DLLEXPORT HUD_Redraw(float time, int intermission)
 	return 1;
 }
 
-
-/*
-==========================
-	HUD_UpdateClientData
-
-called every time shared client
-dll/engine data gets changed,
-and gives the cdll a chance
-to modify the data.
-
-returns 1 if anything has been changed, 0 otherwise.
-==========================
-*/
+/**
+ *	@brief called every time shared client dll/engine data gets changed,
+ *	and gives the cdll a chance to modify the data.
+ *	@return 1 if anything has been changed, 0 otherwise.
+ */
 
 int DLLEXPORT HUD_UpdateClientData(client_data_t* pcldata, float flTime)
 {
@@ -199,27 +168,18 @@ int DLLEXPORT HUD_UpdateClientData(client_data_t* pcldata, float flTime)
 	return static_cast<int>(gHUD.UpdateClientData(pcldata, flTime));
 }
 
-/*
-==========================
-	HUD_Reset
-
-Called at start and end of demos to restore to "non"HUD state.
-==========================
-*/
-
+/**
+ *	@brief Called at start and end of demos to restore to "non"HUD state.
+ *	@details Never called in Steam Half-Life.
+ */
 void DLLEXPORT HUD_Reset()
 {
 	gHUD.VidInit();
 }
 
-/*
-==========================
-HUD_Frame
-
-Called by engine every frame that client .dll is loaded
-==========================
-*/
-
+/**
+ *	@brief Called by engine every frame that client .dll is loaded
+ */
 void DLLEXPORT HUD_Frame(double time)
 {
 	GetClientVoiceMgr()->Frame(time);
@@ -227,28 +187,17 @@ void DLLEXPORT HUD_Frame(double time)
 	g_Client.RunFrame();
 }
 
-
-/*
-==========================
-HUD_VoiceStatus
-
-Called when a player starts or stops talking.
-==========================
-*/
-
+/**
+ *	@brief Called when a player starts or stops talking.
+ */
 void DLLEXPORT HUD_VoiceStatus(int entindex, qboolean bTalking)
 {
 	GetClientVoiceMgr()->UpdateSpeakerStatus(entindex, 0 != bTalking);
 }
 
-/*
-==========================
-HUD_DirectorMessage
-
-Called when a director event message was received
-==========================
-*/
-
+/**
+ *	@brief Called when a director event message was received
+ */
 void DLLEXPORT HUD_DirectorMessage(int iSize, void* pbuf)
 {
 	BufferReader reader{{reinterpret_cast<std::byte*>(pbuf), static_cast<std::size_t>(iSize)}};
@@ -273,6 +222,11 @@ void CL_LoadParticleMan()
 	}
 }
 
+/**
+ *	@brief Used by Steam Half-Life to load the client dll interface.
+ *	If not present, the client dll will be unloaded, global destructors will run, the client dll will be loaded again
+ *	and functions will be retrieved using <tt>GetProcAddress/dlsym</tt>.
+ */
 extern "C" void DLLEXPORT F(void* pv)
 {
 	cldll_func_t* pcldll_func = (cldll_func_t*)pv;
@@ -327,13 +281,16 @@ extern "C" void DLLEXPORT F(void* pv)
 
 #include "cl_dll/IGameClientExports.h"
 
-//-----------------------------------------------------------------------------
-// Purpose: Exports functions that are used by the gameUI for UI dialogs
-//-----------------------------------------------------------------------------
+/**
+ *	@brief Exports functions that are used by the gameUI for UI dialogs
+ */
 class CClientExports : public IGameClientExports
 {
 public:
-	// returns the name of the server the user is connected to, if any
+	/**
+	 *	@brief returns the name of the server the user is connected to, if any
+	 *	@details Does not appear to be called in Steam Half-Life
+	 */
 	const char* GetServerHostName() override
 	{
 		/*if (gViewPortInterface)
