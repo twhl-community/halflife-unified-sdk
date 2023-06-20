@@ -344,6 +344,7 @@ void DLLEXPORT HUD_PostRunCmd(local_state_t* from, local_state_t* to, usercmd_t*
 
 	// All games can use FOV state
 	g_lastFOV = to->client.fov;
+	g_CurrentWeaponId = to->client.m_iId;
 }
 
 bool UTIL_IsMultiplayer()

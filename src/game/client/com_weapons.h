@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include "cdll_dll.h"
 #include "Exports.h"
 
 struct edict_t;
@@ -47,3 +48,5 @@ extern float g_lastFOV;
 //  the final state passed into the postthink functionality.  We'll set this pointer and then
 //  reset it to nullptr as appropriate
 inline local_state_t* g_finalstate = nullptr;
+
+inline int g_CurrentWeaponId = WEAPON_NONE;
