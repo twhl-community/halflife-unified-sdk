@@ -405,6 +405,7 @@ void CBasePlayerWeapon::AttachToPlayer(CBasePlayer* pPlayer)
 	pev->owner = pPlayer->edict();
 	pev->nextthink = gpGlobals->time + .1;
 	SetTouch(nullptr);
+	SetThink(nullptr); // Clear FallThink function so it can't run while attached to player.
 }
 
 bool CBasePlayerWeapon::AddDuplicate(CBasePlayerWeapon* original)
