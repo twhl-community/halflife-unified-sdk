@@ -176,7 +176,7 @@ ExitModal:
 	return m_nModalResult;
 }
 
-int CServerCtrlDlg::DoModal()
+INT_PTR CServerCtrlDlg::DoModal()
 {
 	// can be constructed with a resource template or InitModalIndirect
 	ASSERT(m_lpszTemplateName != NULL || m_hDialogTemplate != NULL ||
@@ -452,7 +452,7 @@ void CServerCtrlDlg::OnBtnStart(void)
 	SA.lpSecurityDescriptor = NULL;
 
 	// Create handles && hlds process
-	m_hMappedFile = CreateFileMapping((HANDLE)0xFFFFFFFF, &SA, PAGE_READWRITE, 0, 16384, NULL);
+	m_hMappedFile = CreateFileMapping(INVALID_HANDLE_VALUE, &SA, PAGE_READWRITE, 0, 16384, NULL);
 	if (!m_hMappedFile)
 	{
 		AfxMessageBox("Couldn't create mapped file", MB_OK);
