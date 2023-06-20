@@ -103,6 +103,7 @@ All changes from Half-Life Updated up until Beta 5 are included: https://github.
 * Made the Linux version link statically to the C++ runtime to help avoid problems when running mods on older systems (Thanks a1ba and FreeSlave)
 * Fixed Egon not stopping its attack animation if the attack button is held down and ammo runs out
 * Fixed scientists crashing when speaking fear dialogue when enemy has been removed
+* Disabled fall think function for weapons when the player picks it up to prevent possible double-pickup which removes the weapon and crashes the game
 
 ## Changes in V1.0.0 Beta 014
 
