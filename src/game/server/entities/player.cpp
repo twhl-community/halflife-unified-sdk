@@ -3378,7 +3378,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 
 		for (auto weapon : g_WeaponDictionary->GetClassNames())
 		{
-			GiveNamedItem(weapon);
+			GiveNamedItem(weapon, -1);
 		}
 
 		for (int i = 0; i < g_AmmoTypes.GetCount(); ++i)
