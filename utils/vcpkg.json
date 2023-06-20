@@ -1,0 +1,13 @@
+{
+	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+	"name": "halflife-unified-sdk-utils",
+	"version-semver": "0.1.0",
+	"builtin-baseline": "9259a0719d94c402aae2ab7975bc096afdec15df",
+	"dependencies": [
+		{
+			"name": "sdl2",
+			"version>=": "2.0.22#3",
+			"default-features": false
+		}
+  ]
+}

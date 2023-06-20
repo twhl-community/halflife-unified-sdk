@@ -23,6 +23,6 @@ target_link_libraries(qbsp2
 		hl_sdk_utils_common
 		OpenGL::GL
 		OpenGL::GLU
-		SDL2)
+		SDL2::SDL2)
 
 create_source_groups(qbsp2)

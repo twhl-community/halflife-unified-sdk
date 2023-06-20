@@ -17,6 +17,6 @@ target_link_libraries(qcsg
 		hl_sdk_utils_common
 		OpenGL::GL
 		OpenGL::GLU
-		SDL2)
+		SDL2::SDL2)
 
 create_source_groups(qcsg)

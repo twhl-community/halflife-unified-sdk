@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.21)
 
+# Pull in the vcpkg repository from the mod SDK.
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
+
 # Note: some of these projects will only work when built as 32 bit. Since they are largely the same as the original tools from the 1999 SDK they will need further changes to compile as 64 bit.
 
 project(HalfLifeUtils
@@ -13,18 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Find dependencies
 find_package(Threads REQUIRED)
 find_package(OpenGL REQUIRED)
-
-# TODO: rework how SDL2 is found to avoid duplicating code.
-# Set up SDL2 library.
-add_library(SDL2 SHARED IMPORTED)
-
-if (WIN32)
-	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2/lib/SDL2.lib")
-else()
-	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
-endif()
-
-target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../external/SDL2/include)
+find_package(SDL2 CONFIG REQUIRED)
 
 # Function to simplify generation of source groups.
 function(create_source_groups target)
