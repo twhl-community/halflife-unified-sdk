@@ -31,6 +31,8 @@ int nWadInclude;
 char* pszWadInclude[128];
 qboolean wadInclude[128]; // include the textures from this WAD in the BSP
 
+static char* g_MiptexNames[MAX_MAP_TEXINFO];
+
 /*
 =================
 lump_sorters
@@ -301,7 +303,8 @@ void WriteMiptex(void)
 		// Sleazy Hack 104 Pt 2 - After sorting the miptex array, reset the texinfos to point to the right miptexs
 		for (int i = 0; i < numtexinfo; i++, tx++)
 		{
-			char* miptex_name = (char*)tx->miptex;
+			char* miptex_name = g_MiptexNames[tx->miptex];
+			g_MiptexNames[tx->miptex] = nullptr;
 			tx->miptex = FindMiptex(miptex_name);
 
 			// Free up the originally strdup()'ed miptex_name
@@ -371,10 +374,6 @@ int TexinfoForBrushTexture(plane_t* plane, brush_texture_t* bt, vec3_t origin)
 	memset(&tx, 0, sizeof(tx));
 	tx.miptex = FindMiptex(bt->name);
 	// Note: FindMiptex() still needs to be called here to add it to the global miptex array
-
-	// Very Sleazy Hack 104 - since the tx.miptex index will be bogus after we sort the miptex array later
-	// Put the string name of the miptex in this "index" until after we are done sorting it in WriteMiptex().
-	tx.miptex = (int)strdup(bt->name);
 
 	// set the special flag
 	if (bt->name[0] == '*' || !Q_strncasecmp(bt->name, "sky", 3) || !Q_strncasecmp(bt->name, "clip", 4) || !Q_strncasecmp(bt->name, "origin", 6) || !Q_strncasecmp(bt->name, "aaatrigger", 10))
@@ -468,7 +467,7 @@ int TexinfoForBrushTexture(plane_t* plane, brush_texture_t* bt, vec3_t origin)
 	for (i = 0; i < numtexinfo; i++, tc++)
 	{
 		// Sleazy hack 104, Pt 3 - Use strcmp on names to avoid dups
-		if (strcmp((char*)(tc->miptex), (char*)(tx.miptex)) != 0)
+		if (strcmp(g_MiptexNames[i], bt->name) != 0)
 			continue;
 		if (tc->flags != tx.flags)
 			continue;
@@ -486,6 +485,12 @@ int TexinfoForBrushTexture(plane_t* plane, brush_texture_t* bt, vec3_t origin)
 	}
 	if (numtexinfo == MAX_MAP_TEXINFO)
 		Error("Exceeded MAX_MAP_TEXINFO");
+
+	// Very Sleazy Hack 104 - since the tx.miptex index will be bogus after we sort the miptex array later
+	// Put the string name of the miptex in this "index" until after we are done sorting it in WriteMiptex().
+	g_MiptexNames[numtexinfo] = strdup(bt->name);
+	tx.miptex = numtexinfo;
+
 	*tc = tx;
 	numtexinfo++;
 	ThreadUnlock();
