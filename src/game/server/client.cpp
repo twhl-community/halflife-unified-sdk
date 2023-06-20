@@ -687,6 +687,10 @@ void SV_CreateClientCommands()
 		{ player->ToggleCheat(Cheat::InfiniteArmor); },
 		{.Flags = ClientCommandFlag::Cheat});
 
+	g_ClientCommands.Create("cheat_jetpack", [](CBasePlayer* player, const CommandArgs& args)
+		{ player->ToggleCheat(Cheat::Jetpack); },
+		{.Flags = ClientCommandFlag::Cheat});
+
 	g_ClientCommands.Create("cheat_givemagazine", [](CBasePlayer* player, const CommandArgs& args)
 		{
 			int attackMode = 0;

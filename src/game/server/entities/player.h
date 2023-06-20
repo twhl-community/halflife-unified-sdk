@@ -114,6 +114,7 @@ enum Cheat
 	Noclip,
 	InfiniteAir,
 	InfiniteArmor,
+	Jetpack
 };
 
 enum class WeaponSwitchMode
@@ -371,6 +372,8 @@ public:
 	bool HasLongJump() const;
 	void SetHasLongJump(bool hasLongJump);
 
+	void SetHasJetpack(bool state);
+
 	/**
 	 *	@brief resends any changed player HUD info to the client.
 	 *	Called every frame by PlayerPreThink
@@ -619,6 +622,7 @@ private:
 
 	bool m_bInfiniteAir;
 	bool m_bInfiniteArmor;
+	bool m_JetpackEnabled = false;
 
 public:
 	/**

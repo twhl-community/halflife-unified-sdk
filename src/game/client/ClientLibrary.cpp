@@ -293,4 +293,5 @@ void ClientLibrary::AddCheatCommands()
 	AddForwardedCommand("cheat_infiniteair");
 	AddForwardedCommand("cheat_infinitearmor");
 	AddForwardedCommand("cheat_givemagazine");
+	AddForwardedCommand("cheat_jetpack");
 }

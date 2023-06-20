@@ -61,6 +61,10 @@ playermove_t* pmove = nullptr;
 #define STEP_LADDER 8	// climbing ladder
 #define STEP_SNOW 9		// snow
 
+const float MaxJetpackSpeed = 400.f;
+const float JetpackVerticalAccelerationPerSecond = MaxJetpackSpeed * 8;
+const float JetpackForwardAccelerationPerSecond = MaxJetpackSpeed * 2;
+
 static Vector rgv3tStuckTable[54];
 static int rgStuckLast[MAX_PLAYERS][2];
 
@@ -2446,6 +2450,24 @@ void PM_Jump()
 	// No more effect
 	if (pmove->onground == -1)
 	{
+		if (atoi(pmove->PM_Info_ValueForKey(pmove->physinfo, "cjp")) == 1)
+		{
+			// Apply additional jump force every frame.
+			float force = pmove->velocity.z;
+			force += JetpackVerticalAccelerationPerSecond * pmove->frametime;
+			force = std::min(force, MaxJetpackSpeed);
+			pmove->velocity.z = force;
+
+			if ((pmove->cmd.buttons & IN_FORWARD) != 0)
+			{
+				// Add some extra forward velocity so players can move in the air.
+				for (i = 0; i < 2; i++)
+				{
+					pmove->velocity[i] += pmove->forward[i] * JetpackForwardAccelerationPerSecond * pmove->frametime;
+				}
+			}
+		}
+
 		// Flag that we jumped.
 		// HACK HACK HACK
 		// Remove this when the game .dll no longer does physics code!!!!

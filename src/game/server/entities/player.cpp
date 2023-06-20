@@ -102,6 +102,7 @@ DEFINE_FIELD(m_SuitLightType, FIELD_INTEGER),
 	DEFINE_FIELD(m_iExtraSoundTypes, FIELD_INTEGER),
 	DEFINE_FIELD(m_iWeaponFlash, FIELD_INTEGER),
 	DEFINE_FIELD(m_fLongJump, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_JetpackEnabled, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_fInitHUD, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_tbdPrev, FIELD_TIME),
 
@@ -2730,6 +2731,7 @@ void CBasePlayer::Spawn()
 	m_bitsDamageType = 0;
 	m_afPhysicsFlags = 0;
 	SetHasLongJump(false); // no longjump module.
+	SetHasJetpack(false);
 
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "hl", "1");
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "jpj", "0");
@@ -2916,6 +2918,7 @@ void CBasePlayer::PostRestore()
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "hl", "1");
 
 	SetHasLongJump(m_fLongJump);
+	SetHasJetpack(m_JetpackEnabled);
 
 	RenewItems();
 
@@ -3766,6 +3769,12 @@ void CBasePlayer::SetHasLongJump(bool hasLongJump)
 	m_fLongJump = hasLongJump;
 	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "slj", hasLongJump ? "1" : "0");
 	// TODO: CTF long jump integration
+}
+
+void CBasePlayer::SetHasJetpack(bool state)
+{
+	m_JetpackEnabled = state;
+	g_engfuncs.pfnSetPhysicsKeyValue(edict(), "cjp", state ? "1" : "0");
 }
 
 void CBasePlayer::SendSingleAmmoUpdate(int ammoIndex, bool clearLastState)
@@ -5033,6 +5042,10 @@ void CBasePlayer::ToggleCheat(Cheat cheat)
 	case Cheat::InfiniteArmor:
 		m_bInfiniteArmor = !m_bInfiniteArmor;
 		UTIL_ConsolePrint(this, "Infinite armor: {}\n", m_bInfiniteArmor ? "ON" : "OFF");
+		break;
+	case Cheat::Jetpack:
+		SetHasJetpack(!m_JetpackEnabled);
+		UTIL_ConsolePrint(this, "Jetpack: {}\n", m_JetpackEnabled ? "ON" : "OFF");
 		break;
 	default:
 		UTIL_ConsolePrint(this, "Bogus cheat value!\n");
