@@ -921,7 +921,7 @@ bool CTalkMonster::FIdleSpeak()
 
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
 	if (CBaseEntity* pFriend = FindNearestFriend(false);
-		pFriend && !(pFriend->IsMoving()) && (RANDOM_LONG(0, 99) < 75))
+		pFriend && pFriend->MyTalkMonsterPointer() && !(pFriend->IsMoving()) && (RANDOM_LONG(0, 99) < 75))
 	{
 		PlaySentence(szQuestionGroup, duration, VOL_NORM, ATTN_IDLE);
 		// sentences::g_Sentences.PlayRndSz(this, szQuestionGroup, 1.0, ATTN_IDLE, 0, pitch);
@@ -1015,8 +1015,10 @@ bool CTalkMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, flo
 			if (pFriend && pFriend->IsAlive())
 			{
 				// only if not dead or dying!
-				CTalkMonster* pTalkMonster = (CTalkMonster*)pFriend;
-				pTalkMonster->ChangeSchedule(slIdleStopShooting);
+				if (CTalkMonster* pTalkMonster = pFriend->MyTalkMonsterPointer(); pTalkMonster)
+				{
+					pTalkMonster->ChangeSchedule(slIdleStopShooting);
+				}
 			}
 		}
 	}
