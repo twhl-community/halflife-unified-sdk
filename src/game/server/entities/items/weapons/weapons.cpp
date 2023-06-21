@@ -277,6 +277,8 @@ void W_Precache()
 
 void CBasePlayerWeapon::PostRestore()
 {
+	BaseClass::PostRestore();
+
 	// If we're part of the player's inventory and we're the active item, reset weapon strings.
 	if (m_pPlayer && m_pPlayer->m_pActiveWeapon == this)
 	{
