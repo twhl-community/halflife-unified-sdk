@@ -306,6 +306,13 @@ void ServerLibrary::PostMapActivate()
 
 void ServerLibrary::PlayerActivating(CBasePlayer* player)
 {
+	// In singleplayer ClientPutInServer is only called when starting a new map with the map command,
+	// so we need to initialize this here so entities can send their own updates at the right time.
+	if (g_LastPlayerJoinTime == 0)
+	{
+		g_LastPlayerJoinTime = gpGlobals->time;
+	}
+
 	// Override the hud color.
 	if (m_MapState->m_HudColor)
 	{
