@@ -27,6 +27,7 @@
 #include "skill.h"
 
 class CBaseEntity;
+class CBaseItem;
 class CBaseMonster;
 class CBasePlayerWeapon;
 class CCineMonster;
@@ -317,6 +318,7 @@ public:
 	virtual CTalkMonster* MyTalkMonsterPointer() { return nullptr; }
 	virtual CSquadMonster* MySquadMonsterPointer() { return nullptr; }
 	virtual COFSquadTalkMonster* MySquadTalkMonsterPointer() { return nullptr; }
+	virtual CBaseItem* MyItemPointer() { return nullptr; }
 	virtual CItemCTF* MyItemCTFPointer() { return nullptr; }
 	virtual float GetDelay() { return 0; }
 	virtual bool IsMoving() { return pev->velocity != g_vecZero; }

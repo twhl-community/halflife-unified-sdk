@@ -70,6 +70,8 @@ public:
 	void Precache() override;
 	void Spawn() override;
 
+	CBaseItem* MyItemPointer() override { return this; }
+
 	virtual ItemType GetType() const = 0;
 
 	/**
