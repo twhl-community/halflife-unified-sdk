@@ -104,6 +104,7 @@ All changes from Half-Life Updated up until Beta 5 are included: https://github.
 * Fixed Egon not stopping its attack animation if the attack button is held down and ammo runs out (Thanks the man)
 * Fixed scientists crashing when speaking fear dialogue when enemy has been removed
 * Disabled fall think function for weapons when the player picks it up to prevent possible double-pickup which removes the weapon and crashes the game
+* Disabled jump sounds while player is frozen (e.g. trigger_camera, trigger_playerfreeze)
 
 ## Changes in V1.0.0 Beta 014
 
