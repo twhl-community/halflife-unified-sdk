@@ -57,11 +57,6 @@ CHalfLifeMultiplay::~CHalfLifeMultiplay()
 	g_VoiceGameMgr.Shutdown();
 }
 
-void CHalfLifeMultiplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
-{
-	pPlayer->SetPrefsFromUserinfo(infobuffer);
-}
-
 // longest the intermission can last, in seconds
 constexpr int MAX_INTERMISSION_TIME = 120;
 

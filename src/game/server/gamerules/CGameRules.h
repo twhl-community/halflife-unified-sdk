@@ -208,7 +208,7 @@ public:
 	/**
 	 *	@brief the player has changed userinfo;  can change it now
 	 */
-	virtual void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) {}
+	virtual void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer);
 
 	// Client kills/scoring
 	/**

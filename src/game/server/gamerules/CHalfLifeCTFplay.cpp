@@ -903,7 +903,7 @@ void CHalfLifeCTFplay::PlayerThink(CBasePlayer* pPlayer)
 
 void CHalfLifeCTFplay::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
 {
-	pPlayer->SetPrefsFromUserinfo(infobuffer);
+	CHalfLifeMultiplay::ClientUserInfoChanged(pPlayer, infobuffer);
 
 	if (pPlayer->m_szTeamModel)
 	{

@@ -376,6 +376,11 @@ CBaseEntity* CGameRules::GetPlayerSpawnSpot(CBasePlayer* pPlayer)
 	return pSpawnSpot;
 }
 
+void CGameRules::ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer)
+{
+	pPlayer->SetPrefsFromUserinfo(infobuffer);
+}
+
 bool CGameRules::CanHaveItem(CBasePlayer* player, CBaseItem* item)
 {
 	GameRulesCanHaveItemVisitor visitor{this, player};

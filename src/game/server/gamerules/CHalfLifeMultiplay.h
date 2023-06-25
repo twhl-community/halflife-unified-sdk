@@ -54,7 +54,6 @@ public:
 	CBaseEntity* GetPlayerSpawnSpot(CBasePlayer* pPlayer) override;
 
 	bool AllowAutoTargetCrosshair() override;
-	void ClientUserInfoChanged(CBasePlayer* pPlayer, char* infobuffer) override;
 
 	int IPointsForKill(CBasePlayer* pAttacker, CBasePlayer* pKilled) override;
 	void PlayerKilled(CBasePlayer* pVictim, CBaseEntity* pKiller, CBaseEntity* inflictor) override;
