@@ -129,7 +129,7 @@ Substitute `hlu` with the name of your mod directory. This name should be short 
 
 If you want to launch a dedicated server through Visual Studio you will need to point the `HalfLife_HLDS_DIRECTORY` variable to the directory that contains `hlds.exe`/`hlds_linux`.
 
-To aid developers project info is displayed on-screen automatically if `HalfLife_RELEASE_TYPE` is set to `Pre-Alpha` or `Alpha`. Configure this variable as needed to suit your needs. This is used solely for in-game diagnostics messages and display and does not affect the source code in any way. See [[Hud Project info|Hud-Project-info]] for more information.
+To aid developers project info is displayed on-screen automatically if `HalfLife_RELEASE_TYPE` is set to `Pre-Alpha` or `Alpha`. Configure this variable as needed to suit your needs. This is used solely for in-game diagnostics messages and display and does not affect the source code in any way. See [Hud Project info](docs/features/hud-project-info.md) for more information.
 
 You can set up the game for debugging by using these optional variables to provide command line arguments to the game:
 * `HalfLife_ENABLE_CONSOLE`: If set, the console will be enabled on startup
