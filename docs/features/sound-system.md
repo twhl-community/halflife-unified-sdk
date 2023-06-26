@@ -59,7 +59,7 @@ Half-Life, like Quake, uses software mixing regardless of which audio API is use
   
 To avoid duplicating distance effects Half-Life has 4 3D sources placed around the player. If you imagine a box 2x2 units wide and long centered on the player, the sources are placed at the corners of the box:
 
-<img src="https://i.imgur.com/Lkfigi8.png"/>
+![Sound System Audio Sources](/docs/images/sound-system-audio-sources.png)
 
 (Image not to scale)
 

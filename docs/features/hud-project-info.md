@@ -4,9 +4,7 @@ The hud has a new element called project info.
 
 This element draws project information on the hud:
 
-<a href="https://i.imgur.com/W1nv5Qr.png">
-<img src="https://i.imgur.com/W1nv5Qr.png" width="800">
-</a>
+![Hud Project Info](/docs/images/hud-project-info.png)
 
 This hud element is drawn if the `cl_projectinfo_show` cvar is set to `1`. A mod built with `HalfLife_RELEASE_TYPE` set to `Pre-Alpha` or `Alpha` will always have this element turned on to make it clear to players that this is a (pre-)alpha build, as well as to more easily capture relevant information in screenshots and videos.
 

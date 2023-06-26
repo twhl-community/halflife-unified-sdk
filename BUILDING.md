@@ -76,13 +76,13 @@ Start the CMake GUI; you will see a few options. Let's go over the ones we'll ne
 
 A typical setup should look like this:
 
-![CMake initial state](https://i.imgur.com/9f3Tvqw.png)
+![CMake initial state](docs/images/cmake-setup1.png)
 
 ### Windows configuration
 
 Now click the `Configure` button on the bottom left part of the screen. You will see this dialog:
 
-![Configure dialog](https://i.imgur.com/EvnW5xW.png)
+![Configure dialog](docs/images/cmake-setup2.png)
 
 Enter the following settings:
 * Generator: Visual Studio 16 2019 (or newer if you prefer)
@@ -91,7 +91,7 @@ Enter the following settings:
 
 Click the `Next` button. You will now see this dialog:
 
-![Toolchain dialog](https://i.imgur.com/oyptUR0.png)
+![Toolchain dialog](docs/images/cmake-setup3.png)
 
 Browse to the source code directory, open the `cmake` directory and select the file `WindowsToolchain.cmake`.
 
@@ -101,7 +101,7 @@ Click the `Finish` button. CMake will now perform first-run setup to prepare for
 
 Now click the `Configure` button on the bottom left part of the screen. You will see this dialog:
 
-![Configure dialog](https://i.imgur.com/cbJMp3A.png)
+![Configure dialog](docs/images/cmake-setup2b.png)
 
 Enter the following settings:
 * Generator: Unix makefiles
@@ -109,7 +109,7 @@ Enter the following settings:
 
 Click the `Next` button. You will now see this dialog:
 
-![Toolchain dialog](https://i.imgur.com/jMbea4h.png)
+![Toolchain dialog](docs/images/cmake-setup3b.png)
 
 Browse to the source code directory, open the `cmake` directory and select the file `LinuxToolchain.cmake`.
 
@@ -121,7 +121,7 @@ CMake will now perform its initial configuration. vcpkg will run as well and wil
 
 You should now see new variables marked red:
 
-![Configured](https://i.imgur.com/33wxe61.png)
+![Configured](docs/images/cmake-setup4.png)
 
 Modify the `CMAKE_INSTALL_PREFIX` variable to point to your mod directory, e.g. `C:/Program Files (x86)/Steam/steamapps/common/Half-Life/hlu`.
 
