@@ -4,7 +4,7 @@ The hud has a new element called entity info.
 
 This element draws entity information on the hud:
 
-![Hud Entity Info](/docs/images/hud-entity-info.png)
+![Hud Entity Info](../images/hud-entity-info.png)
 
 Any entity that is solid and can be hit by a traceline will show this information.
 

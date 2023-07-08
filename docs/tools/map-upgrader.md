@@ -1,10 +1,10 @@
 # MapUpgrader
 
 > **Note**
-> This is a [.NET tool](/docs/dotnet-tools.md)
+> This is a [.NET tool](../dotnet-tools.md)
 
 > **Note**
-> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+> This tool is included in the `hlu/tools` directory in the Releases available [here](../README.md#developer-resources)
 
 The MapUpgrader tool is used to upgrade Half-Life maps for a mod installation.
 This will apply any necessary upgrades and bug fixes.
@@ -15,7 +15,7 @@ This will apply any necessary upgrades and bug fixes.
 
 ```
 Usage:
-  HalfLife.UnifiedSdk.MapUpgrader [<maps>...] [options]
+  MapUpgrader [<maps>...] [options]
 
 Arguments:
   <maps>  List of maps to upgrade

@@ -28,3 +28,4 @@ This API is available for use in conditional evaluation.
 * `Multiplayer`: `true` if the game is running in multiplayer mode
 * `ListenServer`: `true` if the server is hosted by a player
 * `DedicatedServer`: `true` if the server is hosted as a dedicated server
+* `GameMode`: Name of the current game mode. See [Game Modes](game-modes.md#available-game-modes)

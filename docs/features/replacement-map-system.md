@@ -1,8 +1,8 @@
 # Replacement Map System
 
-The Half-Life Unified SDK allows you to replace certain types of assets used by the game.
+The Half-Life Unified SDK allows you to replace certain types of assets used by the game. These replacements are looked up in a map containing identifier mappings.
 
-These replacements are looked up in a map containing identifier mappings.
+Replacements can be global (affects all entities) or per-entity.
 
 The replacement map system uses the logger named `replacementmap`.
 
@@ -17,6 +17,10 @@ This file provides replacements for models used by entities on the server side.
 The filenames are case insensitive and are relative paths starting in the mod directory. The name can refer to a file in the mod directory or in a game whose content is being used as a base or fallback (i.e. `valve` or the game specified in [`liblist.gam`'s `fallback_dir`](https://developer.valvesoftware.com/wiki/The_liblist.gam_File_Structure) keyvalue).
 
 * Supported asset types: `.mdl, .spr`
+
+#### Entity keyvalue
+
+`model_replacement_filename` specifies the file to use for a specific entity.
 
 #### Example
 
@@ -60,6 +64,10 @@ Names are case sensitive.
 
 See the [twhl.info wiki](https://twhl.info/wiki/page/Sentences.txt) for more information about `sentences.txt`.
 
+#### Entity keyvalue
+
+`sentence_replacement_filename` specifies the file to use for a specific entity.
+
 #### Example
 
 This file provides replacements for sentences to use Opposing Force versions instead:
@@ -99,6 +107,10 @@ This file provides replacements for sounds used by entities on the server side a
 The filenames are case insensitive and are relative paths starting in the mod directory. The name can refer to a file in the mod directory or in a game whose content is being used as a base or fallback (i.e. `valve` or the game specified in [`liblist.gam`'s `fallback_dir`](https://developer.valvesoftware.com/wiki/The_liblist.gam_File_Structure) keyvalue).
 
 * Supported asset types: `.wav`
+
+#### Entity keyvalue
+
+`sound_replacement_filename` specifies the file to use for a specific entity.
 
 #### Example
 

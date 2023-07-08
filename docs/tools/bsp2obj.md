@@ -1,10 +1,10 @@
 # Bsp2Obj
 
 > **Note**
-> This is a [.NET tool](/docs/dotnet-tools.md)
+> This is a [.NET tool](../dotnet-tools.md)
 
 > **Note**
-> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+> This tool is included in the `hlu/tools` directory in the Releases available [here](../README.md#developer-resources)
 
 The Bsp2Obj tool is used to convert Half-Life 1 BSP files to the Wavefront OBJ format.
 
@@ -23,7 +23,7 @@ Materials are only generated if the texture is embedded in the BSP file, otherwi
 
 ```
 Usage:
-  HalfLife.UnifiedSdk.Bsp2Obj <filename> [options]
+  Bsp2Obj <filename> [options]
 
 Arguments:
   <filename>  Path to the BSP file

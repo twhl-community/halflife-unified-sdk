@@ -1,34 +1,10 @@
-This is the changelog from Half-Life Updated to Half-Life Updated CMake version 1.0.0.
+# About
 
-Fixes for bugs introduced in beta builds are not included in this list.
+This is the changelog from Steam Half-Life to Half-Life Updated version 1.0.0.
 
-See the full changelog for Half-Life Updated below for changes shared with the base game.
+Included are the full changelogs for Half-Life: Opposing Force Updated and Half-Life: Blue Shift Updated.
 
-## Project changes
-
-* Made the client link with the VGUI and SDL2 libraries using relative paths to avoid hard-coding developer's paths in the client library (matches the vanilla SDK's behavior)
-* Updated setup instructions to remove Windows XP support and use VS 2019 as the example
-* Removed unused linux files, update linux gitignore to account for out-of-tree builds [#4](https://github.com/SamVanheer/halflife-updated-cmake/issues/4)
-* Removed unused files [#5](https://github.com/SamVanheer/halflife-updated-cmake/issues/5)
-* Removed obsolete CBaseSpecator class [#6](https://github.com/SamVanheer/halflife-updated-cmake/issues/6)
-* Removed obsolete cine entities [#7](https://github.com/SamVanheer/halflife-updated-cmake/issues/7)
-* Removed obsolete cycler entity, refactor cycler classes [#8](https://github.com/SamVanheer/halflife-updated-cmake/issues/8)
-* Removed unused preprocessor definitions [#11](https://github.com/SamVanheer/halflife-updated-cmake/issues/11)
-* Restructured source code directories [#12](https://github.com/SamVanheer/halflife-updated-cmake/issues/12)
-* Restructured SDL2 files to encapsulate it as a CMake library [#13](https://github.com/SamVanheer/halflife-updated-cmake/issues/13)
-* Moved vgui Linux libraries to `utils/vgui/lib/linux` [#18](https://github.com/SamVanheer/halflife-updated-cmake/issues/18)
-* The mod libraries are now automatically copied to the HLDS directory on install if the HLDS directory has been provided [#21](https://github.com/SamVanheer/halflife-updated-cmake/issues/21)
-* Set CMake version to 3.21 [#22](https://github.com/SamVanheer/halflife-updated-cmake/issues/22)
-* Added CMake settings to set up debugging command line arguments more easily [#24](https://github.com/SamVanheer/halflife-updated-cmake/issues/24)
-* Fixed Linux libraries having visible symbols [#27](https://github.com/SamVanheer/halflife-updated-cmake/issues/27)
-* Added OpenGL library to client, ensured 32 bit version is used on Linux
-* Added CMake project for tools [#28](https://github.com/SamVanheer/halflife-updated-cmake/issues/28)
-    * Removed duplicate winding_t, CopyWinding, FreeWinding, WindingCenter, pw functions
-    * Resolved conflicts between wadlib & textures.cpp
-    * renamed nummodels in studiomdl to numstudiomodels to avoid conflict with bspfile
-    * Fixed include paths for tools that reference game SDK files
-
----
+# Changelogs
 
 This is the changelog from Steam Half-Life: Blue Shift to Half-Life: Blue Shift Updated version 1.0.0.
 

@@ -2,7 +2,7 @@
 
 # Half-Life Unified SDK
 
-The [Half-Life Unified SDK](https://github.com/SamVanheer/halflife-unified-sdk) is a project that provides an updated version of the Half-Life SDK, with full support for the expansion packs Opposing Force and Blue Shift as well as new features.
+The [Half-Life Unified SDK](docs/README.md#developer-resources) is a project that provides an updated version of the Half-Life SDK, with full support for the expansion packs Opposing Force and Blue Shift as well as new features.
 
 [![CI/CD](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml/badge.svg?branch=master)](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml)
 
@@ -14,6 +14,10 @@ The goal of the Unified SDK is to allow modders to make mods based on these game
 A mod installation is also provided to allow players to play these games with all bug fixes applied.
 
 This mod installation includes files that are required when making a mod based on this SDK.
+
+> <span style="background-color:orange; color: black">Warning
+> </br>
+> Due to how some SDK features are implemented demos will not work properly. Use an external program like OBS to record the game.</span>
 
 The following types of changes are **in scope** for this project:
 * Bug fixes
@@ -35,9 +39,9 @@ See the TWHL thread for status updates about these projects: https://twhl.info/t
 
 Updated game assets provided by [Marc-Antoine Lortie](https://github.com/malortie).
 
-The source code for the C# tools can be found here: https://github.com/SamVanheer/HalfLife.UnifiedSdk-CSharp
+The source code for the C# tools can be found [here](docs/README.md#developer-resources)
 
-The map decompiler can be found here: https://github.com/SamVanheer/HalfLife.UnifiedSdk.MapDecompiler
+The map decompiler can be found [here](docs/README.md#developer-resources)
 
 ## Documentation format
 
@@ -71,7 +75,7 @@ See [CHANGELOG.md](CHANGELOG.md) and [FULL_CHANGELOG.md](FULL_CHANGELOG.md)
 
 # Documentation
 
-See [docs/README.md](/docs/README.md) for a list of documentation, resources and tutorials.
+See [docs/README.md](docs/README.md) for a list of documentation, resources and tutorials.
 
 # Requirements to run mods built with this SDK
 
@@ -103,9 +107,7 @@ Metamod and AMXMod are not supported. The changes made to the source code render
 
 The source code for Deathmatch Classic and Ricochet is in the original Half-Life SDK. The purpose of these updated repositories is to provide updated versions only for Half-Life and its expansion packs, so the source code for these mods has been removed.
 
-Since the vanilla versions don't compile under newer versions of Visual Studio separate repositories have been made that provide the same updates to make them compile:
-* https://github.com/SamVanheer/dmc-updated
-* https://github.com/SamVanheer/ricochet-updated
+Since the vanilla versions don't compile under newer versions of Visual Studio separate repositories have been made that provide the same updates to make them compile. These projects can be found [here](docs/README.md#other-source-code-repositories).
 
 Unlike the other updated repositories these only provide basic fixes. No further development and support will be provided.
 

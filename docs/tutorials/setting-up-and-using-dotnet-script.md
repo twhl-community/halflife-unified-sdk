@@ -8,7 +8,7 @@ This page describes how to install this tool and use it.
 
 Before you can install dotnet script itself you will need to install the .NET SDK. .NET 6.0 or newer is needed to run the tool and the scripts and packages used by existing scripts.
 
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
+See [Setting up the .NET SDK](../dotnet-tools.md#installing-the-net-sdk)
 
 ## Install dotnet script
 
@@ -36,7 +36,7 @@ If you are running the dotnet command for the first time after installing or upd
 
 ## Command-line scripts in the SDK
 
-Command-line scripts work just like regular .NET tools. See [.NET Tools](/docs/dotnet-tools.md#command-line-tools) for more information.
+Command-line scripts work just like regular .NET tools. See [.NET Tools](../dotnet-tools.md#command-line-tools) for more information.
 
 ### Passing command-line parameters
 

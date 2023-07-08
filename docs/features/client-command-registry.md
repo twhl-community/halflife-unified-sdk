@@ -45,10 +45,10 @@ g_ClientCommands.Create("say", [](CBasePlayer* player, const CCommandArgs& args)
 	});
 ```
 
-The shared pointer returned by this function can be used to remove the command at any time by calling `Remove`:
+The pointer returned by this function can be used to remove the command at any time by calling `Remove`:
 ```cpp
-mySharedPointer->Registry->Remove(mySharedPointer);
-mySharedPointer.reset(); //Ensure the command is destroyed.
+g_ClientCommands.Remove(myCommand);
+myCommand = nullptr;
 ```
 
 To set flags on the command, pass the flags as an additional argument:

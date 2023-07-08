@@ -1,10 +1,10 @@
 # AssetSynchronizer
 
 > **Note**
-> This is a [.NET tool](/docs/dotnet-tools.md)
+> This is a [.NET tool](../dotnet-tools.md)
 
 > **Note**
-> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+> This tool is included in the `hlu/tools` directory in the Releases available [here](../README.md#developer-resources)
 
 The AssetSynchronizer tool is used to automatically copy assets from the assets repository to the game installation.
 
@@ -21,7 +21,7 @@ Files are not deleted from the destination directory if they are deleted from th
 
 ```
 Usage:
-  HalfLife.UnifiedSdk.AssetSynchronizer [options]
+  AssetSynchronizer [options]
 
 Options:
   --assets-directory <assets-directory>  Path to the assets directory
@@ -31,15 +31,15 @@ Options:
   -?, -h, --help                         Show help and usage information
 ```
 
-The assets directory should point to your local copy of the [assets repository](https://github.com/SamVanheer/halflife-unified-sdk-assets).
+The assets directory should point to your local copy of the [assets repository](../README.md#developer-resources).
 
-The mod directory should point to your local copy of the [mod installation](/INSTALL.md).
+The mod directory should point to your local copy of the [mod installation](../../INSTALL.md).
 
 The asset manifest should point to the asset manifest file contained in the assets repository.
 
 It is recommended to use a script to pass the arguments automatically. For example, using a batch file placed in the directory containing the assets repository:
 ```bat
-dotnet "path/to/HalfLife.UnifiedSdk.AssetSynchronizer.dll"^
+dotnet "path/to/AssetSynchronizer.dll"^
 	--assets-directory "halflife-unified-sdk-assets"^
 	--mod-directory "C:/Program Files (x86)/Steam/steamapps/common/Half-Life/hlu"^
 	--asset-manifest "halflife-unified-sdk-assets/AssetManifest.json"

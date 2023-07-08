@@ -4,11 +4,13 @@ The Unified SDK uses tools written in .NET. These tools are intended to work on 
 
 ## Prerequisites
 
-### Install the .NET SDK
+### Installing the .NET SDK
 
 .NET tools require the .NET SDK.
 
-See [Setting up the .NET SDK](/docs/tutorials/setting-up-dotnet-sdk.md)
+You can download the SDK here: https://dotnet.microsoft.com/en-us/download
+
+Install the SDK using the provided installer.
 
 ## Launching .NET tools
 
@@ -16,12 +18,12 @@ All tools include a Windows executable (`.exe`) and a .NET assembly (`.dll`).
 
 Launching the executable is as simple as double-clicking it or running it in a command window:
 ```cmd
-path/to/tools/HalfLife.UnifiedSdk.ToolName.exe [options] <arguments>
+path/to/tools/ToolName.exe [options] <arguments>
 ```
 
 For use on other platforms the assembly should be used:
 ```cmd
-dotnet path/to/tools/HalfLife.UnifiedSdk.ToolName.dll [options] <arguments>
+dotnet path/to/tools/ToolName.dll [options] <arguments>
 ```
 
 ## Command-line tools

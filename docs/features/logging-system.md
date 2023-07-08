@@ -4,12 +4,12 @@ The Half-Life Unified SDK uses [spdlog](https://github.com/gabime/spdlog) to han
 
 Because the logging system is implemented at the SDK level a separate version exists for the client and server, so all commands are prefixed with the library name to disambiguate them.
 
-File logging is supported. If file logging is enabled a log file will be created in `logs/<shortlibraryprefix>` where depending on whether the client or server is logging `shortlibraryprefix` is either `cl` or `sv`.
+File logging is supported. If file logging is enabled a log file will be created in `logs/<short_library_prefix>` where depending on whether the client or server is logging `short_library_prefix` is either `cl` or `sv`.
 
 Log filenames are of the form `<BaseFileName>_YYYY_MM_DD.log`.
 
 Console log output is of the form:
-`[logger_name] [log_level] message`
+`[short_library_prefix] [logger_name] [log_level] message`
 
 File log output is of the form:
 `[2022-06-02 14:27:17.148] [logger_name] [log_level] message`
@@ -32,27 +32,38 @@ From most to least verbose:
 
 | Name | Purpose |
 | --- | --- |
-| angelscript | See [Angelscript Scripting Support](/angelscript-scripting-support.md) |
+| angelscript | See [Angelscript Scripting Support](angelscript-scripting-support.md) |
 | assert | In debug builds this logs debug assertion messages using the `critical` level |
-| conditional_evaluation | See [Angelscript-scripting-support](/#conditional-evaluation-api) |
+| bot | Bot testing system |
+| conditional_evaluation | See [Angelscript-scripting-support](angelscript-scripting-support.md#conditional-evaluation) |
 | cvar | See [Console Command System](console-command-system.md) |
 | ent | Logs general entity info |
 | ent.ai | Logs NPC info |
 | ent.ai.script | Logs NPC scripted behavior info (`scripted_sequence`, `aiscripted_sequence` & `scripted_sentence`) |
+| ent.classify | The entity classification system |
 | ent.io | Logs entity I/O related to target and killtarget |
+| ent.template | The entity template system |
 | ent.weapons | Logs weapon state info |
 | game | Logs general game events related to map loading and initialization |
 | gamecfg | See [Game Configuration System](game-configuration-system.md) |
 | gamerules | Logs game mode events. This includes log output that was previously routed to the server log file |
 | json | See [JSON System](json-system.md) |
 | logging | See above |
+| mapcycle | The map cycle system |
+| materials | The materials system |
+| net_data | The network data system |
 | nodegraph | Logs node graph debug output. Will spew much output in trace mode |
 | precache | Logs every call made to model, sound and generic precache functions. Assets precached by the engine are not included in this output |
 | replacementmap | See [Replacement Map System](replacement-map-system.md) |
 | saverestore | Logs errors that occur during saving and loading |
-| sentences | Logs diagnostics, warnings and errors that occur during `sentences.txt` file loading |
+| sentences | Logs diagnostics, warnings and errors that occur during `sentences.json` file loading |
 | skill | See [Skill Configuration System](skill-configuration-system.md) |
 | sound | Logs diagnostics, warnings and errors that occur during sound playback |
+| sound.cache | The client-side sound cache |
+| sound.sentences | The client-side sentences system |
+| ui | Client-side user interface systems |
+| ui.campaign | Client-side campaign selection system |
+| voice | Server-side voice system |
 
 ## Error handling
 

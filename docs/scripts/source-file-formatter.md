@@ -1,10 +1,10 @@
 # SourceFileFormatter
 
 > **Note**
-> This is a [dotnet script tool](/docs/tutorials/setting-up-and-using-dotnet-script.md)
+> This is a [dotnet script tool](../tutorials/setting-up-and-using-dotnet-script.md)
 
 > **Note**
-> This tool is included in the `scripts` directory in the [SDK repository](https://github.com/SamVanheer/halflife-unified-sdk)
+> This tool is included in the `scripts` directory in the [SDK Source Code](../README.md#developer-resources)
 
 The SourceFileFormatter script is used to run clang-format on all of the files in a directory matching a set of filters.
 
@@ -37,7 +37,7 @@ Options:
   -?, -h, --help                         Show help and usage information
 ```
 
-The destination directory should point to the `cfgsrc/maps` directory in your local copy of the [assets repository](https://github.com/SamVanheer/halflife-unified-sdk-assets).
+The destination directory should point to the `cfgsrc/maps` directory in your local copy of the [assets repository](../README.md#developer-resources).
 
 ## Providing a ClangFormat executable to use
 

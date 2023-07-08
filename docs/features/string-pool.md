@@ -20,3 +20,5 @@ In most cases this behavior is unwanted and causes subtle bugs, for instance whe
 The recommended path separator is `/`. The engine's filesystem internally converts paths to the default path separator so this will rarely require manual replacement.
 
 In the rare case where this behavior is wanted a separate function called `ALLOC_ESCAPED_STRING` will perform this conversion. It is currently used only in `game_text`'s `message` keyvalue to handle newlines.
+
+`ALLOC_STRING_VIEW` can also be used when allocating strings from a view. This allows the use of strings that don't end with a null terminator.

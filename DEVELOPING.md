@@ -21,21 +21,21 @@ Resources to learn these things:
 
 ## Overall project structure
 
-The source code for the mod SDK is in [this repository](https://github.com/SamVanheer/halflife-unified-sdk). This also includes the source code for the original tools included with the Half-Life SDK as well as `delta.lst` which is used to configure networking settings for the mod. `liblist.gam` is also included.
+The source code for the mod SDK is in the repository that this file is included with. This also includes the source code for the original tools included with the Half-Life SDK as well as `delta.lst` which is used to configure networking settings for the mod. `liblist.gam` is also included.
 
 Mod installations are available on the releases page of this repository.
 
-The source files for game assets are stored in the [half-life-unified-sdk-assets](https://github.com/SamVanheer/halflife-unified-sdk-assets) repository. This includes sources for all types of models, configuration files, scripts, fgds; anything that's not mod source code.
+The source files for game assets are stored in the [Asset Source Files](docs/README.md#developer-resources) repository. This includes sources for all types of models, configuration files, scripts, fgds; anything that's not mod source code.
 
-See the [README](https://github.com/SamVanheer/halflife-unified-sdk-assets/blob/master/README.md) for more information on what exactly is stored there.
+See the README for more information on what exactly is stored there.
 
-The source code for tools written in C# are stored in the [HalfLife.UnifiedSdk-CSharp](https://github.com/SamVanheer/HalfLife.UnifiedSdk-CSharp) repository. These tools are used to automate some parts of development such as the copying of source files from the assets repository to the game installation, as well as the packaging of mods and installation of game content taken from the original games.
+The source code for tools written in C# are stored in the [C# Tools Source Code](docs/README.md#developer-resources) repository. These tools are used to automate some parts of development such as the copying of source files from the assets repository to the game installation, as well as the packaging of mods and installation of game content taken from the original games.
 
 The tools are included with mod installations.
 
 ## Setting up the source code
 
-See [Setting up the source code](/BUILDING.md)
+See [Setting up the source code](BUILDING.md)
 
 ## Server library name
 

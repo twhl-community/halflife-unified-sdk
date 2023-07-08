@@ -16,7 +16,7 @@ If a JSON file has malformed syntax the error will be reported using an error co
 
 For example a forgotten comma results in this error being shown:
 ```
-[json] [error] Error "101" parsing JSON: "[json.exception.parse_error.101] parse error at line 11, column 3: syntax error while parsing array - unexpected '{'; expected ']'"
+[sv] [json] [error] Error "101" parsing JSON: "[json.exception.parse_error.101] parse error at line 11, column 3: syntax error while parsing array - unexpected '{'; expected ']'"
 ```
 
 See the [NLohmann JSON documentation](https://json.nlohmann.me/home/exceptions/#jsonexceptionparse_error101) for more information about which error types exist and what they mean.
@@ -33,7 +33,7 @@ The validation system reports errors by showing the path in the file and the JSO
 
 For example an invalid `Name` value results in this error being shown:
 ```
-[json] [error] Error validating JSON "/Sections/1" with value "{"Color":"255 160 0","Name":"foo"}": no subschema has succeeded, but one of them is required to validate
+[sv] [json] [error] Error validating JSON "/Sections/1" with value "{"Color":"255 160 0","Name":"foo"}": no subschema has succeeded, but one of them is required to validate
 ```
 
 This indicates that the second array element (starting at 0 for the first) of the `Sections` array is invalid.

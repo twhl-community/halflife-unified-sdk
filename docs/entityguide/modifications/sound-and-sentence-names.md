@@ -6,16 +6,18 @@ Consult the TWHL entity guide for the original names used by the vanilla Half-Li
 
 ## Affected entities
 
-* func_rotating
-* func_button
-* func_rot_button
-* momentary_rot_button
-* func_door
-* func_door_rotating
-* momentary_door
-* func_plat
-* func_platrot
-* func_train
-* func_tracktrain
-* func_trackchange
-* func_trackautochange
+* `env_spritetrain`
+* `func_button`
+* `func_door`
+* `func_door_rotating`
+* `func_plat`
+* `func_platrot`
+* `func_rot_button`
+* `func_rotating`
+* `func_train`
+* `func_trackautochange`
+* `func_trackchange`
+* `func_tracktrain`
+* `func_water`
+* `momentary_door`
+* `momentary_rot_button`

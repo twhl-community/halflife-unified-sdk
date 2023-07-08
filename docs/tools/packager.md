@@ -1,10 +1,10 @@
 # Packager
 
 > **Note**
-> This is a [.NET tool](/docs/dotnet-tools.md)
+> This is a [.NET tool](../dotnet-tools.md)
 
 > **Note**
-> This tool is included in the `hlu/tools` directory in the game installation package available [here](https://github.com/SamVanheer/halflife-unified-sdk/releases)
+> This tool is included in the `hlu/tools` directory in the Releases available [here](../README.md#developer-resources)
 
 The Packager tool is used to create a zip archive containing a mod installation.
 Old packages will be removed automatically on successful completion.
@@ -15,7 +15,7 @@ Old packages will be removed automatically on successful completion.
 
 ```
 Usage:
-  HalfLife.UnifiedSdk.Packager [options]
+  Packager [options]
 
 Options:
   --mod-directory <mod-directory> (REQUIRED)        Path to the mod directory
@@ -26,7 +26,7 @@ Options:
   --version                                         Show version information
   -?, -h, --help                                    Show help and usage information
 ```
-The mod directory should point to your local copy of the [mod installation](/INSTALL.md).
+The mod directory should point to your local copy of the [mod installation](../../INSTALL.md).
 
 The package manifest should point to the package manifest file contained in the game installation.
 
@@ -36,7 +36,7 @@ You can optionally specify `--verbose` to get additional log output to see which
 
 It is recommended to use a script to pass the arguments automatically. For example, using a batch file placed in the directory containing the game installation (typically `Half-Life`):
 ```bat
-dotnet "path/to/HalfLife.UnifiedSdk.Packager.dll"^
+dotnet "path/to/Packager.dll"^
 	--mod-directory "hlu"^
 	--package-manifest "hlu/installer/PackageManifest.json"^
 	--package-name "HalfLifeUnified-Game"^
