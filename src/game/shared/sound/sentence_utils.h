@@ -30,7 +30,7 @@
 
 namespace sentences
 {
-constexpr int CBSENTENCENAME_MAX = 32;
+constexpr int CBSENTENCENAME_MAX = 16;
 
 constexpr int EngineMaxSentences = 1536;
 
@@ -52,7 +52,7 @@ constexpr int CSENTENCE_LRU_MAX = 32;
 
 using SentenceName = eastl::fixed_string<char, CBSENTENCENAME_MAX>;
 
-using SentenceIndexName = eastl::fixed_string<char, CBSENTENCENAME_MAX + 1>;
+using SentenceIndexName = eastl::fixed_string<char, 20 + 1 + 1>;
 
 /**
  *	@brief group of related sentences

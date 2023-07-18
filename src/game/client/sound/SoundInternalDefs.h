@@ -49,8 +49,9 @@ constexpr vec_t NominalClippingDistance = 1000.0;
 
 /**
  *	@brief Hard limit in the original engine, soft limit here. The vector will grow to accomodate more.
+ *	Original limit was @c 32
  */
-constexpr std::size_t MaxWordsPerSentence = 32;
+constexpr std::size_t MaxWordsPerSentence = 8;
 
 /**
  *	@brief The range, in seconds, to sample for mouths.

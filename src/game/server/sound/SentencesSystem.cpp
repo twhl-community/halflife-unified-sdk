@@ -113,12 +113,6 @@ bool SentencesParser::ParseSentences(const json& input)
 				continue;
 			}
 
-			if (name.size() >= sentences::CBSENTENCENAME_MAX)
-			{
-				m_Logger->warn("Sentence {} longer than {} letters", name, sentences::CBSENTENCENAME_MAX - 1);
-				continue;
-			}
-
 			if (m_Sentences.size() >= MaxSentencesCount)
 			{
 				m_Logger->error("Too many sentences in file! (maximum {})", MaxSentencesCount);
