@@ -54,6 +54,12 @@ bool CCineMonster::KeyValue(KeyValueData* pkvd)
 		m_iFinishSchedule = atoi(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq(pkvd->szKeyName, "allow_follow"))
+	{
+		// Make sure nobody tries to change this at runtime.
+		AIScriptLogger->warn("Cannot set \"allow_follow\" on scripts!");
+		return true;
+	}
 
 	return CBaseMonster::KeyValue(pkvd);
 }
