@@ -895,6 +895,12 @@ void CBaseMonster::ForEachFriend(Callback callback)
 	// This typically includes NPCs with the same entity class, but a modder may implement custom classifications.
 	const auto myClass = Classify();
 
+	// Can't have friends if you identify as a prop.
+	if (myClass == ENTCLASS_NONE)
+	{
+		return;
+	}
+
 	for (auto friendEntity : UTIL_FindEntities())
 	{
 		if (friendEntity->IsPlayer())
@@ -936,7 +942,15 @@ void CBaseMonster::ForEachFriend(Callback callback)
 			continue;
 		}
 
-		if (myClass == monster->Classify())
+		const auto otherClass = monster->Classify();
+
+		if (otherClass == ENTCLASS_NONE)
+		{
+			// Don't consider props to be friends.
+			continue;
+		}
+
+		if (myClass == otherClass)
 		{
 			// Already checked these. Includes other NPCs of my type
 			continue;

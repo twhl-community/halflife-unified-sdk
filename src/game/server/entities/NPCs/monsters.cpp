@@ -1972,9 +1972,13 @@ Relationship CBaseMonster::IRelationship(CBaseEntity* pTarget)
 	if (pTarget->IsPlayer())
 	{
 		// Hate player if they shoot you, even if otherwise friendly.
-		if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
+		// Only do this if we have a classification, otherwise we're a prop of some sort.
+		if (Classify() != ENTCLASS_NONE)
 		{
-			return Relationship::Hate;
+			if ((m_afMemory & bits_MEMORY_PROVOKED) != 0)
+			{
+				return Relationship::Hate;
+			}
 		}
 
 		switch (m_PlayerAllyRelationship)
