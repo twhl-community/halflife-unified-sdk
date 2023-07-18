@@ -1755,9 +1755,18 @@ void CBasePlayer::UpdateEntityInfo()
 			}
 		}
 
+		// Clamp to one removed from the bounds for a 32 bit integer to avoid overflowing due to rounding errors.
+		// Must be doubles because floats are too inaccurate to clamp large values.
+		const double clampedHealth = std::clamp(
+			static_cast<double>(entity->pev->health),
+			static_cast<double>(std::numeric_limits<int>::lowest() + 1),
+			static_cast<double>(std::numeric_limits<int>::max() - 1));
+
+		const int roundedHealth = static_cast<int>(clampedHealth);
+
 		MESSAGE_BEGIN(MSG_ONE, gmsgEntityInfo, nullptr, this);
 		WRITE_STRING(STRING(entity->pev->classname));
-		WRITE_LONG(std::clamp(static_cast<int>(entity->pev->health), std::numeric_limits<int>::lowest(), std::numeric_limits<int>::max()));
+		WRITE_LONG(roundedHealth);
 		WRITE_RGB24(color);
 		MESSAGE_END();
 	}
