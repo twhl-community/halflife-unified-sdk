@@ -239,9 +239,9 @@ struct EntityDictionaryLocator final
 };
 
 // Used at runtime to look up entities of specific types.
-inline EntityDictionary<CBaseEntity>* g_EntityDictionary = EntityDictionaryLocator<CBaseEntity>::Get();
-inline EntityDictionary<CBaseItem>* g_ItemDictionary = EntityDictionaryLocator<CBaseItem>::Get();
-inline EntityDictionary<CBasePlayerWeapon>* g_WeaponDictionary = EntityDictionaryLocator<CBasePlayerWeapon>::Get();
+inline EntityDictionary<CBaseEntity>* const g_EntityDictionary = EntityDictionaryLocator<CBaseEntity>::Get();
+inline EntityDictionary<CBaseItem>* const g_ItemDictionary = EntityDictionaryLocator<CBaseItem>::Get();
+inline EntityDictionary<CBasePlayerWeapon>* const g_WeaponDictionary = EntityDictionaryLocator<CBasePlayerWeapon>::Get();
 
 namespace detail
 {
