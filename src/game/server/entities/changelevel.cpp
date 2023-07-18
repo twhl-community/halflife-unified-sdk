@@ -273,8 +273,36 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity* pActivator)
 
 void CChangeLevel::TouchChangeLevel(CBaseEntity* pOther)
 {
-	if (!pOther->IsPlayer())
+	auto player = ToBasePlayer(pOther);
+
+	if (!player)
 		return;
+
+	// This only happens if we're spawning/loading into a map and touching a level change right away.
+	if (!g_Server.HasFinishedLoading())
+	{
+		m_Enabled = false;
+	}
+
+	if (!m_Enabled)
+	{
+		if (m_LastTooCloseMessageTime < gpGlobals->time)
+		{
+			m_LastTooCloseMessageTime = gpGlobals->time + TooCloseMessageInterval;
+
+			// Every time the player tries to use a level change that they were touching on load
+			// we tell them why it's disabled.
+			// This needs to be broken up into lines because centerprint only allows up to 39 characters to be drawn per line.
+			const auto message = fmt::format(
+				"The level change to\n\n\"{}\"\n\nnear {} is too close\n\nto the player when they enter the map",
+				m_szMapName, Center());
+
+			ClientPrint(player, HUD_PRINTCENTER, message.c_str());
+			Con_Printf("%s\n", message.c_str());
+		}
+
+		return;
+	}
 
 	ChangeLevelNow(pOther);
 }

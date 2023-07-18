@@ -64,4 +64,10 @@ public:
 
 	// Co-op only, don't need to restore.
 	bool m_UsePersistentInventory = true;
+
+	// Diagnostics only; so level changes placed too close in connected maps don't break.
+	bool m_Enabled = true;
+	float m_LastTooCloseMessageTime = 0;
+	// Matches the default value of the scr_centertime cvar.
+	static constexpr float TooCloseMessageInterval = 2;
 };

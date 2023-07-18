@@ -193,6 +193,8 @@ void ServerLibrary::NewMapStarted(bool loadGame)
 
 	++m_SpawnCount;
 
+	m_HasFinishedLoading = false;
+
 	// Need to check if we're getting multiple map start commands in the same frame.
 	m_IsStartingNewMap = true;
 	++m_InNewMapStartedCount;
@@ -301,6 +303,15 @@ void ServerLibrary::PostMapActivate()
 			// Don't count the invalid string.
 			g_PrecacheLogger->debug("[{}] {} precached total", list->GetType(), list->GetCount() - 1);
 		}
+	}
+}
+
+void ServerLibrary::OnUpdateClientData()
+{
+	// The first update occurs after the engine has unpaused itself.
+	if (!m_HasFinishedLoading)
+	{
+		m_HasFinishedLoading = true;
 	}
 }
 

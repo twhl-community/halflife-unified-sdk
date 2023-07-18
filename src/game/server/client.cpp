@@ -1988,6 +1988,8 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
  */
 void UpdateClientData(const edict_t* ent, int sendweapons, clientdata_t* cd)
 {
+	g_Server.OnUpdateClientData();
+
 	if (!ent)
 		return;
 

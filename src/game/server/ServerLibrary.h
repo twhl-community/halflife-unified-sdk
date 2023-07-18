@@ -47,6 +47,8 @@ public:
 
 	bool IsCurrentMapLoadedFromSaveGame() const { return m_IsCurrentMapLoadedFromSaveGame; }
 
+	bool HasFinishedLoading() const { return m_HasFinishedLoading; }
+
 	int GetSpawnCount() const { return m_SpawnCount; }
 
 	bool Initialize() override;
@@ -84,6 +86,8 @@ public:
 	 *	@brief Called right after entities are activated
 	 */
 	void PostMapActivate();
+
+	void OnUpdateClientData();
 
 	/**
 	 *	@brief Called when the player activates (first UpdateClientData call after ClientPutInServer or Restore).
@@ -125,6 +129,7 @@ private:
 
 	bool m_IsStartingNewMap = true;
 	bool m_IsCurrentMapLoadedFromSaveGame = false;
+	bool m_HasFinishedLoading = true;
 
 	int m_InNewMapStartedCount = 0;
 
