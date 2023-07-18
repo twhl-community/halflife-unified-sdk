@@ -61,7 +61,7 @@ void NetworkDataSystem::RegisterHandler(std::string&& name, INetworkDataBlockHan
 	if (std::find_if_not(name.begin(), name.end(), [](auto c)
 			{ return 0 != std::isalpha(c); }) != name.end())
 	{
-		assert(!"Producer name is invalid");
+		assert(!"Handler name is invalid");
 		return;
 	}
 
@@ -70,7 +70,7 @@ void NetworkDataSystem::RegisterHandler(std::string&& name, INetworkDataBlockHan
 	if (std::find_if(m_Handlers.begin(), m_Handlers.end(), [&](const auto& candidate)
 			{ return candidate.Name == name; }) != m_Handlers.end())
 	{
-		assert(!"Tried to add multiple producers with the same name");
+		assert(!"Tried to add multiple handlers with the same name");
 		return;
 	}
 

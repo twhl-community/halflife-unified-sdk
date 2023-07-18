@@ -34,4 +34,7 @@ public:
 
 inline HudSpriteConfigSystem g_HudSpriteConfig;
 
+/**
+ *	@brief Finds and returns the matching sprite name @p spriteName in the given sprite list @p sprites
+ */
 const HudSprite* GetSpriteList(const std::vector<HudSprite>& sprites, const char* spriteName);

@@ -79,7 +79,7 @@ bool ClientUserMessages::DispatchUserMessage(const char* pszName, int iSize, voi
 		return true;
 	}
 
-	// Don't spawn the console with error messages; this is a developer error.
+	// Don't spam the console with error messages; this is a developer error.
 	g_GameLogger->debug("No user message handler for message \"{}\"", pszName);
 
 	assert(!"No user message handler for message");
