@@ -29,18 +29,16 @@ SoundCache::SoundCache(std::shared_ptr<spdlog::logger> logger)
 
 SoundIndex SoundCache::FindName(const RelativeFilename& fileName)
 {
-	for (const auto& sound : m_Sounds)
+	if (const auto lookup = m_SoundLookup.find(ToStringView(fileName)); lookup != m_SoundLookup.end())
 	{
-		if (sound.Name.comparei(fileName) == 0)
-		{
-			return MakeSoundIndex(&sound);
-		}
+		return SoundIndex(*lookup + 1);
 	}
 
 	if (m_Sounds.size() >= static_cast<std::size_t>(std::numeric_limits<int>::max()))
 	{
 		// Chances are you'll run out of memory before this happens.
-		m_Logger->warn("Out of sound slots, cannot load {} (maximum {})", fileName.c_str(), std::numeric_limits<int>::max());
+		m_Logger->warn("Out of sound slots, cannot load {} (maximum {})",
+			fileName.c_str(), std::numeric_limits<int>::max());
 		return {};
 	}
 
@@ -51,7 +49,11 @@ SoundIndex SoundCache::FindName(const RelativeFilename& fileName)
 
 	m_Sounds.emplace_back(std::move(copy));
 
-	return MakeSoundIndex(&m_Sounds.back());
+	const std::size_t index = m_Sounds.size() - 1;
+
+	m_SoundLookup.insert(index);
+
+	return SoundIndex{static_cast<int>(index) + 1};
 }
 
 Sound* SoundCache::GetSound(SoundIndex index)
@@ -163,12 +165,8 @@ void SoundCache::ClearBuffers()
 
 void SoundCache::Clear()
 {
+	m_SoundLookup.clear();
 	m_Sounds.clear();
-}
-
-SoundIndex SoundCache::MakeSoundIndex(const Sound* sound) const
-{
-	return SoundIndex{(sound - m_Sounds.data()) + 1};
 }
 
 std::optional<std::tuple<ALint, ALint>> SoundCache::TryLoadCuePoints(

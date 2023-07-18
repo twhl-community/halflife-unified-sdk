@@ -20,6 +20,8 @@
 
 #include <spdlog/common.h>
 
+#include <EASTL/string.h>
+
 /**
  *	@brief String type that can store an integer value up to @c (u)int64_t without dynamic memory allocations.
  */
@@ -28,6 +30,12 @@ using IntegerString = eastl::fixed_string<char, 20 + 1>;
 constexpr [[nodiscard]] std::string_view ToStringView(spdlog::string_view_t view)
 {
 	return {view.data(), view.size()};
+}
+
+template <typename T, typename Allocator>
+constexpr [[nodiscard]] std::basic_string_view<T> ToStringView(const eastl::basic_string<T, Allocator>& str)
+{
+	return {str.data(), str.size()};
 }
 
 /**
