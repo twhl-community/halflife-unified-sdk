@@ -159,7 +159,7 @@ target_sources(client PRIVATE
 	sound/SentencesSystem.h
 	sound/SoundCache.cpp
 	sound/SoundCache.h
-	sound/SoundInternalDefs.h
+	sound/SoundDefs.h
 	sound/SoundSystem.cpp
 	sound/SoundSystem.h
 

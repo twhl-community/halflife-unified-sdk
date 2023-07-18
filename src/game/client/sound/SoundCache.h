@@ -28,7 +28,7 @@
 
 #include "IGameSoundSystem.h"
 #include "OpenALUtils.h"
-#include "SoundInternalDefs.h"
+#include "SoundDefs.h"
 #include "utils/string_utils.h"
 
 namespace sound

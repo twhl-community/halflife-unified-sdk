@@ -26,7 +26,7 @@
 #include "IGameSoundSystem.h"
 #include "SentencesSystem.h"
 #include "SoundCache.h"
-#include "SoundInternalDefs.h"
+#include "SoundDefs.h"
 #include "OpenALUtils.h"
 
 struct cvar_t;
@@ -54,8 +54,11 @@ public:
 
 	void Resume();
 
-	void StartSound(
-		int entityIndex, int channelIndex, const char* soundOrSentence, const Vector& origin, float volume, float attenuation, int flags, int pitch) override;
+	void StartSound(int entityIndex, int channelIndex, const char* soundOrSentence,
+		const Vector& origin, float volume, float attenuation, int flags, int pitch) override;
+
+	void StartSound(int entityIndex, int channelIndex, SoundData&& sound,
+		const Vector& origin, float volume, float attenuation, int pitch, int flags) override;
 
 	void StopAllSounds() override;
 

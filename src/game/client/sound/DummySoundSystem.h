@@ -27,9 +27,11 @@ struct DummyGameSoundSystem final : public IGameSoundSystem
 
 	void HandleNetworkDataBlock(NetworkDataBlock& block) override {}
 
-	void StartSound(
-		int entnum, int entchannel,
-		const char* soundOrSentence, const Vector& origin, float fvol, float attenuation, int flags, int pitch) override {}
+	void StartSound(int entityIndex, int channelIndex, const char* soundOrSentence,
+		const Vector& origin, float volume, float attenuation, int pitch, int flags) override {}
+
+	void StartSound(int entityIndex, int channelIndex, SoundData&& sound,
+		const Vector& origin, float volume, float attenuation, int pitch, int flags) override {}
 
 	void StopAllSounds() override {}
 

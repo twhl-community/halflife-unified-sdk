@@ -20,7 +20,7 @@
 
 #include <spdlog/logger.h>
 
-#include "SoundInternalDefs.h"
+#include "SoundDefs.h"
 
 #include "utils/json_fwd.h"
 

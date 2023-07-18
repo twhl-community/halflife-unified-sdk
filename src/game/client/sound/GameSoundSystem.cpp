@@ -386,11 +386,6 @@ void GameSoundSystem::StartSound(
 	int entityIndex, int channelIndex,
 	const char* soundOrSentence, const Vector& origin, float volume, float attenuation, int pitch, int flags)
 {
-	if (!MakeCurrent())
-	{
-		return;
-	}
-
 	SoundData sound;
 
 	if (soundOrSentence[0] != '!')
@@ -401,30 +396,52 @@ void GameSoundSystem::StartSound(
 			++soundOrSentence;
 		}
 
-		const auto index = m_SoundCache->FindName(soundOrSentence);
-
-		if (!index.IsValid())
-		{
-			return;
-		}
-
-		if (auto soundData = m_SoundCache->GetSound(index); !m_SoundCache->LoadSound(*soundData))
-		{
-			return;
-		}
-
-		sound = index;
+		sound = m_SoundCache->FindName(soundOrSentence);
 	}
 	else
 	{
-		const auto sentenceIndex = m_Sentences->FindSentence(soundOrSentence + 1);
+		sound = SentenceChannel{m_Sentences->FindSentence(soundOrSentence + 1), 0};
+	}
 
-		if (sentenceIndex == SentencesSystem::InvalidIndex)
+	StartSound(entityIndex, channelIndex, std::move(sound), origin, volume, attenuation, pitch, flags);
+}
+
+void GameSoundSystem::StartSound(int entityIndex, int channelIndex, SoundData&& sound,
+	const Vector& origin, float volume, float attenuation, int pitch, int flags)
+{
+	if (!MakeCurrent())
+	{
+		return;
+	}
+
+	if (!std::visit([&, this](auto&& sound)
 		{
-			return;
-		}
+			using T = std::decay_t<decltype(sound)>;
 
-		sound = SentenceChannel{sentenceIndex, 0};
+			if constexpr (std::is_same_v<T, SoundIndex>)
+			{
+				if (!sound.IsValid())
+				{
+					return false;
+				}
+
+				auto& soundData = *m_SoundCache->GetSound(sound);
+
+				return m_SoundCache->LoadSound(soundData);
+			}
+			else if constexpr (std::is_same_v<T, SentenceChannel>)
+			{
+				return sound.Sentence != SentencesSystem::InvalidIndex;
+			}
+			else
+			{
+				static_assert(always_false_v<T>, "StartSound does not handle all sound types");
+			}
+
+			return false; },
+		sound))
+	{
+		return;
 	}
 
 	if ((flags & (SND_STOP | SND_CHANGE_VOL | SND_CHANGE_PITCH)) != 0)
@@ -447,6 +464,8 @@ void GameSoundSystem::StartSound(
 	}
 
 	Channel* newChannel = FindOrCreateChannel(entityIndex, channelIndex);
+
+	const std::string_view soundOrSentence = GetSoundName(sound);
 
 	if (SetupChannel(*newChannel, entityIndex, channelIndex, std::move(sound), origin, volume, pitch, attenuation, false))
 	{
@@ -507,7 +526,6 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, BufferReader& reade
 
 	const std::size_t absoluteSoundIndex = soundIndex >= 0 ? static_cast<std::size_t>(soundIndex) : SentencesSystem::InvalidIndex;
 
-	// TODO: this is needlessly converting from index to filename and back again
 	if ((flags & SND_SENTENCE) == 0)
 	{
 		if (absoluteSoundIndex >= m_PrecacheMap.size())
@@ -518,26 +536,11 @@ void GameSoundSystem::MsgFunc_EmitSound(const char* pszName, BufferReader& reade
 
 		const SoundIndex actualSoundIndex = m_PrecacheMap[absoluteSoundIndex];
 
-		const auto sound = m_SoundCache->GetSound(actualSoundIndex);
-
-		assert(sound);
-
-		StartSound(entityIndex, channel, sound->Name.c_str(), origin, volume, attenuation, pitch, flags);
+		StartSound(entityIndex, channel, actualSoundIndex, origin, volume, attenuation, pitch, flags);
 	}
 	else
 	{
-		const auto sentence = m_Sentences->GetSentence(absoluteSoundIndex);
-
-		if (!sentence)
-		{
-			m_Logger->error("MsgFunc_EmitSound: Invalid sentence index {}", soundIndex);
-			return;
-		}
-
-		Filename sample;
-		fmt::format_to(std::back_inserter(sample), "!{}", sentence->Name.c_str());
-
-		StartSound(entityIndex, channel, sample.c_str(), origin, volume, attenuation, pitch, flags);
+		StartSound(entityIndex, channel, SentenceChannel{absoluteSoundIndex, 0}, origin, volume, attenuation, pitch, flags);
 	}
 }
 

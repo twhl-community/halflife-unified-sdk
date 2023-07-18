@@ -21,8 +21,6 @@
 
 #include "Platform.h"
 
-// TODO: move SoundIndex somewhere else
-#include "IGameSoundSystem.h"
 #include "OpenALUtils.h"
 
 #include "sound/sentence_utils.h"
@@ -80,6 +78,30 @@ constexpr float UnderwaterLowPassHFGain = 1.f;
 
 namespace sound
 {
+/**
+ *	@brief Strongly typed sound index, for disambiguating overloads between <tt>const char*</tt> and <tt>int</tt>.
+ */
+struct SoundIndex final
+{
+	static constexpr int InvalidIndex = 0;
+
+	constexpr SoundIndex() noexcept = default;
+
+	explicit constexpr SoundIndex(int index) noexcept
+		: Index(index)
+	{
+	}
+
+	constexpr bool IsValid() const
+	{
+		return Index != InvalidIndex;
+	}
+
+	constexpr auto operator<=>(const SoundIndex&) const = default;
+
+	int Index = InvalidIndex;
+};
+
 /**
  *	@brief A single sound.
  *	@details Sounds should always be referred to using a @see SoundIndex.

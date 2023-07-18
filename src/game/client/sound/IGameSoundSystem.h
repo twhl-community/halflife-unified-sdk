@@ -15,36 +15,12 @@
 
 #pragma once
 
+#include "SoundDefs.h"
 #include "networking/NetworkDataSystem.h"
-
 #include "utils/json_fwd.h"
 
 namespace sound
 {
-/**
- *	@brief Strongly typed sound index, for disambiguating overloads between <tt>const char*</tt> and <tt>int</tt>.
- */
-struct SoundIndex final
-{
-	static constexpr int InvalidIndex = 0;
-
-	constexpr SoundIndex() noexcept = default;
-
-	explicit constexpr SoundIndex(int index) noexcept
-		: Index(index)
-	{
-	}
-
-	constexpr bool IsValid() const
-	{
-		return Index != InvalidIndex;
-	}
-
-	constexpr auto operator<=>(const SoundIndex&) const = default;
-
-	int Index = InvalidIndex;
-};
-
 /**
  *	@brief Provides sound playback for game systems.
  */
@@ -52,8 +28,11 @@ struct IGameSoundSystem : public INetworkDataBlockHandler
 {
 	virtual ~IGameSoundSystem() = default;
 
-	virtual void StartSound(
-		int entityIndex, int channelIndex, const char* soundOrSentence, const Vector& origin, float volume, float attenuation, int pitch, int flags) = 0;
+	virtual void StartSound(int entityIndex, int channelIndex, const char* soundOrSentence,
+		const Vector& origin, float volume, float attenuation, int pitch, int flags) = 0;
+
+	virtual void StartSound(int entityIndex, int channelIndex, SoundData&& sound,
+		const Vector& origin, float volume, float attenuation, int pitch, int flags) = 0;
 
 	virtual void StopAllSounds() = 0;
 
