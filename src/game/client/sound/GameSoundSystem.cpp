@@ -431,7 +431,7 @@ void GameSoundSystem::StartSound(int entityIndex, int channelIndex, SoundData&& 
 			}
 			else if constexpr (std::is_same_v<T, SentenceChannel>)
 			{
-				return sound.Sentence != SentencesSystem::InvalidIndex;
+				return m_Sentences->GetSentence(sound.Sentence) != nullptr;
 			}
 			else
 			{
