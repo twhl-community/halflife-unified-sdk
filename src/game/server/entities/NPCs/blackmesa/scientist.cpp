@@ -350,7 +350,7 @@ void CScientist::StartTask(const Task_t* pTask)
 
 	case TASK_SAY_FEAR:
 		// Marphy Fact FIles Fix - This speech check always fails during combat, so removing
-		//if ( FOkToSpeak() )
+		// if ( FOkToSpeak() )
 		if (m_hEnemy)
 		{
 			Talk(2);
@@ -532,7 +532,8 @@ void CScientist::Spawn()
 	{
 		// Erase previous value because SetBodygroup won't.
 		pev->body = 0;
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1)); // pick a head, any head
+		// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));
 	}
 
 	SetSize(VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
@@ -1027,8 +1028,11 @@ void CDeadScientist::Spawn()
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->body == -1)
-	{																													 // -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1)); // pick a head, any head
+	{
+		pev->body = 0;
+		// -1 chooses a random head
+		// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));
 	}
 	// Luther is black, make his hands black
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)
@@ -1096,8 +1100,11 @@ void CSittingScientist::Spawn()
 	SetBits(pev->spawnflags, SF_MONSTER_PREDISASTER); // predisaster only!
 
 	if (pev->body == -1)
-	{																													 // -1 chooses a random head
-		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1)); // pick a head, any head
+	{
+		pev->body = 0;
+		// -1 chooses a random head
+		// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));
 	}
 	// Luther is black, make his hands black
 	if (GetBodygroup(ScientistBodygroup::Head) == HEAD_LUTHER)

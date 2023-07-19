@@ -114,8 +114,11 @@ void CDeadCleansuitScientist::Spawn()
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->body == -1)
-	{														 // -1 chooses a random head
-		pev->body = RANDOM_LONG(0, NUM_SCIENTIST_HEADS - 1); // pick a head, any head
+	{														 
+		pev->body = 0;
+		// -1 chooses a random head
+		// pick a head, any head
+		SetBodygroup(ScientistBodygroup::Head, RANDOM_LONG(0, GetBodygroupSubmodelCount(ScientistBodygroup::Head) - 1));
 	}
 	// Luther is black, make his hands black
 	if (pev->body == HEAD_LUTHER)
