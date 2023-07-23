@@ -19,3 +19,4 @@ Brush entity that allows players to move to other levels.
 ## Notes
 
 * This entity works in multiplayer, unlike in the original SDK
+* The game will disable level changes if the player is touching them immediately after entering the map. A message will be shown on-screen and in the console to warn the player. The original behavior disabled all level changes in the map

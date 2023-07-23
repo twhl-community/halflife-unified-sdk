@@ -112,6 +112,7 @@
 * Made `trigger_changelevel` **work in multiplayer** (**non-persistent level changes only**)
 	* Added the option to use **non-persistent level changes** in singleplayer
 * Removed unused `trigger_changelevel` functionality left over from Quake 1
+* Added check to prevent level changes from breaking if they are too close to each-other in relative space. The game will instead notify players who touch broken level changes that the level change is incorrectly placed
 * Reworked `func_breakable` and `func_pushable` to allow level designers to **specify the classname of the entity to spawn on break**. This allows both entities to spawn any item in the game aside from CTF items without needing code changes to support newly added items
 * Reworked save/restore system to use a datamap to store data
 	* Decoupled engine save/restore data from the game's data to allow the game's version to be changed freely
