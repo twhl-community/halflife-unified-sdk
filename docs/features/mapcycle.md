@@ -26,20 +26,20 @@ Unlike `mapcycle.txt` it is not possible to specify commands to be executed. Thi
 
 ```jsonc
 [
-    "undertow",
-    {
-        "Name": "snark_pit",
+	"undertow",
+	{
+		"Name": "snark_pit",
 		// Only switch to this map if there are between 4 and 16 players on the server
-        "MinPlayers": 4,
-        "MaxPlayers": 16
-    },
+		"MinPlayers": 4,
+		"MaxPlayers": 16
+	},
 	{
 		"Name": "boot_camp",
 		// Only switch to this map if there are at least 8 players on the server
 		"MinPlayers": 8
 	},
-    "lambda_bunker",
-    "datacore",
-    "stalkyard"
+ 	"lambda_bunker",
+ 	"datacore",
+ 	"stalkyard"
 ]
 ```
