@@ -33,7 +33,7 @@ The files in this directory and subdirectories contain documentation for the Uni
 * [Content Installer](tools/content-installer.md)
 * [Bsp2Obj](tools/bsp2obj.md)
 * [KeyValueMatcher](tools/keyvalue-matcher.md)
-* [MapCfgGenerator](scripts/map-cfg-generator.md)
+* [MapCfgGenerator](tools/map-cfg-generator.md)
 * [Hud2Json](tools/hud2json.md)
 * [Materials2Json](tools/materials2json.md)
 * [Sentences2Json](tools/sentences2json.md)
