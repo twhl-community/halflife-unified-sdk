@@ -67,6 +67,8 @@ void CGenericMonster::OnCreate()
 	pev->health = 8;
 
 	SetClassification("player_ally");
+
+	m_AllowFollow = false;
 }
 
 void CGenericMonster::SetYawSpeed()
