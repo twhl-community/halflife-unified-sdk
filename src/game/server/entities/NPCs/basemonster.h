@@ -228,7 +228,7 @@ public:
 	{
 		int caps = BaseClass::ObjectCaps();
 
-		if (m_AllowFollow)
+		if ((pev->flags & FL_MONSTER) != 0 && m_AllowFollow)
 		{
 			caps |= FCAP_IMPULSE_USE;
 		}
