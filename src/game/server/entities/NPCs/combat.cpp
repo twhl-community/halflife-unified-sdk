@@ -273,11 +273,21 @@ static void SpawnClientGibsCore(CBaseEntity* victim, const GibType type, int cGi
 		return;
 	}
 
+	const Vector origin = victim->Center();
+	const int bloodColor = victim->BloodColor();
+
+	// If you bleed, you stink!
+	if (bloodColor != DONT_BLEED)
+	{
+		// ok, start stinkin!
+		CSoundEnt::InsertSound(bits_SOUND_MEAT, origin, 384, 25);
+	}
+
 	MESSAGE_BEGIN(MSG_BROADCAST, gmsgClientGibs);
 	WRITE_SHORT(victim->entindex());
-	WRITE_BYTE(victim->BloodColor());
+	WRITE_BYTE(bloodColor);
 	WRITE_BYTE(cGibs);
-	WRITE_COORD_VECTOR(victim->Center()); // Spawn in center since we can't get bounding box on the client side.
+	WRITE_COORD_VECTOR(origin); // Spawn in center since we can't get bounding box on the client side.
 	WRITE_COORD_VECTOR(g_vecAttackDir);
 
 	const auto multiplier = [=]()
