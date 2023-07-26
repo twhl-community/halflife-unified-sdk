@@ -31,6 +31,7 @@
 * Reworked **HUD sprite system**
 	* Converted HUD sprite configuration files to use JSON
 	* Implemented **HUD replacement system**: allows maps to provide **custom HUD sprite configuration files**
+* Implemented **crosshair scale** option (**OpenGL renderer only**)
 * Implemented new client-side temporary entity list; increased maximum number from **500** to **2048**
 * Implemented **entity templates**: allows default values for keyvalues to be specified for a specific type of entity in a map (e.g. amount of ammo given by ammunition, amount of ammo in a weapon)
 * Implemented **global and per-entity model, sound and sentence replacement**. **Global sound replacement also works on the client side**
