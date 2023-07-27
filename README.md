@@ -11,9 +11,7 @@ Opposing Force and Blue Shift features have been integrated with code refactored
 
 The goal of the Unified SDK is to allow modders to make mods based on these games, while providing bug fixes that could be applied to the official games as well in addition to bug fixes that would be a breaking change.
 
-A mod installation is also provided to allow players to play these games with all bug fixes applied.
-
-This mod installation includes files that are required when making a mod based on this SDK.
+A mod installation is also provided to allow players to play these games with all bug fixes applied. It includes files that are required when making a mod based on this SDK.
 
 > <span style="background-color:orange; color: black">Warning
 > </br>
@@ -42,6 +40,10 @@ Updated game assets provided by [Marc-Antoine Lortie](https://github.com/malorti
 The source code for the C# tools can be found [here](docs/README.md#developer-resources)
 
 The map decompiler can be found [here](docs/README.md#developer-resources)
+
+# Documentation
+
+See [docs/README.md](docs/README.md) for a list of documentation, resources and tutorials.
 
 ## Documentation format
 
@@ -72,10 +74,6 @@ The repository currently contains a pre-alpha version in the master branch. This
 # Changelog
 
 See [FULL_CHANGELOG.md](FULL_CHANGELOG.md) for changes inherited from Half-Life Updated and [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for changes specific to the Unified SDK.
-
-# Documentation
-
-See [docs/README.md](docs/README.md) for a list of documentation, resources and tutorials.
 
 # Requirements to run mods built with this SDK
 
