@@ -51,9 +51,9 @@ For offline use the best way to view the documentation is to use Visual Studio C
 
 Visual Studio Code includes Markdown preview using the keyboard shortcuts `CTRL+SHIFT+V` (switch to preview) and `CTRL+K V` (open preview side by side; press `CTRL+K`, let go of both keys, then press `V`).
 
-Links to other documentation files in this repository use relative and absolute links starting at the repository root. To follow links correctly open the repository folder (the folder containing this file) in Visual Studio Code using `File->Open Folder...`.
+It is recommended to open the repository folder using `File->Open Folder...` to allow navigation to the files included in the repository.
 
-Consult Visual Studio Code's documentation for more information about Markdown support : https://code.visualstudio.com/docs/languages/markdown
+Consult Visual Studio Code's documentation for more information about Markdown support: https://code.visualstudio.com/docs/languages/markdown
 
 # Development process
 
@@ -71,7 +71,7 @@ The repository currently contains a pre-alpha version in the master branch. This
 
 # Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) and [FULL_CHANGELOG.md](FULL_CHANGELOG.md)
+See [FULL_CHANGELOG.md](FULL_CHANGELOG.md) for changes inherited from Half-Life Updated and [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for changes specific to the Unified SDK.
 
 # Documentation
 

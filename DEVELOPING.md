@@ -63,7 +63,7 @@ The [Packager](docs/tools/packager.md) tool is used to create the mod installati
 
 Archive filenames include a UTC timestamp to uniquely identify them. On successful completion old archives are automatically removed.
 
-The [Installer](docs/tools/installer.md) tool is used to copy, convert and upgrade maps from Half-Life, Opposing Force and Blue Shift.
+The [ContentInstaller](docs/tools/content-installer.md) tool is used to copy, convert and upgrade maps from Half-Life, Opposing Force and Blue Shift.
 
 Original maps can't be redistributed, and changes made to SDK code require changes to be made to these maps. This tool does that automatically.
 

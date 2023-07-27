@@ -6,7 +6,7 @@
 
 3. Install the Visual Studio 2022 re-distributable. You can find it in the `hlu/redist` directory.
 
-4. Run the [Installer](docs/tools/Installer.md) tool:
+4. Run the [ContentInstaller](docs/tools/content-installer.md) tool:
 ```bat
 cd "path/to/Half-Life/directory"
 dotnet "hlu/tools/ContentInstaller.dll" --mod-directory hlu

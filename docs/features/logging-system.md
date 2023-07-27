@@ -34,23 +34,23 @@ From most to least verbose:
 | --- | --- |
 | angelscript | See [Angelscript Scripting Support](angelscript-scripting-support.md) |
 | assert | In debug builds this logs debug assertion messages using the `critical` level |
-| bot | Bot testing system |
+| bot | See [Bot System](bot-system.md) |
 | conditional_evaluation | See [Angelscript-scripting-support](angelscript-scripting-support.md#conditional-evaluation) |
 | cvar | See [Console Command System](console-command-system.md) |
 | ent | Logs general entity info |
 | ent.ai | Logs NPC info |
 | ent.ai.script | Logs NPC scripted behavior info (`scripted_sequence`, `aiscripted_sequence` & `scripted_sentence`) |
-| ent.classify | The entity classification system |
+| ent.classify | See [Entity Classifications](entity-classifications.md) |
 | ent.io | Logs entity I/O related to target and killtarget |
-| ent.template | The entity template system |
+| ent.template | See [Entity Templates](entity-templates.md) |
 | ent.weapons | Logs weapon state info |
 | game | Logs general game events related to map loading and initialization |
 | gamecfg | See [Game Configuration System](game-configuration-system.md) |
 | gamerules | Logs game mode events. This includes log output that was previously routed to the server log file |
 | json | See [JSON System](json-system.md) |
 | logging | See above |
-| mapcycle | The map cycle system |
-| materials | The materials system |
+| mapcycle | See [Mapcycle](mapcycle.md) |
+| materials | See [Material System](material-system.md) |
 | net_data | The network data system |
 | nodegraph | Logs node graph debug output. Will spew much output in trace mode |
 | precache | Logs every call made to model, sound and generic precache functions. Assets precached by the engine are not included in this output |
@@ -62,7 +62,7 @@ From most to least verbose:
 | sound.cache | The client-side sound cache |
 | sound.sentences | The client-side sentences system |
 | ui | Client-side user interface systems |
-| ui.campaign | Client-side campaign selection system |
+| ui.campaign | See [Campaign selection system](campaign-selection-system.md)] |
 | voice | Server-side voice system |
 
 ## Error handling

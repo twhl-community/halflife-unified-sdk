@@ -24,25 +24,6 @@ The files in this directory and subdirectories contain documentation for the Uni
 
 * [Entity guide](entityguide/README.md)
 
-## Tools
-
-* [AssetSynchronizer](tools/asset-synchronizer.md)
-* [MapUpgrader](tools/map-upgrader.md)
-* [MapUpgraderDocGenerator](tools/map-upgrader-doc-generator.md)
-* [Packager](tools/packager.md)
-* [Content Installer](tools/content-installer.md)
-* [Bsp2Obj](tools/bsp2obj.md)
-* [KeyValueMatcher](tools/keyvalue-matcher.md)
-* [MapCfgGenerator](tools/map-cfg-generator.md)
-* [Hud2Json](tools/hud2json.md)
-* [Materials2Json](tools/materials2json.md)
-* [Sentences2Json](tools/sentences2json.md)
-* [Skill2Json](tools/skill2json.md)
-
-## Scripts
-
-* [SourceFileFormatter](scripts/source-file-formatter.md)
-
 ## Core Features
 
 * [String pool](features/string-pool.md)
@@ -77,6 +58,25 @@ The files in this directory and subdirectories contain documentation for the Uni
 * [Entity Templates](features/entity-templates.md)
 * [Temporary entities](features/temporary-entities.md)
 * [Miscellaneous Commands](features/misc-commands.md)
+
+## Tools
+
+* [AssetSynchronizer](tools/asset-synchronizer.md)
+* [MapUpgrader](tools/map-upgrader.md)
+* [MapUpgraderDocGenerator](tools/map-upgrader-doc-generator.md)
+* [Packager](tools/packager.md)
+* [Content Installer](tools/content-installer.md)
+* [Bsp2Obj](tools/bsp2obj.md)
+* [KeyValueMatcher](tools/keyvalue-matcher.md)
+* [MapCfgGenerator](tools/map-cfg-generator.md)
+* [Hud2Json](tools/hud2json.md)
+* [Materials2Json](tools/materials2json.md)
+* [Sentences2Json](tools/sentences2json.md)
+* [Skill2Json](tools/skill2json.md)
+
+## Scripts
+
+* [SourceFileFormatter](scripts/source-file-formatter.md)
 
 ## Tutorials
 
