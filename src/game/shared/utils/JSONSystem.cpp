@@ -99,7 +99,6 @@ private:
 
 bool JSONSystem::Initialize()
 {
-	m_JsonDebug = g_ConCommands.CreateCVar("json_debug", "0", FCVAR_PROTECTED);
 	m_JsonSchemaValidation = g_ConCommands.CreateCVar("json_schema_validation", "0", FCVAR_PROTECTED);
 
 	g_ConCommands.CreateCommand("json_listschemas", [this](const auto& args)
@@ -125,7 +124,6 @@ void JSONSystem::Shutdown()
 	g_Logging.RemoveLogger(m_Logger);
 	m_Logger.reset();
 	m_JsonSchemaValidation = nullptr;
-	m_JsonDebug = nullptr;
 }
 
 void JSONSystem::RegisterSchema(std::string&& name, std::function<std::string()>&& getSchemaFunction)
@@ -275,12 +273,6 @@ std::optional<json> JSONSystem::LoadJSONFile(const char* fileName, const JSONLoa
 
 void JSONSystem::ListSchemas(const CommandArgs& args)
 {
-	if (!IsDebugEnabled())
-	{
-		Con_Printf("json_listschemas can only be used if %s_json_debug is set to 1\n", GetShortLibraryPrefix().data());
-		return;
-	}
-
 	Con_Printf("%zu schemas:\n", m_Schemas.size());
 
 	for (const auto& schema : m_Schemas)
@@ -291,12 +283,6 @@ void JSONSystem::ListSchemas(const CommandArgs& args)
 
 void JSONSystem::GenerateSchema(const CommandArgs& args)
 {
-	if (!IsDebugEnabled())
-	{
-		Con_Printf("json_generateschema can only be used if %s_json_debug is set to 1\n", GetShortLibraryPrefix().data());
-		return;
-	}
-
 	if (2 == args.Count())
 	{
 		const auto schemaName = args.Argument(1);
@@ -320,12 +306,6 @@ void JSONSystem::GenerateSchema(const CommandArgs& args)
 
 void JSONSystem::GenerateAllSchemas(const CommandArgs& args)
 {
-	if (!IsDebugEnabled())
-	{
-		Con_Printf("json_generateallschemas can only be used if %s_json_debug is set to 1\n", GetShortLibraryPrefix().data());
-		return;
-	}
-
 	if (args.Count() != 1)
 	{
 		Con_Printf("Usage: json_generateallschemas\n");

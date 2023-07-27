@@ -50,15 +50,11 @@ Syntax: `json_listschemas`
 
 Prints a list of all JSON schemas.
 
-Only available if `json_debug` is enabled.
-
 ### json_generateschema
 
 Syntax: `json_generateschema <schema_name>`
 
 Generates a file in `schemas/<shortlibraryprefix>` containing the given JSON schema.
-
-Only available if `json_debug` is enabled.
 
 ### json_generateallschemas
 
@@ -66,14 +62,10 @@ Syntax: `json_generateallschemas`
 
 Generates files for all schemas in `schemas/<shortlibraryprefix>`.
 
-Only available if `json_debug` is enabled.
-
 ## Console variables
 
-### json_debug
-
-Boolean value that controls whether JSON debug console commands are enabled.
-
 ### json_schema_validation
+
+Syntax: `json_schema_validation <0|1>`
 
 Boolean value that controls whether JSON Schema validation is enabled.

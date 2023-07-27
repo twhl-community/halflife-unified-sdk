@@ -77,15 +77,6 @@ public:
 	void Shutdown() override;
 
 	/**
-	 *	@brief Used to check if debug functionality is enabled.
-	 *	@details This allows sensitive commands and performance-lowering systems to be disabled.
-	 */
-	bool IsDebugEnabled() const
-	{
-		return !!m_JsonDebug->value;
-	}
-
-	/**
 	 *	@brief Registers a schema with a function to get the schema.
 	 */
 	void RegisterSchema(std::string&& name, std::function<std::string()>&& getSchemaFunction);
@@ -149,7 +140,6 @@ private:
 	void WriteSchemaToFile(std::string_view schemaName, const json& schema);
 
 private:
-	cvar_t* m_JsonDebug = nullptr;
 	cvar_t* m_JsonSchemaValidation = nullptr;
 	std::shared_ptr<spdlog::logger> m_Logger;
 
