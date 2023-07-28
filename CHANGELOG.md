@@ -285,6 +285,12 @@ This page lists all changes made since the last release in the current developme
 
 # Half-Life: Blue Shift Updated changelog
 
+## Changes in V1.0.0 Beta 011
+
+All changes from Half-Life Updated up until Beta 14 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-014
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+
 ## Changes in V1.0.0 Beta 010
 
 All changes from Half-Life Updated up until Beta 13 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-013
