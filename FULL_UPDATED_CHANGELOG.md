@@ -4,7 +4,7 @@ This is the changelog from Steam Half-Life to Half-Life Updated version 1.0.0.
 
 Included are the full changelogs for Half-Life: Opposing Force Updated and Half-Life: Blue Shift Updated.
 
-# Changelogs
+# Half-Life: Blue Shift Updated
 
 This is the changelog from Steam Half-Life: Blue Shift to Half-Life: Blue Shift Updated version 1.0.0.
 
@@ -37,7 +37,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed script in `ba_yard4a` that relied on a bug to break frozen Alien Slaves out of their frozen animation (halflife issue [#3061](https://github.com/ValveSoftware/halflife/issues/3061))
 * Fixed LD and HD Revolver models not playing the reload sound (halflife issue [#2351](https://github.com/ValveSoftware/halflife/issues/2351))
 
----
+# Half-Life: Opposing Force Updated
 
 This is the changelog from Steam Half-Life: Opposing Force to Half-Life: Opposing Force Updated version 1.0.0.
 
@@ -173,7 +173,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed Pit Worm's Nest boss death script unlocking the bridge too soon, which could cause players to get stuck with no way to progress (halflife issue [#3043](https://github.com/ValveSoftware/halflife/issues/3043))
 * Fixed LD and HD Revolver models not playing the reload sound (halflife issue [#2351](https://github.com/ValveSoftware/halflife/issues/2351))
 
----
+# Half-Life Updated
 
 This is the changelog from Steam Half-Life to Half-Life Updated version 1.0.0.
 
