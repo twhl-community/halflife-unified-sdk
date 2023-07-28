@@ -4,6 +4,13 @@ This is the changelog from Steam Half-Life to Half-Life Updated version 1.0.0.
 
 Included are the full changelogs for Half-Life: Opposing Force Updated and Half-Life: Blue Shift Updated.
 
+Table of contents:
+* [Half-Life: Blue Shift Updated](#half-life-blue-shift-updated)
+* [Half-Life: Opposing Force Updated](#half-life-opposing-force-updated)
+* [Half-Life Updated](#half-life-updated)
+
+<div class="page"/>
+
 # Half-Life: Blue Shift Updated
 
 This is the changelog from Steam Half-Life: Blue Shift to Half-Life: Blue Shift Updated version 1.0.0.
@@ -36,6 +43,8 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 
 * Fixed script in `ba_yard4a` that relied on a bug to break frozen Alien Slaves out of their frozen animation (halflife issue [#3061](https://github.com/ValveSoftware/halflife/issues/3061))
 * Fixed LD and HD Revolver models not playing the reload sound (halflife issue [#2351](https://github.com/ValveSoftware/halflife/issues/2351))
+
+<div class="page"/>
 
 # Half-Life: Opposing Force Updated
 
@@ -156,6 +165,8 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed Health Charger recharge time not using the correct value in Co-op
 * Fixed ropes breaking at high framerates
 
+<div class="page"/>
+
 ## Project changes
 
 * Added `fgd/halflife-op4.fgd`
@@ -172,6 +183,8 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed "Temporal paradox" Xen map displaying a map title (halflife issue [#963](https://github.com/ValveSoftware/halflife/issues/963))
 * Fixed Pit Worm's Nest boss death script unlocking the bridge too soon, which could cause players to get stuck with no way to progress (halflife issue [#3043](https://github.com/ValveSoftware/halflife/issues/3043))
 * Fixed LD and HD Revolver models not playing the reload sound (halflife issue [#2351](https://github.com/ValveSoftware/halflife/issues/2351))
+
+<div class="page"/>
 
 # Half-Life Updated
 
@@ -434,7 +447,7 @@ Fixes for bugs introduced in beta builds are not included in this list.
 * Updated smdlexp to use 3DS Max 2023 SDK [#149](https://github.com/SamVanheer/halflife-updated/pull/149)
     * Updated to fix configuration issues so both debug and release profiles compile and don't fail when trying to copy the library to the 3DS Max plugins directory
     * Added errors to stop compilation if the library is not built as 64 bit or if it does not use the Unicode character set (required for 3DS Max 2023 plugins)
-    * Note: plugin has not been tested. Use this plugin instead: https://knockout.chat/thread/806/1
+    * Note: plugin has not been tested. Use this plugin instead: [https://knockout.chat/thread/806/1](https://knockout.chat/thread/806/1)
 * Refactored env_sound code to use correct data type for room type, don't use goto to control think rate
 * Always send room_type changes to client, set room_type to 0 by default, reset room_type to 0 on map change, save room_type and restore it when loading same map (halflife issues [#1144](https://github.com/ValveSoftware/halflife/issues/1144) and [#2936](https://github.com/ValveSoftware/halflife/issues/2936))
 * Added fixes from Marphy Black's [Half-Life Fact Fixes](https://github.com/Revenant100/halflife-FactFilesFixes)
