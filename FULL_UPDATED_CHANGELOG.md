@@ -35,6 +35,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 ### Desert Eagle
 
 * Fixed Desert Eagle using wrong time base for underwater attack check (halflife issue [#1042](https://github.com/ValveSoftware/halflife/issues/1042))
+* Fixed Desert Eagle laser position not updating when holding down reload button [#95](https://github.com/SamVanheer/halflife-op4-updated/issues/95) (Thanks Ronin4862)
 
 ### MP5
 
@@ -75,7 +76,8 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 
 ### Specific NPCs
 
-* Fixed friendly grunts using wrong death sound filenames (thanks hammermaps) (halflife issue [#3036](https://github.com/ValveSoftware/halflife/issues/3036))
+* Fixed allied human grunts using wrong death sound filenames (halflife issue [#3036](https://github.com/ValveSoftware/halflife/issues/3036)) (thanks hammermaps)
+* Fixed allied human grunts continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862)
 * Fixed Shock Troopers not playing death sounds (halflife issue [#3037](https://github.com/ValveSoftware/halflife/issues/3037))
 * Fixed Voltigores not playing death sounds (halflife issue [#3039](https://github.com/ValveSoftware/halflife/issues/3039))
 * Fixed Voltigore not saving its charge beams (halflife issue [#3049](https://github.com/ValveSoftware/halflife/issues/3049))
@@ -93,6 +95,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed npc_gonome trying to play non-existent sounds [#64](https://github.com/SamVanheer/halflife-op4-updated/issues/64)
 * Fixed human grunts being able to drop weapons in the intro map
 * Fixed Engineer not shutting off his blow torch properly [#81](https://github.com/SamVanheer/halflife-op4-updated/issues/81)
+* Fixed Gonome locking first player on the server when attacking anything [#89](https://github.com/SamVanheer/halflife-op4-updated/issues/89) (Thanks LuckNukeHunter99)
 
 ## User Interface
 
@@ -109,6 +112,8 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed CBaseEntity::Instance(entvars_t*) crashing the game if given a null pointer (halflife issue [#3056](https://github.com/ValveSoftware/halflife/issues/3056))
 * Fixed incorrect header include guard in CRopeSample.h [#29](https://github.com/SamVanheer/halflife-op4-updated/issues/29)
 * Fixed FL_FAKECLIENT flag being cleared in some places (halflife issue [#3256](https://github.com/ValveSoftware/halflife/issues/3256))
+* Fixed Health Charger recharge time not using the correct value in Co-op
+* Fixed ropes breaking at high framerates
 
 ## Project changes
 
