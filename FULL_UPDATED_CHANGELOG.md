@@ -115,15 +115,15 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed Health Charger recharge time not using the correct value in Co-op
 * Fixed ropes breaking at high framerates
 
-## Project changes
-
-* Added `fgd/halflife-op4.fgd`
-
 ## Code cleanup
 
 * Removed void from functions taking no arguments (clang-tidy modernize-redundant-void-arg)
 * Used override specifier where needed (clang-tidy modernize-use-override)
 * Removed workarounds for conflicts between server & client code
+
+## Project changes
+
+* Added `fgd/halflife-op4.fgd`
 
 ## Game installation
 
