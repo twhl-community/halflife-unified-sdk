@@ -6,7 +6,7 @@
 
 > <span style="background-color:darkseagreen; color: black">Note
 > </br>
-> This changelog does not include changes that were made in Half-Life Updated and related projects. See [FULL_CHANGELOG.md](FULL_CHANGELOG.md) for a list of those changes.</span>
+> This changelog does not include changes that were made in Half-Life Updated and related projects. See [FULL_UPDATED_CHANGELOG.md](FULL_UPDATED_CHANGELOG.md) for a list of those changes.</span>
 
 ## New Features
 

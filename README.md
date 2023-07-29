@@ -73,7 +73,7 @@ The repository currently contains a pre-alpha version in the master branch. This
 
 # Changelog
 
-See [FULL_CHANGELOG.md](FULL_CHANGELOG.md) for changes inherited from Half-Life Updated and [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for changes specific to the Unified SDK.
+See [FULL_UPDATED_CHANGELOG.md](FULL_UPDATED_CHANGELOG.md) for changes inherited from Half-Life Updated and [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for changes specific to the Unified SDK.
 
 # Requirements to run mods built with this SDK
 
