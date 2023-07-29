@@ -14,7 +14,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 
 * Fixed game potentially crashing when saving and/or loading the game in ba_outro (halflife issue [#1014](https://github.com/ValveSoftware/halflife/issues/1014))
 
-### Code cleanup
+## Code cleanup
 
 * Removed void from functions taking no arguments (clang-tidy modernize-redundant-void-arg)
 * Used override specifier where needed (clang-tidy modernize-use-override)
