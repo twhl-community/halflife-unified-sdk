@@ -1,12 +1,25 @@
 # Half-Life Unified SDK V1.0.0 Changelog
 
-> <span style="background-color:darkseagreen; color: black">Note
-> </br>
-> This changelog is not complete yet.</span>
+This is the changelog from Half-Life Updated version 1.0.0 to Half-Life Unified SDK V1.0.0.
 
 > <span style="background-color:darkseagreen; color: black">Note
 > </br>
 > This changelog does not include changes that were made in Half-Life Updated and related projects. See [FULL_UPDATED_CHANGELOG.md](FULL_UPDATED_CHANGELOG.md) for a list of those changes.</span>
+
+Table of contents:
+* [New Features](#new-features)
+* [Entities](#entities)
+* [NPCs](#npcs)
+* [Items And Weapons](#items-and-weapons)
+* [Audio](#audio)
+* [User Interface](#user-interface)
+* [Bug Fixes](#bug-fixes)
+* [Code Cleanup](#code-cleanup)
+* [Project Changes](#project-changes)
+* [Tools](#tools)
+	* [Studiomdl](#studiomdl)
+* [Prototypes](#prototypes)
+* [Asset Changes](#asset-changes)
 
 ## New Features
 
@@ -225,7 +238,6 @@
 	* Converted to JSON
 	* Added support for **multiple materials configuration files**
 	* Raised maximum **material texture name length** from **12** to **15** (matches WAD and BSP limits)
-	* TODO: add note about material texture name prefix
 * Play hud and geiger sounds on unique channels to avoid preempting game sounds (geiger used to cause sounds to cut out)
 * Reworked HEV suit sentence playback to no longer store group and sentence indices in save games (indices are not guaranteed to be stable)
 

@@ -4,6 +4,10 @@ This is the changelog from Steam Half-Life to Half-Life Updated version 1.0.0.
 
 Included are the full changelogs for Half-Life: Opposing Force Updated and Half-Life: Blue Shift Updated.
 
+> <span style="background-color:darkseagreen; color: black">Note
+> </br>
+> This changelog does not include changes that were made in the Half-Life Unified SDK. See [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for a list of those changes.</span>
+
 Table of contents:
 * [Half-Life Updated](#half-life-updated)
 	* [Weapons](#weapons)

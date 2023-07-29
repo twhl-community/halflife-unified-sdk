@@ -45,6 +45,8 @@ The map decompiler can be found [here](docs/README.md#developer-resources)
 
 See [docs/README.md](docs/README.md) for a list of documentation, resources and tutorials.
 
+See [FULL_UPDATED_CHANGELOG.md](FULL_UPDATED_CHANGELOG.md) for changes inherited from Half-Life Updated and [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for changes specific to the Unified SDK.
+
 ## Documentation format
 
 All of the SDK's documentation is written in Markdown. Github allows you to view these files as well as navigate through them.
@@ -70,10 +72,6 @@ The repository currently contains a pre-alpha version in the master branch. This
 
 > **Note** **For players and testers**
 > During pre-alpha development testing is limited to individual features if they are noted to be ready for this.
-
-# Changelog
-
-See [FULL_UPDATED_CHANGELOG.md](FULL_UPDATED_CHANGELOG.md) for changes inherited from Half-Life Updated and [UNIFIED_CHANGELOG.md](UNIFIED_CHANGELOG.md) for changes specific to the Unified SDK.
 
 # Requirements to run mods built with this SDK
 

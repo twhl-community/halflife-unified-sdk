@@ -2,6 +2,10 @@
 
 The files in this directory and subdirectories contain documentation for the Unified SDK as well as tutorials and resources. Please check them before asking for help.
 
+> <span style="background-color:orange; color: black">Warning
+> </br>
+> Due to how some SDK features are implemented demos will not work properly. Use an external program like OBS to record the game.</span>
+
 ## Developer Resources
 
 * [SDK Source Code](https://github.com/SamVanheer/halflife-unified-sdk) (Source code for mods and original SDK tools)

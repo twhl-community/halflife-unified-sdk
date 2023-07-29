@@ -32,7 +32,7 @@ All command-line tools use [System.CommandLine](https://learn.microsoft.com/en-u
 
 This means all command-line tools have the following options:
 
-### version
+### --version
 
 Shows version information.
 
