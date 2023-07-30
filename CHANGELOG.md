@@ -1,10 +1,6 @@
 # Half-Life: Opposing Force Updated changelog
 
-Many changes have been made since 2019. All changes made after [[this|https://github.com/Solokiller/halflife-op4/commit/0acdeaea6c27c6b3e1f0ef458f58b98925bc201b]] commit are new.
-
-## Changes in V1.0.0 Beta 012
-
-> Note: this beta has not been released yet.
+## Changes in V1.0.0 Release Candidate 001
 
 ### Bug fixes
 
