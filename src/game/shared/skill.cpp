@@ -338,8 +338,7 @@ void SkillSystem::DefineVariable(std::string name, float initialValue, const Ski
 		.InitialValue = initialValue,
 		.Constraints = updatedConstraints,
 		.NetworkIndex = networkIndex,
-		.Flags = VarFlag_IsExplicitlyDefined
-	};
+		.Flags = VarFlag_IsExplicitlyDefined};
 
 	m_SkillVariables.emplace_back(std::move(variable));
 }

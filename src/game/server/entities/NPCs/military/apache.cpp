@@ -679,7 +679,7 @@ void CApache::Flight()
 				if (pitch == 100)
 					pitch = 101;
 
-				//float flVol = std::min(1.f, (m_flForce / 100.0f) + .1f);
+				// float flVol = std::min(1.f, (m_flForce / 100.0f) + .1f);
 			}
 		}
 

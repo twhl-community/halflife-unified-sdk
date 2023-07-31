@@ -192,4 +192,3 @@ void CPointTeleport::TeleportUse(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 		FireTargets(STRING(m_FireOnTeleportTarget), pActivator, this, USE_TOGGLE, 0);
 	}
 }
-

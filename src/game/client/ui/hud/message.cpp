@@ -411,8 +411,7 @@ bool CHudMessage::Draw(float fTime)
 
 	if (m_CustomMessageText->string[0] != '\0')
 	{
-		client_textmessage_t customMessage
-		{
+		client_textmessage_t customMessage{
 			.effect = 0,
 			.r1 = 255,
 			.g1 = 255,
@@ -428,8 +427,7 @@ bool CHudMessage::Draw(float fTime)
 			.fadeout = 0,
 			.holdtime = 0,
 			.pName = "#CustomMessage",
-			.pMessage = m_CustomMessageText->string
-		};
+			.pMessage = m_CustomMessageText->string};
 
 		MessageDrawScan(&customMessage, 0);
 	}

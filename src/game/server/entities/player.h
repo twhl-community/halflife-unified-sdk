@@ -199,13 +199,13 @@ public:
 	float m_flDuckTime;		  // how long we've been ducking
 	float m_flWallJumpTime;	  // how long until next walljump
 
-	float m_flSuitUpdate;							// when to play next suit update
-	string_t m_rgSuitPlayList[CSUITPLAYLIST];		// next sentencenum to play for suit update
-	int m_iSuitPlayNext;							// next sentence slot for queue storage;
-	string_t m_rgiSuitNoRepeat[CSUITNOREPEAT];		// suit sentence no repeat list
-	float m_rgflSuitNoRepeatTime[CSUITNOREPEAT];	// how long to wait before allowing repeat
-	int m_lastDamageAmount;							// Last damage taken
-	float m_tbdPrev;								// Time-based damage timer
+	float m_flSuitUpdate;						 // when to play next suit update
+	string_t m_rgSuitPlayList[CSUITPLAYLIST];	 // next sentencenum to play for suit update
+	int m_iSuitPlayNext;						 // next sentence slot for queue storage;
+	string_t m_rgiSuitNoRepeat[CSUITNOREPEAT];	 // suit sentence no repeat list
+	float m_rgflSuitNoRepeatTime[CSUITNOREPEAT]; // how long to wait before allowing repeat
+	int m_lastDamageAmount;						 // Last damage taken
+	float m_tbdPrev;							 // Time-based damage timer
 
 	float m_flgeigerRange; // range to nearest radiation source
 	float m_flgeigerDelay; // delay per update of range msg to client

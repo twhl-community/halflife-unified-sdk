@@ -49,7 +49,7 @@ struct triangleapi_t
 	void (*Brightness)(float brightness);
 	void (*CullFace)(TRICULLSTYLE style);
 	int (*SpriteTexture)(model_t* pSpriteModel, int frame);
-	int (*WorldToScreen)(float* world, float* screen);					   // Returns 1 if it's z clipped
+	int (*WorldToScreen)(float* world, float* screen);							 // Returns 1 if it's z clipped
 	void (*Fog)(const float flFogColor[3], float flStart, float flEnd, int bOn); // Works just like GL_FOG, flFogColor is r/g/b.
 	void (*ScreenToWorld)(float* screen, float* world);
 	void (*GetMatrix)(const int pname, float* matrix);

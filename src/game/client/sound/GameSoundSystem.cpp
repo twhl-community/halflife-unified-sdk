@@ -415,7 +415,7 @@ void GameSoundSystem::StartSound(int entityIndex, int channelIndex, SoundData&& 
 	}
 
 	if (!std::visit([&, this](auto&& sound)
-		{
+			{
 			using T = std::decay_t<decltype(sound)>;
 
 			if constexpr (std::is_same_v<T, SoundIndex>)
@@ -439,7 +439,7 @@ void GameSoundSystem::StartSound(int entityIndex, int channelIndex, SoundData&& 
 			}
 
 			return false; },
-		sound))
+			sound))
 	{
 		return;
 	}

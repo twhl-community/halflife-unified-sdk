@@ -550,4 +550,3 @@ void CPlayerHasWeapon::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TY
 		}
 	}
 }
-

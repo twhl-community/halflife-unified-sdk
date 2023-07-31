@@ -51,7 +51,7 @@ private:
 
 		bool operator()(std::size_t lhs, std::size_t rhs) const
 		{
-			return UTIL_CompareI(ToStringView((*m_Cache)[lhs].Name), ToStringView((*m_Cache)[rhs].Name)) < 0; 
+			return UTIL_CompareI(ToStringView((*m_Cache)[lhs].Name), ToStringView((*m_Cache)[rhs].Name)) < 0;
 		}
 
 		bool operator()(std::string_view lhs, std::size_t rhs) const

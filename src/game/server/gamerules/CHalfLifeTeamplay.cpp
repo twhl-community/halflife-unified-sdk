@@ -444,7 +444,7 @@ bool CHalfLifeTeamplay::IsValidTeam(const char* pTeamName)
 const char* CHalfLifeTeamplay::TeamWithFewestPlayers()
 {
 	int teamCount[MAX_TEAMS]{};
-	
+
 	// loop through all clients, count number of players on each team
 	for (int i = 1; i <= gpGlobals->maxClients; i++)
 	{

@@ -114,7 +114,7 @@ void CDeadCleansuitScientist::Spawn()
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->body == -1)
-	{														 
+	{
 		pev->body = 0;
 		// -1 chooses a random head
 		// pick a head, any head

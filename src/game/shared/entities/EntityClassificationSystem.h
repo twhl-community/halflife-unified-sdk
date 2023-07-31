@@ -75,8 +75,8 @@ public:
 	Relationship GetRelationship(EntityClassification source, EntityClassification target) const;
 
 	/**
-	*	@brief Returns true if the given classification is one of the given class names.
-	*/
+	 *	@brief Returns true if the given classification is one of the given class names.
+	 */
 	bool ClassNameIs(EntityClassification classification, std::initializer_list<const char*> classNames) const;
 
 private:

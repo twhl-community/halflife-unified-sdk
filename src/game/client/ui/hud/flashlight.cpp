@@ -68,7 +68,7 @@ bool CHudFlashlight::VidInit()
 	};
 
 	m_Flashlight = setup("flash_empty", "flash_full", "flash_beam");
-	//NVG doesn't have a beam.
+	// NVG doesn't have a beam.
 	m_Nightvision = setup("nvg_empty", "nvg_full", nullptr);
 
 	m_nvSprite = SPR_Load("sprites/of_nv_b.spr");

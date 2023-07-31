@@ -55,7 +55,7 @@ struct ScheduleList
 #define DECLARE_CUSTOM_SCHEDULES_COMMON()              \
 private:                                               \
 	static const ScheduleList m_ScheduleList;          \
-													   \
+                                                       \
 public:                                                \
 	static const ScheduleList* GetLocalScheduleList(); \
 	static const ScheduleList* GetBaseScheduleList()

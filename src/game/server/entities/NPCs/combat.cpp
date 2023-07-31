@@ -349,7 +349,7 @@ void CBaseMonster::GibMonster()
 	// Most of this is client side now to save on server side entities, network overhead and possible crashes.
 	bool gibbed = false;
 
-	//EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	// EmitSound(CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
 
 	GibType type = GibType::None;
 	bool spawnHead = false;

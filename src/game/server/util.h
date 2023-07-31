@@ -304,17 +304,17 @@ inline int g_Language;
 #define SPEAKER_START_SILENT 1 // wait for trigger 'on' to start announcements
 
 // Only the first 8 flags are sent from the server to the client.
-constexpr int SND_VOLUME = 1 << 0;				// Volume is not 255
-constexpr int SND_ATTENUATION = 1 << 1;			// Attenuation is not 1
-constexpr int SND_LARGE_INDEX = 1 << 2;			// Sound or sentence index is larger than 8 bits
-constexpr int SND_PITCH = 1 << 3;				// Pitch is not 100
-constexpr int SND_SENTENCE = 1 << 4;			// This is a sentence
-constexpr int SND_STOP = 1 << 5;				// duplicated in protocol.h stop sound
-constexpr int SND_CHANGE_VOL = 1 << 6;			// duplicated in protocol.h change sound vol
-constexpr int SND_CHANGE_PITCH = 1 << 7;		// duplicated in protocol.h change sound pitch
-constexpr int SND_SPAWNING = 1 << 8;			// duplicated in protocol.h we're spawing, used in some cases for ambients
-constexpr int SND_PLAY_WHEN_PAUSED = 1 << 9;	// For client side use only: start playing sound even when paused.
-constexpr int SND_NOTHOST = 1 << 10;			// Don't send sound message to host (only for sounds emitted by players).
+constexpr int SND_VOLUME = 1 << 0;			 // Volume is not 255
+constexpr int SND_ATTENUATION = 1 << 1;		 // Attenuation is not 1
+constexpr int SND_LARGE_INDEX = 1 << 2;		 // Sound or sentence index is larger than 8 bits
+constexpr int SND_PITCH = 1 << 3;			 // Pitch is not 100
+constexpr int SND_SENTENCE = 1 << 4;		 // This is a sentence
+constexpr int SND_STOP = 1 << 5;			 // duplicated in protocol.h stop sound
+constexpr int SND_CHANGE_VOL = 1 << 6;		 // duplicated in protocol.h change sound vol
+constexpr int SND_CHANGE_PITCH = 1 << 7;	 // duplicated in protocol.h change sound pitch
+constexpr int SND_SPAWNING = 1 << 8;		 // duplicated in protocol.h we're spawing, used in some cases for ambients
+constexpr int SND_PLAY_WHEN_PAUSED = 1 << 9; // For client side use only: start playing sound even when paused.
+constexpr int SND_NOTHOST = 1 << 10;		 // Don't send sound message to host (only for sounds emitted by players).
 
 #define LFO_SQUARE 1
 #define LFO_TRIANGLE 2

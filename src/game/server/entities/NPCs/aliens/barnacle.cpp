@@ -81,7 +81,7 @@ void CBarnacle::HandleAnimEvent(MonsterEvent_t* pEvent)
 	switch (pEvent->event)
 	{
 	case BARNACLE_AE_PUKEGIB:
-		//CGib::SpawnRandomGibs(this, 1, true);
+		// CGib::SpawnRandomGibs(this, 1, true);
 		CGib::SpawnClientGibs(this, GibType::Human, 1, false, false);
 		break;
 	default:
@@ -248,7 +248,7 @@ void CBarnacle::BarnacleThink()
 		if (0 != m_cGibs && RANDOM_LONG(0, 99) == 1)
 		{
 			// cough up a gib.
-			//CGib::SpawnRandomGibs(this, 1, true);
+			// CGib::SpawnRandomGibs(this, 1, true);
 			CGib::SpawnClientGibs(this, GibType::Human, 1, false, false);
 			m_cGibs--;
 

@@ -1873,7 +1873,7 @@ void CMessage::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useTy
 	else
 	{
 		CBasePlayer* pPlayer = ToBasePlayer(pActivator);
-		if (!pPlayer  && !g_pGameRules->IsMultiplayer())
+		if (!pPlayer && !g_pGameRules->IsMultiplayer())
 		{
 			pPlayer = UTIL_GetLocalPlayer();
 		}

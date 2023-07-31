@@ -42,7 +42,7 @@ int CBasePlayer::GetAmmoCountByIndex(int ammoIndex) const
 {
 	if (ammoIndex < 0 || ammoIndex >= MAX_AMMO_TYPES)
 	{
-		return - 1;
+		return -1;
 	}
 
 	if (g_Skill.GetValue("infinite_ammo") != 0)

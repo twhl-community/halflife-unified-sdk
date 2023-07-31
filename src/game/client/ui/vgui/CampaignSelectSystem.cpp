@@ -74,8 +74,7 @@ std::vector<CampaignInfo> CampaignSelectSystem::LoadCampaigns()
 		do
 		{
 			if (std::find_if(campaigns.begin(), campaigns.end(), [=](const auto& candidate)
-				{ return candidate.FileName == fileName;
-				}) != campaigns.end())
+					{ return candidate.FileName == fileName; }) != campaigns.end())
 			{
 				// The same file will be returned for every search path that includes the same directory so
 				// we have to ignore them.

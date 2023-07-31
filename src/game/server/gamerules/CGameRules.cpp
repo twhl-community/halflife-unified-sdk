@@ -73,7 +73,6 @@ public:
 
 	void Visit(CBasePlayerAmmo* ammo) override
 	{
-		
 	}
 
 	void Visit(CBasePlayerWeapon* weapon) override

@@ -1820,7 +1820,7 @@ void CBaseMonster::MonsterInit()
 
 	SetThink(&CBaseMonster::MonsterInitThink);
 	pev->nextthink = gpGlobals->time + 0.1;
-	//SetUse(&CBaseMonster::MonsterUse);
+	// SetUse(&CBaseMonster::MonsterUse);
 
 	if (m_AllowFollow)
 	{

@@ -22,16 +22,16 @@
 #include "CRope.h"
 
 /**
-*	@brief The framerate that the rope aims to run at.
-*	Clamping simulation to this also fixes ropes being invisible in multiplayer.
-*/
+ *	@brief The framerate that the rope aims to run at.
+ *	Clamping simulation to this also fixes ropes being invisible in multiplayer.
+ */
 constexpr float RopeFrameRate = 60.f;
 
 /**
-*	@brief Account for varying frame rates; adjust force to apply what was previously applied at 30 FPS.
-*	HL1 games were developed on machines running around 30 FPS so this is about right.
-*	This is independent of the framerate to allow for smoother ropes.
-*/
+ *	@brief Account for varying frame rates; adjust force to apply what was previously applied at 30 FPS.
+ *	HL1 games were developed on machines running around 30 FPS so this is about right.
+ *	This is independent of the framerate to allow for smoother ropes.
+ */
 constexpr float RopeForceMultiplier = 30.f;
 
 static const char* const g_pszCreakSounds[] =
