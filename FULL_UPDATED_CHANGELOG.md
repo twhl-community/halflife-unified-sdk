@@ -89,7 +89,7 @@ Fixes for bugs introduced in beta builds are not included in this list.
 * Fixed chainsaw Crowbar effect when hitting corpse (halflife issue [#2590](https://github.com/ValveSoftware/halflife/issues/2590))
 * Fixed Crowbar using wrong time base for swing think (halflife issue [#2296](https://github.com/ValveSoftware/halflife/issues/2296))
 * Fixed crowbar not showing in weapon list if there are empty weapon slots with a lower id (halflife [#3181](https://github.com/ValveSoftware/halflife/issues/3181))
-* Fixed the Crowbar damage always being calculated halved (halflife issue [#1600](https://github.com/ValveSoftware/halflife/pull/1600) (Thanks YaLTeR)
+* Fixed the Crowbar damage always being calculated halved (halflife issue [#1600](https://github.com/ValveSoftware/halflife/pull/1600)) (Thanks YaLTeR)
 * Fixed Crowbar playing back swing events twice sometimes (halflife issue [#3230](https://github.com/ValveSoftware/halflife/issues/3230))
 
 ### Glock
