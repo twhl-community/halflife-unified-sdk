@@ -218,6 +218,14 @@ Can't be fixed:
 
 # Half-Life Updated changelog
 
+## Changes in V1.0.0 Release Candidate 002
+
+> Note: this release candidate has not been released yet.
+
+### Bug fixes
+
+* Fixed hand grenade animations not playing correctly [#209](https://github.com/SamVanheer/halflife-updated/pull/209) (Thanks Toodles2You)
+
 ## Changes in V1.0.0 Release Candidate 001
 
 ### Bug fixes
