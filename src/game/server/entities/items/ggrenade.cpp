@@ -251,6 +251,7 @@ void CGrenade::BounceTouch(CBaseEntity* pOther)
 		pev->velocity = pev->velocity * 0.8;
 
 		pev->sequence = RANDOM_LONG(1, 1);
+		ResetSequenceInfo();
 	}
 	else
 	{
@@ -396,8 +397,10 @@ CGrenade* CGrenade::ShootTimed(CBaseEntity* owner, Vector vecStart, Vector vecVe
 		pGrenade->pev->velocity = Vector(0, 0, 0);
 	}
 
+	pGrenade->SetModel("models/w_grenade.mdl");
 	pGrenade->pev->sequence = RANDOM_LONG(3, 6);
 	pGrenade->pev->framerate = 1.0;
+	pGrenade->ResetSequenceInfo();
 
 	// Tumble through the air
 	// pGrenade->pev->avelocity.x = -400;
@@ -405,7 +408,6 @@ CGrenade* CGrenade::ShootTimed(CBaseEntity* owner, Vector vecStart, Vector vecVe
 	pGrenade->pev->gravity = 0.5;
 	pGrenade->pev->friction = 0.8;
 
-	pGrenade->SetModel("models/w_grenade.mdl");
 	pGrenade->pev->dmg = 100;
 
 	return pGrenade;
