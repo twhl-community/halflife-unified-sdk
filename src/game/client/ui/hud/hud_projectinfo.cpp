@@ -50,26 +50,42 @@ bool CHudProjectInfo::Draw(float flTime)
 
 		int yPos = static_cast<int>(ScreenHeight * 0.05);
 
-		const auto lineDrawer = [&](const std::string& text, const RGB24& color = {255, 255, 255})
+		const auto lineDrawer = [&](const char* text, const RGB24& color = {255, 255, 255})
 		{
-			gHUD.DrawHudString(xPos, yPos, ScreenWidth - xPos, text.c_str(), color);
+			gHUD.DrawHudString(xPos, yPos, ScreenWidth - xPos, text, color);
 			yPos += lineHeight;
 		};
 
+		eastl::fixed_string<char, 512> buffer;
+
 		const auto libraryDrawer = [&](const LibraryInfo& info, const char* libraryName, const RGB24& libraryNameColor)
 		{
-			lineDrawer(fmt::format("{}:", libraryName), libraryNameColor);
-			lineDrawer(fmt::format("\tVersion: {}.{}.{}-{} | Branch: {} | Tag: {}",
-				info.MajorVersion, info.MinorVersion, info.PatchVersion, info.ReleaseType, info.BranchName, info.TagName));
-			lineDrawer(fmt::format("\tCommit Hash: {}", info.CommitHash));
-			lineDrawer(fmt::format("\tBuild Timestamp: {}", info.BuildTimestamp));
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "{}:", libraryName);
+			lineDrawer(buffer.c_str(), libraryNameColor);
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "\tVersion: {}.{}.{}-{} | Branch: {} | Tag: {}",
+				info.MajorVersion, info.MinorVersion, info.PatchVersion,
+				info.ReleaseType, info.BranchName, info.TagName);
+			lineDrawer(buffer.c_str());
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "\tCommit Hash: {}", info.CommitHash);
+			lineDrawer(buffer.c_str());
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "\tBuild Timestamp: {}", info.BuildTimestamp);
+			lineDrawer(buffer.c_str());
 		};
 
 		const auto clientInfo = g_ProjectInfo.GetLocalInfo();
 		const auto serverInfo = g_ProjectInfo.GetServerInfo();
 
 		// The server's build type isn't important enough to send over.
-		lineDrawer(fmt::format("Build type: {}", UNIFIED_SDK_CONFIG));
+		buffer.clear();
+		fmt::format_to(std::back_inserter(buffer), "Build type: {}", UNIFIED_SDK_CONFIG);
+		lineDrawer(buffer.c_str());
 
 		libraryDrawer(*clientInfo, "Client", {128, 128, 255});
 		libraryDrawer(*serverInfo, "Server", {255, 128, 128});

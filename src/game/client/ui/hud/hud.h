@@ -23,6 +23,7 @@
 #pragma once
 
 #include <array>
+#include <string>
 #include <vector>
 
 #include <EASTL/fixed_string.h>
@@ -667,6 +668,7 @@ public:
 
 private:
 	cvar_t* m_ShowDebugInfo = nullptr;
+
 	std::string m_GameMode;
 };
 

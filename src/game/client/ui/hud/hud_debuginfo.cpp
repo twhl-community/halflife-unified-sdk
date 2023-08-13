@@ -69,9 +69,9 @@ bool CHudDebugInfo::Draw(float flTime)
 
 		int yPos = static_cast<int>(ScreenHeight * 0.5f);
 
-		const auto lineDrawer = [&](const std::string& text, const RGB24& color = {255, 255, 255})
+		const auto lineDrawer = [&](const char* text, const RGB24& color = {255, 255, 255})
 		{
-			gHUD.DrawHudString(xPos, yPos, ScreenWidth - xPos, text.c_str(), color);
+			gHUD.DrawHudString(xPos, yPos, ScreenWidth - xPos, text, color);
 			yPos += lineHeight;
 		};
 
@@ -80,29 +80,52 @@ bool CHudDebugInfo::Draw(float flTime)
 
 		if (levelName && '\0' != levelName[0] && localPlayer)
 		{
-			lineDrawer(fmt::format("Renderer: {}", GetRendererName()));
+			eastl::fixed_string<char, 256> buffer;
+
+			fmt::format_to(std::back_inserter(buffer), "Renderer: {}", GetRendererName());
+			lineDrawer(buffer.c_str());
 
 			lineDrawer("Current game time:", {128, 64, 255});
-			lineDrawer(fmt::format("  {}", SecondsToTime(int(gHUD.m_flTime))));
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  {}", SecondsToTime(int(gHUD.m_flTime)));
+			lineDrawer(buffer.c_str());
 
 			lineDrawer("Map name:", {255, 128, 0});
-			lineDrawer(fmt::format("  {}", levelName));
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  {}", gEngfuncs.pfnGetLevelName());
+			lineDrawer(buffer.c_str());
 
 			lineDrawer("Game mode:", {255, 0, 255});
-			lineDrawer(fmt::format("  {}", m_GameMode));
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  {}", m_GameMode);
+			lineDrawer(buffer.c_str());
 
 			lineDrawer("Player Origin:", {0, 255, 0});
 
-			lineDrawer(fmt::format("  X: {:+09.2f}", localPlayer->curstate.origin.x));
-			lineDrawer(fmt::format("  Y: {:+09.2f}", localPlayer->curstate.origin.y));
-			lineDrawer(fmt::format("  Z: {:+09.2f}", localPlayer->curstate.origin.z));
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  X: {:+09.2f}", localPlayer->curstate.origin.x);
+			lineDrawer(buffer.c_str());
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  Y: {:+09.2f}", localPlayer->curstate.origin.y);
+			lineDrawer(buffer.c_str());
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  Z: {:+09.2f}", localPlayer->curstate.origin.z);
+			lineDrawer(buffer.c_str());
 
 			lineDrawer("Player Angles:", {0, 128, 255});
 			// Angles are modified in the view code so we need to use the original angles.
 			// Pitch is inverted for players so it needs to be inverted again.
 			// Roll is always 0 so don't show it.
-			lineDrawer(fmt::format("  Pitch: {:+07.2f}", -v_client_aimangles.x));
-			lineDrawer(fmt::format("  Yaw: {:+07.2f}", v_client_aimangles.y));
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  Pitch: {:+07.2f}", -v_client_aimangles.x);
+			lineDrawer(buffer.c_str());
+
+			buffer.clear();
+			fmt::format_to(std::back_inserter(buffer), "  Yaw: {:+07.2f}", v_client_aimangles.y);
+			lineDrawer(buffer.c_str());
 		}
 	}
 
