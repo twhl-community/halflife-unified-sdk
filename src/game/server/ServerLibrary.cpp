@@ -164,6 +164,27 @@ void ServerLibrary::RunFrame()
 
 	g_Bots.RunFrame();
 
+	const bool allowBunnyHopping = sv_allowbunnyhopping.value != 0;
+
+	if (allowBunnyHopping != m_LastAllowBunnyHoppingState)
+	{
+		m_LastAllowBunnyHoppingState = allowBunnyHopping;
+
+		const auto setting = UTIL_ToString(allowBunnyHopping ? 1 : 0);
+
+		for (int i = 1; i <= gpGlobals->maxClients; ++i)
+		{
+			auto player = UTIL_PlayerByIndex(i);
+
+			if (!player)
+			{
+				continue;
+			}
+
+			g_engfuncs.pfnSetPhysicsKeyValue(player->edict(), "bj", setting.c_str());
+		}
+	}
+
 	// If we're loading all maps then change maps after 4 seconds to give the game time to generate files.
 	if (!m_MapsToLoad.empty() && gpGlobals->time > 5)
 	{

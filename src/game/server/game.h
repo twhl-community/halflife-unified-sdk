@@ -36,6 +36,8 @@ extern cvar_t defaultteam;
 extern cvar_t allow_spectators;
 extern cvar_t mp_chattime;
 
+extern cvar_t sv_allowbunnyhopping;
+
 extern cvar_t ctf_capture;
 extern cvar_t multipower;
 extern cvar_t ctf_autoteam;
