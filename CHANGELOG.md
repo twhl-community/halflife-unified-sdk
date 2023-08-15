@@ -90,6 +90,7 @@ All changes from Half-Life Updated up until Beta 5 are included.
 
 * Fixed hand grenade animations not playing correctly [#209](https://github.com/SamVanheer/halflife-updated/pull/209) (Thanks Toodles2You)
 * Fixed out of bounds access in studiomodel renderer bone setup code (halflife issue [#3360](https://github.com/ValveSoftware/halflife/issues/3360))
+* Fixed mouse cursor being invisible in VGUI1 menus when raw input is enabled [#211](https://github.com/SamVanheer/halflife-updated/issues/211) (Thanks RykahKnight)
 
 ### Features
 
