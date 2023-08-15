@@ -126,10 +126,6 @@ int DLLEXPORT HUD_VidInit()
 
 	VGui_Startup();
 
-	// Reset mouse position the first time the engine asks for an update so
-	// movement during map load doesn't impact in-game angles.
-	g_ResetMousePosition = true;
-
 	return 1;
 }
 

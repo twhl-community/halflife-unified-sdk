@@ -35,11 +35,6 @@
 // Set this to 1 to show mouse cursor.  Experimental
 bool g_iVisibleMouse = false;
 
-/**
- *	@brief Tells the input code to reset the mouse position to center.
- */
-bool g_ResetMousePosition = false;
-
 extern bool iMouseInUse;
 
 extern kbutton_t in_strafe;
@@ -1005,12 +1000,6 @@ void IN_JoyMove(float frametime, usercmd_t* cmd)
 
 void IN_Move(float frametime, usercmd_t* cmd)
 {
-	if (g_ResetMousePosition)
-	{
-		IN_ResetMouse();
-		g_ResetMousePosition = false;
-	}
-
 	if (!iMouseInUse && mouseactive)
 	{
 		IN_MouseMove(frametime, cmd);
