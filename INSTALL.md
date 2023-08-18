@@ -6,13 +6,15 @@
 
 3. Install the Visual Studio 2022 re-distributable. You can find it in the `hlu/redist` directory.
 
-4. Run the [ContentInstaller](docs/tools/content-installer.md) tool:
+4. Install the [.NET SDK which includes the runtime](docs/dotnet-tools.md#installing-the-net-sdk). Make sure to install the latest version as the runtime is updated regularly.
+
+5. Run the [ContentInstaller](docs/tools/content-installer.md) tool:
 ```bat
 cd "path/to/Half-Life/directory"
 dotnet "hlu/tools/ContentInstaller.dll" --mod-directory hlu
 ```
 
-5. Restart Steam so the game is added to the list of games.
+6. Restart Steam so the game is added to the list of games.
 
 # Running the game
 
