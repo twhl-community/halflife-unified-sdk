@@ -131,6 +131,41 @@ void CBasePlayer::SelectItem(const char* pstr)
 	DeployWeapon(pItem);
 }
 
+void CBasePlayer::SelectItem(int iId)
+{
+	if (iId <= WEAPON_NONE)
+		return;
+
+	CBasePlayerWeapon* pItem = nullptr;
+
+	for (int i = 0; i < MAX_WEAPON_SLOTS; i++)
+	{
+		if (m_rgpPlayerWeapons[i])
+		{
+			pItem = m_rgpPlayerWeapons[i];
+
+			while (pItem)
+			{
+				if (pItem->m_iId == iId)
+					break;
+				pItem = pItem->m_pNext;
+			}
+		}
+
+		if (pItem)
+			break;
+	}
+
+	if (!pItem)
+		return;
+
+
+	if (pItem == m_pActiveWeapon)
+		return;
+
+	DeployWeapon(pItem);
+}
+
 void CBasePlayer::SelectLastItem()
 {
 	if (!m_pLastWeapon)

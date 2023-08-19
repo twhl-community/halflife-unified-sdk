@@ -446,7 +446,7 @@ void CHudAmmo::Think()
 	{
 		if (gpActiveSel != (WEAPON*)1)
 		{
-			SendWeaponSelectCommand(gpActiveSel->Info->Name.c_str());
+			// SendWeaponSelectCommand(gpActiveSel->Info->Name.c_str());
 			g_weaponselect = gpActiveSel->Info->Id;
 		}
 
@@ -524,7 +524,7 @@ void WeaponsResource::SelectSlot(int iSlot, bool fAdvance, int iDirection)
 			WEAPON* p2 = GetNextActivePos(p->Info->Slot, p->Info->Position);
 			if (!p2)
 			{ // only one active item in bucket, so change directly to weapon
-				SendWeaponSelectCommand(p->Info->Name.c_str());
+				// SendWeaponSelectCommand(p->Info->Name.c_str());
 				g_weaponselect = p->Info->Id;
 				return;
 			}
