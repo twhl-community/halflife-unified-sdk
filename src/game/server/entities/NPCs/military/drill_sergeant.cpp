@@ -30,6 +30,8 @@ const ReplacementMap DrillSergeantSentenceReplacement{
  */
 class CDrillSergeant : public CBarney
 {
+	DECLARE_CLASS(CDrillSergeant, CBarney);
+
 public:
 	int ObjectCaps() override { return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE; }
 
@@ -78,6 +80,13 @@ public:
 
 		// get voice for head - just one barney voice for now
 		m_voicePitch = 100;
+	}
+
+	void Spawn() override
+	{
+		BaseClass::Spawn();
+
+		SetBodygroup(GuardBodyGroup::Weapons, NPCWeaponState::Blank);
 	}
 
 protected:
