@@ -169,6 +169,11 @@ Fixes `monster_generic` entities that use `hgrunt_opfor.mdl` to use the correct 
 
 Fixes the Pit Worm's Nest bridge possibly breaking if triggered too soon.
 
+### OfBoot1FixOspreyScriptUpgrade
+
+Prevents the Osprey in `ofboot1` from switching to the `rotor` animation
+and falling through the ground after loading a save game.
+
 ### RemoveGameModeSettingsUpgrade
 
 Removes the CTF game mode settings from Opposing Force maps.
@@ -197,7 +202,7 @@ This fixes the script restarting on save load.
 
 ### BaSecurity2ChangeHologramModelUpgrade
 
-Changes Gina model in ba_security2 to allow playing push cart sequence.
+Changes Gina model in `ba_security2` to allow playing push cart sequence.
 
 ### BaTram1FixSuitUpgrade
 
@@ -205,11 +210,12 @@ Removes the HEV suit from `ba_tram1` (now given by map config).
 
 ### BaYard1FixDeadScientistModelUpgrade
 
-Changes incorrect dead scientist head (Rosenberg) in ba_yard1 to use the same as in ba_yard4 (Glasses).
+Changes incorrect dead scientist head (Rosenberg) in `ba_yard1` to use the same as in `ba_yard4` (Glasses).
 
 ### BaYard4aSlavesUpgrade
 
-Fixes the Alien Slaves in ba_yard4a being resurrected by triggering them instead of the scripted_sequence keeping them in stasis.
+Fixes the Alien Slaves in `ba_yard4a` being resurrected by triggering them
+instead of the `scripted_sequence` keeping them in stasis.
 
 ### ChangeBlueShiftSentencesUpgrade
 
