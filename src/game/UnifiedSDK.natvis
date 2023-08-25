@@ -12,7 +12,14 @@
 		<DisplayString Condition="m_Value == 0">Null string_t</DisplayString>
 	</Type>
 	
-	<Type Name="CBaseEntity">		
+	<Type Name="Schedule_t">
+		<DisplayString>{{ name={pName} }}</DisplayString>
+		<Expand>
+			<Item Name="[TaskCount]">cTasks</Item>
+		</Expand>
+	</Type>
+	
+	<Type Name="CBaseEntity">
 		<DisplayString>{{ classname={pev->classname} }}</DisplayString>
 		<Expand>
 			<Item Name="[classname]">pev->classname</Item>
@@ -21,6 +28,31 @@
 			<Item Name="[model]">pev->model</Item>
 			<Item Name="[netname]">pev->netname</Item>
 			<Item Name="[message]">pev->message</Item>
+		</Expand>
+	</Type>
+	
+	<Type Name="CBaseMonster">
+		<DisplayString>{{ classname={pev->classname} }}</DisplayString>
+		<Expand>
+			<ExpandedItem>*(CBaseEntity*)this,nd</ExpandedItem>
+			<Item Name="[Monster State]">m_MonsterState</Item>
+			<Item Name="[Ideal Monster State]">m_IdealMonsterState</Item>
+			<Item Name="[Current Schedule]">*m_pSchedule</Item>
+			<Item Name="[Current Task]">m_iScheduleIndex</Item>
+			<Item Name="[Script State]">m_scriptState</Item>
+			<Item Name="[Current Script]">*m_pCine</Item>
+		</Expand>
+	</Type>
+	
+	<Type Name="CCineMonster">
+		<DisplayString>{{ classname={pev->classname} }}</DisplayString>
+		<Expand>
+			<ExpandedItem>*(CBaseMonster*)this,nd</ExpandedItem>
+			<Item Name="[Idle Animation]">m_iszIdle</Item>
+			<Item Name="[Play Animation]">m_iszPlay</Item>
+			<Item Name="[Target Entity Name]">m_iszEntity</Item>
+			<Item Name="[Search Radius]">m_flRadius</Item>
+			<Item Name="[Interruptable]">m_interruptable</Item>
 		</Expand>
 	</Type>
 	
