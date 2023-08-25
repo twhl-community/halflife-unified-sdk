@@ -8,7 +8,7 @@
 
 4. Install the [.NET SDK which includes the runtime](docs/dotnet-tools.md#installing-the-net-sdk). Make sure to install the latest version as the runtime is updated regularly.
 
-5. Run the [ContentInstaller](docs/tools/content-installer.md) tool:
+5. Run the [ContentInstaller](docs/tools/content-installer.md) tool in a command line window:
 ```bat
 cd "path/to/Half-Life/directory"
 dotnet "hlu/tools/ContentInstaller.dll" --mod-directory hlu
