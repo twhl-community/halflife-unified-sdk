@@ -247,6 +247,16 @@ void SentencesSystem::MoveMouth(Channel& channel, SentenceChannel& sentenceChann
 	const auto& word = sentence.Words[sentenceChannel.CurrentWord];
 	const auto& sound = *m_SoundCache->GetSound(word.Index);
 
+	MoveMouth(channel, sound);
+}
+
+void SentencesSystem::MoveMouth(Channel& channel, const Sound& sound)
+{
+	if (channel.ChannelIndex != CHAN_VOICE && channel.ChannelIndex != CHAN_STREAM)
+	{
+		return;
+	}
+
 	ALint frequency = 0;
 	alGetBufferi(sound.Buffer.Id, AL_FREQUENCY, &frequency);
 

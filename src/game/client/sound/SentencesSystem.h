@@ -56,6 +56,8 @@ public:
 	void InitMouth(int entityIndex, int channelIndex);
 	void CloseMouth(int entityIndex, int channelIndex);
 
+	void MoveMouth(Channel& channel, const Sound& sound);
+
 private:
 	bool CreateTimeCompressedBuffer(const Channel& channel, SentenceChannel& sentenceChannel, const Sound& sound);
 

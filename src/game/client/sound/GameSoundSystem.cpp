@@ -1034,7 +1034,14 @@ bool GameSoundSystem::UpdateSound(Channel& channel)
 	ALint state = AL_STOPPED;
 	alGetSourcei(channel.Source.Id, AL_SOURCE_STATE, &state);
 
-	return state == AL_STOPPED;
+	if (state == AL_STOPPED)
+	{
+		return true;
+	}
+
+	m_Sentences->MoveMouth(channel, *m_SoundCache->GetSound(std::get<SoundIndex>(channel.Sound)));
+
+	return false;
 }
 
 void GameSoundSystem::Spatialize(Channel& channel, int messagenum)
