@@ -1,5 +1,13 @@
 # Half-Life: Opposing Force Updated changelog
 
+## Changes in V1.0.0 Release Candidate 002
+
+> Note: this release candidate has not been released yet.
+
+### Bug fixes
+
+* Fixed electrified wire damage being frametime-dependent [#102](https://github.com/SamVanheer/halflife-op4-updated/issues/102) (Thanks malortie)
+
 ## Changes in V1.0.0 Release Candidate 001
 
 ### Bug fixes
