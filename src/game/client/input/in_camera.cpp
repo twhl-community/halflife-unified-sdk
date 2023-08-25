@@ -608,5 +608,5 @@ int DLLEXPORT CL_IsThirdPerson()
 
 void DLLEXPORT CL_CameraOffset(float* ofs)
 {
-	ofs = cam_ofs;
+	cam_ofs.CopyToArray(ofs);
 }
