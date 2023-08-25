@@ -648,6 +648,8 @@ void COFFuncTank::TrackTarget()
 				m_hEnemy = nullptr;
 				return;
 			}
+
+			m_fireLast = gpGlobals->time - 0.1f;
 		}
 
 		// Calculate angle needed to aim at target
