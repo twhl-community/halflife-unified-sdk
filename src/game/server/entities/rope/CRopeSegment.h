@@ -82,4 +82,5 @@ private:
 	float m_flDefaultMass;
 	bool m_bCauseDamage;
 	bool m_bCanBeGrabbed;
+	float m_LastDamageTime{0};
 };

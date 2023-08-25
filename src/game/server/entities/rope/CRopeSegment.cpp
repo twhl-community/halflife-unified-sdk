@@ -25,6 +25,7 @@ DEFINE_FIELD(m_pSample, FIELD_CLASSPTR),
 	DEFINE_FIELD(m_flDefaultMass, FIELD_FLOAT),
 	DEFINE_FIELD(m_bCauseDamage, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_bCanBeGrabbed, FIELD_BOOLEAN),
+	DEFINE_FIELD(m_LastDamageTime, FIELD_TIME),
 	END_DATAMAP();
 
 LINK_ENTITY_TO_CLASS(rope_segment, CRopeSegment);
@@ -77,7 +78,14 @@ void CRopeSegment::Touch(CBaseEntity* pOther)
 	// Electrified wires deal damage.
 	if (m_bCauseDamage)
 	{
-		pOther->TakeDamage(this, this, 1, DMG_SHOCK);
+		// Like trigger_hurt we need to deal half a second's worth of damage per touch to make this frametime-independent.
+		if (m_LastDamageTime < gpGlobals->time)
+		{
+			// 1 damage per tick is 30 damage per second at 30 FPS.
+			const float damagePerHalfSecond = 30.f / 2;
+			pOther->TakeDamage(this, this, damagePerHalfSecond, DMG_SHOCK);
+			m_LastDamageTime = gpGlobals->time + 0.5f;
+		}
 	}
 
 	if (m_pSample->GetMasterRope()->IsAcceptingAttachment() && !player->IsOnRope())
