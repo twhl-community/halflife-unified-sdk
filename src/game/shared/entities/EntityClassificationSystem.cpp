@@ -166,6 +166,11 @@ Relationship EntityClassificationSystem::GetRelationship(EntityClassification so
 
 	const auto& clazz = m_Classifications[sourceIndex];
 
+	if (targetIndex >= clazz.Relationships.size())
+	{
+		return Relationship::None;
+	}
+
 	return clazz.Relationships[targetIndex];
 }
 
