@@ -139,6 +139,10 @@ Converts the Opposing Force scientist `clipboard` and `stick` heads to use the `
 
 Converts `item_suit`'s model to use `w_pcv.mdl` in Opposing Force maps.
 
+### DisableFuncTankOfPersistenceUpgrade
+
+Disables the `persistence` behavior for all Opposing Force tank entities to match the original's behavior.
+
 ### FixBlackOpsSpawnDelayUpgrade
 
 Sets the `assassin4_spawn` `monstermaker` in `of6a1` to spawn a Black Ops assassin immediately
