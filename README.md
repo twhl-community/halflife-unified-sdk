@@ -17,6 +17,11 @@ A mod installation is also provided to allow players to play these games with al
 > </br>
 > Due to how some SDK features are implemented demos will not work properly. Use an external program like OBS to record the game.</span>
 
+> <span style="background-color:darkseagreen; color: black">
+> Note
+></br>
+> Maps made for the original games need to be upgraded using the MapUpgrader tool before they can be played in this mod.</span>
+
 The following types of changes are **in scope** for this project:
 * Bug fixes
 * Features to improve the game's code (refactoring, generalizing, simplifying). This does not include complete redesigns of systems as this makes it much harder for modders to integrate changes and get started with Half-Life modding

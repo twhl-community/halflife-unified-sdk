@@ -6,6 +6,11 @@ The files in this directory and subdirectories contain documentation for the Uni
 > </br>
 > Due to how some SDK features are implemented demos will not work properly. Use an external program like OBS to record the game.</span>
 
+> <span style="background-color:darkseagreen; color: black">
+> Note
+></br>
+> Maps made for the original games need to be upgraded using the MapUpgrader tool before they can be played in this mod.</span>
+
 ## Developer Resources
 
 * [SDK Source Code](https://github.com/SamVanheer/halflife-unified-sdk) (Source code for mods and original SDK tools)
