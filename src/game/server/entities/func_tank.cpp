@@ -79,7 +79,7 @@ public:
 		m_fireLast = 0;
 		StopRotSound();
 	}
-	inline bool CanFire() { return (gpGlobals->time - m_lastSightTime) < m_persist; }
+	inline bool CanFire() { return (gpGlobals->time - m_lastSightTime) <= m_persist; }
 	bool InRange(float range);
 
 	// Acquire a target.
@@ -146,9 +146,6 @@ protected:
 	Vector m_sightOrigin; // Last sight of target
 	int m_spread;		  // firing spread
 
-	// Not saved, will reacquire after restore
-	// TODO: could be exploited to make a tank change targets
-	// TODO: never actually written to
 	EHANDLE m_hEnemy;
 
 	// 0 - player only
@@ -189,6 +186,7 @@ DEFINE_FIELD(m_yawCenter, FIELD_FLOAT),
 	DEFINE_FIELD(m_vecControllerUsePos, FIELD_VECTOR),
 	DEFINE_FIELD(m_flNextAttack, FIELD_TIME),
 	DEFINE_FIELD(m_iBulletDamage, FIELD_INTEGER),
+	DEFINE_FIELD(m_hEnemy, FIELD_EHANDLE),
 	DEFINE_FIELD(m_iEnemyType, FIELD_INTEGER),
 	DEFINE_FIELD(m_EnableTargetLaser, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_TargetLaserSpriteName, FIELD_STRING),
@@ -676,8 +674,10 @@ void CFuncTank::TrackTarget()
 	TraceResult tr;
 	CBasePlayer* pPlayer = UTIL_FindClientInPVS(this);
 	bool updateTime = false, lineOfSight;
-	Vector angles, direction, targetPosition, barrelEnd;
+	Vector angles, direction, targetPosition;
 	CBaseEntity* pTarget = nullptr;
+
+	const Vector barrelEnd = BarrelPosition();
 
 	// Get a position to aim for
 	if (m_pController)
@@ -701,23 +701,40 @@ void CFuncTank::TrackTarget()
 			return;
 		}
 
-		// Keep tracking the same target
+		// Keep tracking the same target unless the target is in cover and a better one is around.
 		pTarget = m_hEnemy;
+
+		if (pTarget)
+		{
+			targetPosition = pTarget->pev->origin + pTarget->pev->view_ofs;
+			UTIL_TraceLine(barrelEnd, targetPosition, dont_ignore_monsters, edict(), &tr);
+
+			if (tr.flFraction != 1.0 && tr.pHit != pTarget->edict())
+			{
+				pTarget = nullptr;
+			}
+		}
 
 		if (!pTarget || !pTarget->IsAlive())
 		{
 			pTarget = FindTarget(pPlayer);
+
+			// Keep shooting at our last target.
 			if (!pTarget)
 			{
-				m_hEnemy = nullptr;
+				pTarget = m_hEnemy;
+			}
+
+			// Nothing to shoot at.
+			if (!pTarget)
+			{
 				return;
 			}
 
-			m_fireLast = gpGlobals->time - 0.1f;
+			m_hEnemy = pTarget;
 		}
 
 		// Calculate angle needed to aim at target
-		barrelEnd = BarrelPosition();
 		targetPosition = pTarget->pev->origin + pTarget->pev->view_ofs;
 		float range = (targetPosition - barrelEnd).Length();
 
