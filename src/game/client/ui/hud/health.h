@@ -57,8 +57,8 @@ private:
 	// Armor HUD
 	HSPRITE m_ArmorSprite1;
 	HSPRITE m_ArmorSprite2;
-	Rect* m_ArmorSprite1Rect;
-	Rect* m_ArmorSprite2Rect;
+	const Rect* m_ArmorSprite1Rect;
+	const Rect* m_ArmorSprite2Rect;
 	int m_iBat;
 	int m_iBatMax;
 	float m_ArmorFade;

@@ -26,3 +26,5 @@ struct Rect
 	int top = 0;
 	int bottom = 0;
 };
+
+constexpr Rect EmptyRect{};

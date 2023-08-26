@@ -354,9 +354,9 @@ private:
 		HSPRITE m_hSprite1 = 0;
 		HSPRITE m_hSprite2 = 0;
 		HSPRITE m_hBeam = 0;
-		Rect* m_prc1 = nullptr;
-		Rect* m_prc2 = nullptr;
-		Rect* m_prcBeam = nullptr;
+		const Rect* m_prc1 = nullptr;
+		const Rect* m_prc2 = nullptr;
+		const Rect* m_prcBeam = nullptr;
 		int m_iWidth = 0; // width of the battery innards
 	};
 
@@ -778,8 +778,13 @@ public:
 		return (index < 0) ? 0 : m_Sprites[index].Handle;
 	}
 
-	Rect& GetSpriteRect(int index)
+	const Rect& GetSpriteRect(int index)
 	{
+		if (index == -1)
+		{
+			return EmptyRect;
+		}
+
 		return m_Sprites[index].Rectangle;
 	}
 

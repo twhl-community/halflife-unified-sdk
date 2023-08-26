@@ -209,8 +209,15 @@ void CHud::VidInit()
 		m_HudNumbers[i] = GetSpriteIndex(fmt::format("number_{}", i).c_str());
 	}
 
-	const auto& numberRect = m_Sprites[m_HUD_number_0].Rectangle;
-	m_iFontHeight = numberRect.bottom - numberRect.top;
+	if (m_HUD_number_0 != -1)
+	{
+		const auto& numberRect = m_Sprites[m_HUD_number_0].Rectangle;
+		m_iFontHeight = numberRect.bottom - numberRect.top;
+	}
+	else
+	{
+		m_iFontHeight = 0;
+	}
 
 	// Reset to default on new map load
 	m_HudColor = RGB_HUD_COLOR;
