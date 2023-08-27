@@ -20,6 +20,8 @@
  */
 class COFLoader : public CBaseMonster
 {
+	DECLARE_CLASS(COFLoader, CBaseMonster);
+
 public:
 	int ISoundMask() override { return bits_SOUND_NONE; }
 
@@ -37,6 +39,15 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 
 	void StartTask(const Task_t* pTask) override;
+
+	void UpdateOnRemove() override
+	{
+		BaseClass::UpdateOnRemove();
+
+		// Make sure the loader stops playing these.
+		StopSound(CHAN_BODY, "ambience/warn2.wav");
+		StopSound(CHAN_BODY, "ambience/turretrot1.wav");
+	}
 
 	void SetTurnActivity();
 };
