@@ -41,6 +41,12 @@ public:
 	void AlertSound() override;
 	void PainSound() override;
 
+	void GibMonster() override
+	{
+		// Don't use adult gibbing logic.
+		CSquadMonster::GibMonster();
+	}
+
 	/**
 	 *	@brief expects a length to trace, amount of damage to do, and damage type.
 	 *	Returns a pointer to the damaged entity in case the monster wishes to do other stuff to the victim (punchangle, etc)
