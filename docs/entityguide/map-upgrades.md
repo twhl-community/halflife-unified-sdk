@@ -208,6 +208,10 @@ Sets the `Remove On Fire` spawnflag on the `trigger_auto` entity
 used to start the script on `ba_outro`.
 This fixes the script restarting on save load.
 
+### BaPower2RemoveChapterTitleUpgrade
+
+Removes the `chaptertitle` key from `worldspawn` in `ba_power2` to remove the redundant chapter title text.
+
 ### BaSecurity2ChangeHologramModelUpgrade
 
 Changes Gina model in `ba_security2` to allow playing push cart sequence.
