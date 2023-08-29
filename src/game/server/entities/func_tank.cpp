@@ -534,7 +534,7 @@ CBaseEntity* CFuncTank::FindTarget(CBaseEntity* pvsPlayer)
 	auto flIdealDist = m_maxRange;
 	CBaseEntity* pIdealTarget = nullptr;
 
-	if (pPlayerTarget->IsAlive())
+	if (pPlayerTarget->IsAlive() && !FBitSet(pPlayerTarget->pev->flags, FL_NOTARGET))
 	{
 		const auto distance = (pPlayerTarget->pev->origin - pev->origin).Length2D();
 
@@ -703,6 +703,13 @@ void CFuncTank::TrackTarget()
 
 		// Keep tracking the same target unless the target is in cover and a better one is around.
 		pTarget = m_hEnemy;
+
+		// Forget targets that enable notarget.
+		if (pTarget && FBitSet(pTarget->pev->flags, FL_NOTARGET))
+		{
+			pTarget = nullptr;
+			m_hEnemy = nullptr;
+		}
 
 		if (pTarget)
 		{

@@ -27,6 +27,9 @@
 
 bool FBoxVisible(CBaseEntity* looker, CBaseEntity* target, Vector& vecTargetOrigin, float flSize)
 {
+	if (FBitSet(target->pev->flags, FL_NOTARGET))
+		return false;
+
 	// don't look through water
 	if ((looker->pev->waterlevel != WaterLevel::Head && target->pev->waterlevel == WaterLevel::Head) ||
 		(looker->pev->waterlevel == WaterLevel::Head && target->pev->waterlevel == WaterLevel::Dry))
