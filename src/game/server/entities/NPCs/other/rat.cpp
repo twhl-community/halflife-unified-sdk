@@ -26,7 +26,7 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 
-	bool HasAlienGibs() override { return true; }
+	bool HasHumanGibs() override { return true; }
 };
 LINK_ENTITY_TO_CLASS(monster_rat, CRat);
 
