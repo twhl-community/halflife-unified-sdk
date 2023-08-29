@@ -173,6 +173,10 @@ Fixes `monster_generic` entities that use `hgrunt_opfor.mdl` to use the correct 
 
 Fixes the Pit Worm's Nest bridge possibly breaking if triggered too soon.
 
+### Of5a2FixXenBullsquidScriptsUpgrade
+
+Fixes the Bullsquids in `of5a2` having the wrong targetnames causing the eating scripts to fail.
+
 ### Of6a5FixGenewormArriveSoundUpgrade
 
 Adds a missing `.wav` extension to the sound played when the Geneworm enters in `of6a5`.
