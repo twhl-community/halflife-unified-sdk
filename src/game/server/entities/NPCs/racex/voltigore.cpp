@@ -944,6 +944,7 @@ const Schedule_t* COFVoltigore::GetSchedule()
 		// zap player!
 		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
 		{
+			AttackSound(); // this is a total hack. Should be parto f the schedule
 			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
 		}
 

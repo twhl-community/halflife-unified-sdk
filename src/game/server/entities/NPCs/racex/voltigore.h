@@ -86,6 +86,7 @@ public:
 	void RunTask(const Task_t* pTask) override;
 	void AlertSound() override;
 	void PainSound() override;
+	virtual void AttackSound() {}
 	void TraceAttack(CBaseEntity* attacker, float flDamage, Vector vecDir, TraceResult* ptr, int bitsDamageType) override;
 
 	/**

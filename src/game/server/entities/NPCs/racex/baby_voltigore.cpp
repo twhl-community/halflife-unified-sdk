@@ -40,6 +40,7 @@ public:
 
 	void AlertSound() override;
 	void PainSound() override;
+	void AttackSound() override;
 
 	void GibMonster() override
 	{
@@ -92,6 +93,13 @@ void COFBabyVoltigore::PainSound()
 	StopTalking();
 
 	EmitSoundDyn(CHAN_VOICE, pPainSounds[RANDOM_LONG(0, std::size(pPainSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
+}
+
+void COFBabyVoltigore::AttackSound()
+{
+	StopTalking();
+
+	EmitSoundDyn(CHAN_VOICE, pAttackSounds[RANDOM_LONG(0, std::size(pAttackSounds) - 1)], 1.0, ATTN_NORM, 0, 180);
 }
 
 void COFBabyVoltigore::HandleAnimEvent(MonsterEvent_t* pEvent)
