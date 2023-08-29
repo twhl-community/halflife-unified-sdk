@@ -954,7 +954,7 @@ void COFGeneWorm::HuntThink()
 
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 		WRITE_BYTE(TE_ELIGHT);
-		WRITE_SHORT(entindex() | 3);
+		WRITE_SHORT(entindex() | (3 << 12));
 		WRITE_COORD(vecOrigin.x);
 		WRITE_COORD(vecOrigin.y);
 		WRITE_COORD(vecOrigin.z);
@@ -974,7 +974,7 @@ void COFGeneWorm::HuntThink()
 
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 		WRITE_BYTE(TE_ELIGHT);
-		WRITE_SHORT(entindex() | 4);
+		WRITE_SHORT(entindex() | (4 << 12));
 		WRITE_COORD(vecOrigin.x);
 		WRITE_COORD(vecOrigin.y);
 		WRITE_COORD(vecOrigin.z);
