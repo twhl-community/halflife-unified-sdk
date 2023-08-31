@@ -64,6 +64,20 @@ void ConCommandSystem::Shutdown()
 	m_Logger.reset();
 }
 
+void ConCommandSystem::RunFrame()
+{
+	for (auto& callback : m_ChangeCallbacks)
+	{
+		if (callback.State.Cvar->string != callback.State.OldString)
+		{
+			callback.Callback(callback.State);
+
+			callback.State.OldString = callback.State.Cvar->string;
+			callback.State.OldValue = callback.State.Cvar->value;
+		}
+	}
+}
+
 cvar_t* ConCommandSystem::GetCVar(const char* name) const
 {
 	return g_engfuncs.pfnCVarGetPointer(name);
@@ -162,6 +176,42 @@ void ConCommandSystem::CreateCommand(std::string_view name, std::function<void(c
 	m_Commands.emplace(key, std::move(data));
 
 	g_engfuncs.pfnAddServerCommand(key.data(), &ConCommandSystem::CommandCallbackWrapper);
+}
+
+void ConCommandSystem::RegisterChangeCallback(const char* name, std::function<void(const ChangeCallback&)>&& callback)
+{
+	auto cvar = GetCVar(name);
+
+	if (!cvar)
+	{
+		m_Logger->error("RegisterChangeCallback: Cvar \"{}\" does not exist", name);
+		return;
+	}
+
+	RegisterChangeCallback(cvar, std::move(callback));
+}
+
+void ConCommandSystem::RegisterChangeCallback(cvar_t* cvar, std::function<void(const ChangeCallback&)>&& callback)
+{
+	if (!cvar)
+	{
+		m_Logger->error("RegisterChangeCallback: Null cvar provided");
+		return;
+	}
+
+	if (!callback)
+	{
+		m_Logger->error("RegisterChangeCallback: Null callback provided");
+		return;
+	}
+
+	// Multiple callbacks can listen for changes to the same cvar, so don't block that here.
+
+	ChangeCallbackData data{
+		.State = {.Cvar = cvar, .OldString = cvar->string, .OldValue = cvar->value},
+		.Callback = std::move(callback)};
+
+	m_ChangeCallbacks.push_back(std::move(data));
 }
 
 void ConCommandSystem::CommandCallbackWrapper()

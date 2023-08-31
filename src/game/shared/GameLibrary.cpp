@@ -79,6 +79,11 @@ void GameLibrary::Shutdown()
 	FileSystem_FreeFileSystem();
 }
 
+void GameLibrary::RunFrame()
+{
+	g_ConCommands.RunFrame();
+}
+
 void GameLibrary::AddGameSystems()
 {
 	// Done separately before game systems to avoid tightly coupling logging to json.

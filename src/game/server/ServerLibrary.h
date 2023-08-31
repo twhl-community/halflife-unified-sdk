@@ -135,8 +135,6 @@ private:
 
 	int m_SpawnCount = 0;
 
-	bool m_LastAllowBunnyHoppingState = false;
-
 	std::unique_ptr<MapState> m_MapState;
 
 	std::vector<std::string> m_MapsToLoad;

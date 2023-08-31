@@ -120,6 +120,8 @@ void ClientLibrary::Shutdown()
 
 void ClientLibrary::RunFrame()
 {
+	GameLibrary::RunFrame();
+
 	// Force the download cvar to enabled so we can download network data.
 	if (m_AllowDownload->value == 0)
 	{

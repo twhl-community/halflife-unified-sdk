@@ -26,6 +26,8 @@
 
 #include "GameSystem.h"
 
+struct cvar_t;
+
 /**
  *	@brief Provides an interface to get command arguments without explicitly depending on library interfaces
  */
@@ -42,6 +44,14 @@ public:
 	int Count() const;
 
 	const char* Argument(int index) const;
+};
+
+struct ChangeCallback
+{
+	cvar_t* Cvar;
+
+	std::string OldString;
+	float OldValue;
 };
 
 enum class CommandLibraryPrefix
@@ -75,6 +85,13 @@ private:
 		std::function<void(const CommandArgs&)> Callback;
 	};
 
+	struct ChangeCallbackData
+	{
+		ChangeCallback State;
+
+		std::function<void(ChangeCallback&)> Callback;
+	};
+
 public:
 	ConCommandSystem();
 	~ConCommandSystem();
@@ -86,6 +103,8 @@ public:
 	bool Initialize() override;
 	void PostInitialize() override;
 	void Shutdown() override;
+
+	void RunFrame();
 
 	/**
 	 *	@brief Gets a cvar by name
@@ -105,6 +124,16 @@ public:
 	void CreateCommand(std::string_view name, std::function<void(const CommandArgs&)>&& callback,
 		CommandLibraryPrefix useLibraryPrefix = CommandLibraryPrefix::Yes);
 
+	/**
+	 *	@brief Registers a callback to be executed whenever the value of the given cvar changes.
+	 */
+	void RegisterChangeCallback(const char* name, std::function<void(const ChangeCallback&)>&& callback);
+
+	/**
+	 *	@copydoc RegisterChangeCallback(const char*, std::function<void(const ChangeCallback&)>&&)
+	 */
+	void RegisterChangeCallback(cvar_t* cvar, std::function<void(const ChangeCallback&)>&& callback);
+
 private:
 	static void CommandCallbackWrapper();
 	void CommandCallback();
@@ -117,6 +146,8 @@ private:
 	std::vector<CVarData> m_Cvars;
 
 	std::unordered_map<std::string_view, CommandData> m_Commands;
+
+	std::vector<ChangeCallbackData> m_ChangeCallbacks;
 };
 
 inline ConCommandSystem g_ConCommands;

@@ -117,6 +117,25 @@ bool ServerLibrary::Initialize()
 	g_ConCommands.CreateCommand("load_all_maps", [this](const auto&)
 		{ LoadAllMaps(); });
 
+	g_ConCommands.RegisterChangeCallback(&sv_allowbunnyhopping, [](const auto& state)
+		{
+			const bool allowBunnyHopping = state.Cvar->value != 0;
+
+			const auto setting = UTIL_ToString(allowBunnyHopping ? 1 : 0);
+
+			for (int i = 1; i <= gpGlobals->maxClients; ++i)
+			{
+				auto player = UTIL_PlayerByIndex(i);
+
+				if (!player)
+				{
+					continue;
+				}
+
+				g_engfuncs.pfnSetPhysicsKeyValue(player->edict(), "bj", setting.c_str());
+			}
+		});
+
 	RegisterCommandWhitelistSchema();
 
 	LoadCommandWhitelist();
@@ -157,33 +176,14 @@ static void ForceCvarToValue(cvar_t* cvar, float value)
 
 void ServerLibrary::RunFrame()
 {
+	GameLibrary::RunFrame();
+
 	// Force the download cvars to enabled so we can download network data.
 	ForceCvarToValue(m_AllowDownload, 1);
 	ForceCvarToValue(m_SendResources, 1);
 	ForceCvarToValue(m_AllowDLFile, 1);
 
 	g_Bots.RunFrame();
-
-	const bool allowBunnyHopping = sv_allowbunnyhopping.value != 0;
-
-	if (allowBunnyHopping != m_LastAllowBunnyHoppingState)
-	{
-		m_LastAllowBunnyHoppingState = allowBunnyHopping;
-
-		const auto setting = UTIL_ToString(allowBunnyHopping ? 1 : 0);
-
-		for (int i = 1; i <= gpGlobals->maxClients; ++i)
-		{
-			auto player = UTIL_PlayerByIndex(i);
-
-			if (!player)
-			{
-				continue;
-			}
-
-			g_engfuncs.pfnSetPhysicsKeyValue(player->edict(), "bj", setting.c_str());
-		}
-	}
 
 	// If we're loading all maps then change maps after 4 seconds to give the game time to generate files.
 	if (!m_MapsToLoad.empty() && gpGlobals->time > 5)

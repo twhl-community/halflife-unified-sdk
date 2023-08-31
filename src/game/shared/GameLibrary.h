@@ -52,7 +52,7 @@ public:
 	/**
 	 *	@brief Called every frame.
 	 */
-	virtual void RunFrame() = 0;
+	virtual void RunFrame();
 
 protected:
 	virtual void AddGameSystems();
