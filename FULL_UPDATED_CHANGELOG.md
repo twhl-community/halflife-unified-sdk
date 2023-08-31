@@ -594,10 +594,10 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Don't send `EF_BRIGHTLIGHT` effect flag for players to prevent night vision goggles from lighting things up for everybody (NEEDS PUBLIC TESTING) (halflife issue [#1858](https://github.com/ValveSoftware/halflife/issues/1858))
 * Fixed ropes leaking memory (halflife issue [#3054](https://github.com/ValveSoftware/halflife/issues/3054))
 * Fixed CBaseEntity::Instance(entvars_t*) crashing the game if given a null pointer (halflife issue [#3056](https://github.com/ValveSoftware/halflife/issues/3056))
-* Fixed incorrect header include guard in CRopeSample.h [#29](https://github.com/SamVanheer/halflife-op4-updated/issues/29)
 * Fixed FL_FAKECLIENT flag being cleared in some places (halflife issue [#3256](https://github.com/ValveSoftware/halflife/issues/3256))
 * Fixed Health Charger recharge time not using the correct value in Co-op
 * Fixed ropes breaking at high framerates
+* Fixed electrified wire damage being frametime-dependent [#102](https://github.com/SamVanheer/halflife-op4-updated/issues/102) (Thanks malortie)
 
 <div class="page"/>
 
