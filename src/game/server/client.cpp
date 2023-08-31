@@ -1939,6 +1939,8 @@ int GetWeaponData(edict_t* player, weapon_data_t* info)
 	if (!pl)
 		return 1;
 
+	pl->m_LastWeaponDataUpdateTime = gpGlobals->time;
+
 	// go through all of the weapons and make a list of the ones to pack
 	for (i = 0; i < MAX_WEAPON_SLOTS; i++)
 	{

@@ -286,6 +286,9 @@ public:
 	// Not saved, used to update client.
 	std::uint64_t m_ClientWeaponBits;
 
+	// Not saved, tracks the last time the engine called GetWeaponData.
+	float m_LastWeaponDataUpdateTime{0};
+
 	std::uint32_t m_HudFlags = 0;
 
 	// shared ammo slots

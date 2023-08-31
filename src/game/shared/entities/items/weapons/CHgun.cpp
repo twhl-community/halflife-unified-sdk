@@ -121,6 +121,8 @@ void CHgun::PrimaryAttack()
 	m_flRechargeTime = gpGlobals->time + 0.5;
 #endif
 
+	const bool wasLastShot = m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) == 1;
+
 	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
@@ -133,8 +135,13 @@ void CHgun::PrimaryAttack()
 	flags = 0;
 #endif
 
-	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0);
+	if (wasLastShot &&
+		m_pPlayer->m_LastWeaponDataUpdateTime != 0 && m_pPlayer->m_LastWeaponDataUpdateTime < m_LastRechargeTime)
+	{
+		flags &= ~FEV_NOTHOST;
+	}
 
+	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0);
 
 
 	// player "shoot" animation
@@ -220,6 +227,14 @@ void CHgun::SecondaryAttack()
 	flags = 0;
 #endif
 
+	const bool wasLastShot = m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) == 1;
+
+	if (wasLastShot &&
+		m_pPlayer->m_LastWeaponDataUpdateTime != 0 && m_pPlayer->m_LastWeaponDataUpdateTime < m_LastRechargeTime)
+	{
+		flags &= ~FEV_NOTHOST;
+	}
+
 	PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usHornetFire, 0.0, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0);
 
 	m_pPlayer->AdjustAmmoByIndex(m_iPrimaryAmmoType, -1);
@@ -241,13 +256,21 @@ void CHgun::Reload()
 	if (m_pPlayer->GetAmmoCountByIndex(m_iPrimaryAmmoType) >= HORNET_MAX_CARRY)
 		return;
 
+	bool updatedAmmo = false;
+
 	while (ammoCount < HORNET_MAX_CARRY && m_flRechargeTime < gpGlobals->time)
 	{
 		++ammoCount;
 		m_flRechargeTime += 0.5;
+		updatedAmmo = true;
 	}
 
 	m_pPlayer->SetAmmoCountByIndex(m_iPrimaryAmmoType, ammoCount);
+
+	if (updatedAmmo)
+	{
+		m_LastRechargeTime = gpGlobals->time;
+	}
 #endif
 }
 

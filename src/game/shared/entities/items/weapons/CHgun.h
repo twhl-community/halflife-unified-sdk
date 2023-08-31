@@ -48,6 +48,7 @@ public:
 	float m_flNextAnimTime;
 
 	float m_flRechargeTime;
+	float m_LastRechargeTime;
 
 	int m_iFirePhase = 0; // don't save me.
 
