@@ -73,6 +73,9 @@ cvar_t servercfgfile = {"sv_servercfgfile", "cfg/server/server.json", FCVAR_NOEX
 cvar_t mp_gamemode = {"mp_gamemode", "", FCVAR_SERVER};
 cvar_t mp_createserver_gamemode = {"mp_createserver_gamemode", "", FCVAR_SERVER};
 
+cvar_t sv_infinite_ammo = {"sv_infinite_ammo", "0", FCVAR_SERVER};
+cvar_t sv_bottomless_magazines = {"sv_bottomless_magazines", "0", FCVAR_SERVER};
+
 ServerLibrary::ServerLibrary() = default;
 ServerLibrary::~ServerLibrary() = default;
 
@@ -109,6 +112,9 @@ bool ServerLibrary::Initialize()
 	g_engfuncs.pfnCVarRegister(&mp_gamemode);
 	g_engfuncs.pfnCVarRegister(&mp_createserver_gamemode);
 
+	g_engfuncs.pfnCVarRegister(&sv_infinite_ammo);
+	g_engfuncs.pfnCVarRegister(&sv_bottomless_magazines);
+
 	g_ConCommands.CreateCommand(
 		"mp_list_gamemodes", [](const auto&)
 		{ PrintMultiplayerGameModes(); },
@@ -133,8 +139,13 @@ bool ServerLibrary::Initialize()
 				}
 
 				g_engfuncs.pfnSetPhysicsKeyValue(player->edict(), "bj", setting.c_str());
-			}
-		});
+			} });
+
+	g_ConCommands.RegisterChangeCallback(&sv_infinite_ammo, [](const auto& state)
+		{ g_Skill.SetValue("infinite_ammo", state.Cvar->value); });
+
+	g_ConCommands.RegisterChangeCallback(&sv_bottomless_magazines, [](const auto& state)
+		{ g_Skill.SetValue("bottomless_magazines", state.Cvar->value); });
 
 	RegisterCommandWhitelistSchema();
 
@@ -574,6 +585,17 @@ void ServerLibrary::LoadServerConfigFiles()
 	sentences::g_Sentences.LoadSentences(context.SentencesFiles);
 	g_MaterialSystem.LoadMaterials(context.MaterialsFiles);
 	g_Skill.LoadSkillConfigFiles(context.SkillFiles);
+
+	// Override skill vars with cvars if they are enabled only.
+	if (sv_infinite_ammo.value != 0)
+	{
+		g_Skill.SetValue("infinite_ammo", sv_infinite_ammo.value);
+	}
+
+	if (sv_bottomless_magazines.value != 0)
+	{
+		g_Skill.SetValue("bottomless_magazines", sv_bottomless_magazines.value);
+	}
 
 	m_MapState->m_GlobalModelReplacement = g_ReplacementMaps.LoadMultiple(
 		context.GlobalModelReplacementFiles, {.CaseSensitive = false});
