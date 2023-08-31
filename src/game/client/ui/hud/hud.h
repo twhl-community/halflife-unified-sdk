@@ -747,6 +747,8 @@ public:
 	 */
 	RGB24 m_HudItemColor = RGB_HUD_COLOR;
 
+	RGB24 m_CrosshairColor = RGB_CROSSHAIR_COLOR;
+
 	int m_iFontHeight;
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, const RGB24& color);
 	int DrawHudString(int x, int y, int iMaxX, const char* szString, const RGB24& color);
@@ -831,6 +833,7 @@ public:
 	void MsgFunc_Damage(const char* pszName, BufferReader& reader);
 	void MsgFunc_GameMode(const char* pszName, BufferReader& reader);
 	void MsgFunc_HudColor(const char* pszName, BufferReader& reader);
+	void MsgFunc_CrosshairColor(const char* pszName, BufferReader& reader);
 	void MsgFunc_Logo(const char* pszName, BufferReader& reader);
 	void MsgFunc_ResetHUD(const char* pszName, BufferReader& reader);
 	void MsgFunc_InitHUD(const char* pszName, BufferReader& reader);

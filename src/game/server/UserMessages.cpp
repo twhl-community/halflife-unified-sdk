@@ -65,6 +65,7 @@ void LinkUserMessages()
 	gmsgStatusIcon = g_engfuncs.pfnRegUserMsg("StatusIcon", -1);
 	gmsgPlayerBrowse = g_engfuncs.pfnRegUserMsg("PlyrBrowse", -1);
 	gmsgHudColor = g_engfuncs.pfnRegUserMsg("HudColor", 3);
+	gmsgCrosshairColor = g_engfuncs.pfnRegUserMsg("CrsshrClr", 3);
 	gmsgFlagIcon = g_engfuncs.pfnRegUserMsg("FlagIcon", -1);
 	gmsgFlagTimer = g_engfuncs.pfnRegUserMsg("FlagTimer", -1);
 	gmsgPlayerIcon = g_engfuncs.pfnRegUserMsg("PlayerIcon", -1);

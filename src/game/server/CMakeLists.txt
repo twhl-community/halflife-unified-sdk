@@ -67,6 +67,7 @@ target_sources(server PRIVATE
 	config/GameConfig.h
 	config/sections/BaseFileNamesListSection.h
 	config/sections/CommandsSection.h
+	config/sections/CrosshairColorSection.h
 	config/sections/EchoSection.h
 	config/sections/EntityClassificationsSection.h
 	config/sections/EntityTemplatesSection.h

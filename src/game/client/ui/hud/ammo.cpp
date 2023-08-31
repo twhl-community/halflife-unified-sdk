@@ -983,7 +983,7 @@ void CHudAmmo::DrawCrosshair(int x, int y)
 		}
 	};
 
-	renderer(x, y, m_Crosshair, gHUD.m_HudItemColor);
+	renderer(x, y, m_Crosshair, gHUD.m_CrosshairColor);
 	renderer(x, y, m_AutoaimCrosshair, RGB_REDISH);
 }
 

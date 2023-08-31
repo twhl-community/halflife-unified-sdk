@@ -291,6 +291,7 @@ constexpr RGB24 RGB_GREENISH{0, 160, 0};
 constexpr RGB24 RGB_BLUEISH{95, 95, 255};
 
 constexpr RGB24 RGB_HUD_COLOR{RGB_YELLOWISH};
+constexpr RGB24 RGB_CROSSHAIR_COLOR{RGB_YELLOWISH};
 
 /**
  *	@brief Amount of time, in seconds, between entity info update checks.

@@ -88,6 +88,78 @@ void CPlayerSetHudColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 	player->SetHudColor(color);
 }
 
+class CPlayerSetCrosshairColor : public CPointEntity
+{
+	DECLARE_CLASS(CPlayerSetCrosshairColor, CPointEntity);
+	DECLARE_DATAMAP();
+
+public:
+	enum class Action
+	{
+		Set = 0,
+		Reset = 1
+	};
+
+	bool KeyValue(KeyValueData* pkvd) override;
+
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+
+private:
+	Vector m_CrosshairColor{vec3_origin};
+	Action m_Action{Action::Set};
+};
+
+LINK_ENTITY_TO_CLASS(player_setcrosshaircolor, CPlayerSetCrosshairColor);
+
+BEGIN_DATAMAP(CPlayerSetCrosshairColor)
+DEFINE_FIELD(m_CrosshairColor, FIELD_VECTOR),
+	DEFINE_FIELD(m_Action, FIELD_INTEGER),
+	END_DATAMAP();
+
+bool CPlayerSetCrosshairColor::KeyValue(KeyValueData* pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "crosshair_color"))
+	{
+		UTIL_StringToVector(m_CrosshairColor, pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq(pkvd->szKeyName, "action"))
+	{
+		m_Action = static_cast<Action>(atoi(pkvd->szValue));
+		return true;
+	}
+
+	return CPointEntity::KeyValue(pkvd);
+}
+
+void CPlayerSetCrosshairColor::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	auto player = ToBasePlayer(pActivator);
+
+	if (!player || !player->IsNetClient())
+	{
+		return;
+	}
+
+	const RGB24 color = [this]()
+	{
+		switch (m_Action)
+		{
+		case Action::Set:
+			return RGB24{
+				static_cast<std::uint8_t>(m_CrosshairColor.x),
+				static_cast<std::uint8_t>(m_CrosshairColor.y),
+				static_cast<std::uint8_t>(m_CrosshairColor.z)};
+
+		default:
+		case Action::Reset:
+			return RGB_HUD_COLOR;
+		}
+	}();
+
+	player->SetCrosshairColor(color);
+}
+
 class CPlayerSetSuitLightType : public CPointEntity
 {
 	DECLARE_CLASS(CPlayerSetSuitLightType, CPointEntity);

@@ -94,6 +94,7 @@ void __CmdFunc_OpenCommandMenu()
 void CHud::Init()
 {
 	g_ClientUserMessages.RegisterHandler("HudColor", &CHud::MsgFunc_HudColor, this);
+	g_ClientUserMessages.RegisterHandler("CrsshrClr", &CHud::MsgFunc_CrosshairColor, this);
 	g_ClientUserMessages.RegisterHandler("Logo", &CHud::MsgFunc_Logo, this);
 	g_ClientUserMessages.RegisterHandler("ResetHUD", &CHud::MsgFunc_ResetHUD, this);
 	g_ClientUserMessages.RegisterHandler("GameMode", &CHud::MsgFunc_GameMode, this);
@@ -222,6 +223,7 @@ void CHud::VidInit()
 	// Reset to default on new map load
 	m_HudColor = RGB_HUD_COLOR;
 	m_HudItemColor = RGB_HUD_COLOR;
+	m_CrosshairColor = RGB_CROSSHAIR_COLOR;
 
 	for (auto hudElement : m_HudList)
 	{
@@ -240,6 +242,13 @@ void CHud::MsgFunc_HudColor(const char* pszName, BufferReader& reader)
 	{
 		m_HudItemColor = m_HudColor;
 	}
+}
+
+void CHud::MsgFunc_CrosshairColor(const char* pszName, BufferReader& reader)
+{
+	m_CrosshairColor.Red = reader.ReadByte();
+	m_CrosshairColor.Green = reader.ReadByte();
+	m_CrosshairColor.Blue = reader.ReadByte();
 }
 
 void CHud::MsgFunc_Logo(const char* pszName, BufferReader& reader)

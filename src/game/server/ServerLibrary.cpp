@@ -41,6 +41,7 @@
 #include "config/ConditionEvaluator.h"
 #include "config/GameConfig.h"
 #include "config/sections/CommandsSection.h"
+#include "config/sections/CrosshairColorSection.h"
 #include "config/sections/EchoSection.h"
 #include "config/sections/EntityClassificationsSection.h"
 #include "config/sections/EntityTemplatesSection.h"
@@ -362,6 +363,12 @@ void ServerLibrary::PlayerActivating(CBasePlayer* player)
 		player->SetHudColor(*m_MapState->m_HudColor);
 	}
 
+	// Override the crosshair color.
+	if (m_MapState->m_CrosshairColor)
+	{
+		player->SetCrosshairColor(*m_MapState->m_CrosshairColor);
+	}
+
 	// Override the light type.
 	if (m_MapState->m_LightType)
 	{
@@ -422,6 +429,7 @@ void ServerLibrary::CreateConfigDefinitions()
 
 			sections.push_back(std::make_unique<EchoSection<ServerConfigContext>>());
 			sections.push_back(std::make_unique<CommandsSection<ServerConfigContext>>(&g_CommandWhitelist));
+			sections.push_back(std::make_unique<CrosshairColorSection>());
 			sections.push_back(std::make_unique<SentencesSection>());
 			sections.push_back(std::make_unique<MaterialsSection>());
 			sections.push_back(std::make_unique<SkillSection>());

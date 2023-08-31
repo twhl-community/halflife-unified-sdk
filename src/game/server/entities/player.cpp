@@ -126,6 +126,7 @@ DEFINE_FIELD(m_SuitLightType, FIELD_INTEGER),
 	DEFINE_FIELD(m_DisplacerReturn, FIELD_POSITION_VECTOR),
 	DEFINE_FIELD(m_DisplacerSndRoomtype, FIELD_INTEGER),
 	DEFINE_FIELD(m_HudColor, FIELD_INTEGER),
+	DEFINE_FIELD(m_CrosshairColor, FIELD_INTEGER),
 
 	DEFINE_FIELD(m_bInfiniteAir, FIELD_BOOLEAN),
 	DEFINE_FIELD(m_bInfiniteArmor, FIELD_BOOLEAN),
@@ -4002,6 +4003,7 @@ void CBasePlayer::UpdateClientData()
 	{
 		// Reinitialize hud color to saved off value.
 		SetHudColor(RGB24::FromInteger(m_HudColor));
+		SetCrosshairColor(RGB24::FromInteger(m_CrosshairColor));
 	}
 
 	// Update Flashlight
@@ -4925,6 +4927,17 @@ void CBasePlayer::SetHudColor(RGB24 color)
 	m_HudColor = color.ToInteger();
 
 	MESSAGE_BEGIN(MSG_ONE, gmsgHudColor, nullptr, this);
+	g_engfuncs.pfnWriteByte(color.Red);
+	g_engfuncs.pfnWriteByte(color.Green);
+	g_engfuncs.pfnWriteByte(color.Blue);
+	g_engfuncs.pfnMessageEnd();
+}
+
+void CBasePlayer::SetCrosshairColor(RGB24 color)
+{
+	m_CrosshairColor = color.ToInteger();
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgCrosshairColor, nullptr, this);
 	g_engfuncs.pfnWriteByte(color.Red);
 	g_engfuncs.pfnWriteByte(color.Green);
 	g_engfuncs.pfnWriteByte(color.Blue);

@@ -619,6 +619,23 @@ void SV_CreateClientCommands()
 			} },
 		{.Flags = ClientCommandFlag::Cheat});
 
+	g_ClientCommands.Create("set_crosshair_color", [](CBasePlayer* player, const auto& args)
+		{
+			if (args.Count() >= 4)
+			{
+				Vector color{255, 255, 255};
+				UTIL_StringToVector(color, CMD_ARGS());
+
+				player->SetCrosshairColor({static_cast<std::uint8_t>(color.x),
+					static_cast<std::uint8_t>(color.y),
+					static_cast<std::uint8_t>(color.z)});
+			}
+			else
+			{
+				UTIL_ConsolePrint(player, "Usage: set_crosshair_color <r> <g> <b> (values in range 0-255)\n");
+			} },
+		{.Flags = ClientCommandFlag::Cheat});
+
 	g_ClientCommands.Create("set_suit_light_type", [](CBasePlayer* player, const auto& args)
 		{
 			if (args.Count() > 1)
