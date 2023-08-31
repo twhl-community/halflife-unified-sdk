@@ -22,6 +22,18 @@ Loads all maps and generates the node graph for them. This allows leaving the ga
 
 ## Server-side variables
 
+### sv_allowbunnyhopping
+
+Controls whether players can bunny hop. Half-Life normally limits movement speed to prevent this. This cvar allows that limitation to be disabled.
+
+### sv_bottomless_magazines
+
+Controls whether players have bottomless magazines. If set to **0** the skill variable setting is used. If set to **1** or changed at runtime the cvar will override the skill variable setting.
+
+### sv_infinite_ammo
+
+Controls whether players have infinite ammo. If set to **0** the skill variable setting is used. If set to **1** or changed at runtime the cvar will override the skill variable setting.
+
 ### sv_schedule_debug
 
 Syntax: `sv_schedule_debug <0|1>`
@@ -210,6 +222,16 @@ Example: `npc_create monster_osprey target corner1` (Spawns an Osprey that start
 Creates an entity at the position you're looking for and adjusts its height to place its bounding box on the ground. If the entity is stuck in an object or can't fall to the ground it is removed.
 
 The entity's resources must have been precached before for this to work.
+
+### set_crosshair_color
+
+Syntax: `set_crosshair_color R G B`
+
+Example: `set_crosshair_color 255 0 0` (bright red color)
+
+> <span style="background-color:orange; color: black">This is a cheat.</span>
+
+Sets the player's crosshair color to the given color.
 
 ### set_hud_color
 
