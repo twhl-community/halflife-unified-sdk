@@ -38,7 +38,7 @@ Table of contents:
 * Implemented **console command system** to allow object member functions to be console command handlers and to provide the same interface for client and server code
 * **Server-side client commands** are now registrable and unregistrable on the fly to allow for gamemode-specific commands
 * Implemented **client user messages dispatcher** to allow object member functions to be user message handlers
-* **Configurable hud color**: setting is map-specific and can be overridden using an entity and a cheat command on a per-player basis
+* **Configurable hud and crosshair colors**: settings are map-specific and can be overridden using entities and cheat commands on a per-player basis
 * **Configurable suit light type** (**flashlight** or **night vision**): setting is map-specific and can be overridden using an entity and a cheat command on a per-player basis
 * Implemented **Campaign selection menu** (replaces **New Game dialog**)
 * Reworked **HUD sprite system**
@@ -57,6 +57,7 @@ Table of contents:
 * Added **barebones bot system for multiplayer testing**
 * Added `cl_custom_message_text` cvar to **display a custom message on-screen**, along with `cl_custom_message_x` and `cl_custom_message_y` to control the position on-screen (works like `game_text`)
 * Added `sv_load_all_maps` command to load all maps and generate the node graph for them (allows leaving the game running on its own, can also be used to generate a log containing any errors logged by the game)
+* Added cvars `sv_infinite_ammo` & `sv_bottomless_magazines` to override skill variables
 * Added **cheat commands that work in all gamemodes**:
 	* `cheat_god`
 	* `cheat_unkillable`
@@ -185,6 +186,8 @@ Table of contents:
 * Re-added activity changes to talk monster schedules using `ACT_IDLE` instead of `ACT_SIGNAL3` (not used by talk monsters, but is used by allied human grunts which do have that activity)
 * Fixed Barney playing post-disaster use/unuse sentences in training
 * Fixed Human Grunts and Male Assassins not playing MP5 attack sounds during scripted sequence
+* Fixed rats having alien gibs instead of human gibs
+* Fixed turrets and tanks continuing to target players after enabling notarget
 
 ## Items And Weapons
 
@@ -295,6 +298,7 @@ Table of contents:
 * Fixed player weapons still receiving input when starting to use a `func_tank`
 * Fixed `func_tank` entities not returning player weapon control when killtargeted
 * The weapon deploy animation is now always sent to clients when calling `EquipWeapon` to ensure it plays when the player stops using `func_tank` entities
+* `func_tank` entities can now switch targets if their current target is behind cover
 * Disabled the ability to pick up items when in observer/spectator mode
 * Fixed Gauss gun sometimes setting remaining player Uranium ammo to **-1**
 * Fixed Glock not playing empty sound when using secondary attack
