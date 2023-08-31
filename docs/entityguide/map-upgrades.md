@@ -212,6 +212,11 @@ Sets the `Remove On Fire` spawnflag on the `trigger_auto` entity
 used to start the script on `ba_outro`.
 This fixes the script restarting on save load.
 
+### BaOutroFixGruntsBodyUpgrade
+
+Adjusts the body values of the Human Grunts in `ba_outro` to match the Half-Life script
+and to avoid clipping weapons into Freeman.
+
 ### BaPower2RemoveChapterTitleUpgrade
 
 Removes the `chaptertitle` key from `worldspawn` in `ba_power2` to remove the redundant chapter title text.
