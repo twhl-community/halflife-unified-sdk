@@ -76,7 +76,7 @@ void CTripmineGrenade::OnCreate()
 {
 	CGrenade::OnCreate();
 
-	pev->model = MAKE_STRING("models/v_tripmine.mdl");
+	pev->model = MAKE_STRING("models/w_tripmine.mdl");
 }
 
 void CTripmineGrenade::Spawn()
@@ -88,8 +88,6 @@ void CTripmineGrenade::Spawn()
 
 	SetModel(STRING(pev->model));
 	pev->frame = 0;
-	pev->body = 3;
-	pev->sequence = TRIPMINE_WORLD;
 	ResetSequenceInfo();
 	pev->framerate = 0;
 
@@ -353,7 +351,7 @@ void CTripmine::OnCreate()
 	CBasePlayerWeapon::OnCreate();
 	m_iId = WEAPON_TRIPMINE;
 	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
-	m_WorldModel = pev->model = MAKE_STRING("models/v_tripmine.mdl");
+	m_WorldModel = pev->model = MAKE_STRING("models/w_tripmine.mdl");
 }
 
 void CTripmine::Spawn()
@@ -361,15 +359,9 @@ void CTripmine::Spawn()
 	CBasePlayerWeapon::Spawn();
 
 	pev->frame = 0;
-	pev->body = 3;
 	pev->sequence = TRIPMINE_GROUND;
 	// ResetSequenceInfo( );
 	pev->framerate = 0;
-
-	// HACK: force the body to the first person view by default so it doesn't show up as a huge tripmine for a second.
-#ifdef CLIENT_DLL
-	pev->body = 0;
-#endif
 
 	if (!UTIL_IsMultiplayer())
 	{

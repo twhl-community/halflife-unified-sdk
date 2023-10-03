@@ -26,8 +26,12 @@ enum tripmine_e
 	TRIPMINE_FIDGET,
 	TRIPMINE_HOLSTER,
 	TRIPMINE_DRAW,
-	TRIPMINE_WORLD,
-	TRIPMINE_GROUND,
+};
+
+enum tripmineworld_e
+{
+	TRIPMINE_WORLD = 0,
+	TRIPMINE_GROUND
 };
 
 class CTripmine : public CBasePlayerWeapon
