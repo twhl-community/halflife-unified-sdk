@@ -26,6 +26,7 @@ bool BotSystem::Initialize()
 			if (args.Count() != 2)
 			{
 				Con_Printf("Usage: %s <bot_name>\n", args.Argument(0));
+				return;
 			}
 
 			const char* name = args.Argument(1);
