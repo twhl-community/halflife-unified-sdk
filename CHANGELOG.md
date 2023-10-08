@@ -9,6 +9,7 @@
 * Fixed electrified wire damage being frametime-dependent [#102](https://github.com/SamVanheer/halflife-op4-updated/issues/102) (Thanks malortie)
 * Fixed func_tank_of and other OF tank entities firing many attacks at the same time at players if they hide behind obstacles for a few seconds (Thanks Shepard)
 * Fixed Geneworm not lighting up its eyes (Thanks Shepard)
+* Fixed Male Assassin Snipers not tracking their last shot time properly (Thanks malortie)
 
 ## Changes in V1.0.0 Release Candidate 001
 

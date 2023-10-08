@@ -817,6 +817,7 @@ void CMOFAssassin::Shoot()
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
+	m_flLastShot = gpGlobals->time;
 }
 
 //=========================================================
