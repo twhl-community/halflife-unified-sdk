@@ -76,7 +76,7 @@ bool CHgun::GetWeaponInfo(WeaponInfo& info)
 	info.Slot = 3;
 	info.Position = 3;
 	info.Id = WEAPON_HORNETGUN;
-	info.Flags = ITEM_FLAG_NOAUTOSWITCHEMPTY | ITEM_FLAG_NOAUTORELOAD;
+	info.Flags = ITEM_FLAG_NOAUTOSWITCHEMPTY | ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_SELECTONEMPTY;
 	info.Weight = HORNETGUN_WEIGHT;
 
 	return true;

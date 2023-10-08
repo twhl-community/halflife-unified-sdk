@@ -275,7 +275,7 @@ bool CShockRifle::GetWeaponInfo(WeaponInfo& info)
 	info.AttackModeInfo[0].AmmoType = "shock";
 	info.Name = STRING(pev->classname);
 	info.AttackModeInfo[0].MagazineSize = WEAPON_NOCLIP;
-	info.Flags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY;
+	info.Flags = ITEM_FLAG_NOAUTORELOAD | ITEM_FLAG_NOAUTOSWITCHEMPTY | ITEM_FLAG_SELECTONEMPTY;
 	info.Slot = 6;
 	info.Position = 1;
 	info.Id = WEAPON_SHOCKRIFLE;
