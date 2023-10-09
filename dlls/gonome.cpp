@@ -527,7 +527,7 @@ void COFGonome::HandleAnimEvent(MonsterEvent_t* pEvent)
 	case GONOME_AE_ATTACK_BITE_SECOND:
 	case GONOME_AE_ATTACK_BITE_THIRD:
 	{
-		if ((pev->origin - m_hEnemy->pev->origin).Length() < 48)
+		if (m_hEnemy == nullptr || (pev->origin - m_hEnemy->pev->origin).Length() < 48)
 		{
 			// Unfreeze previous player if they were locked.
 			auto prevPlayer = m_PlayerLocked.Entity<CBasePlayer>();
