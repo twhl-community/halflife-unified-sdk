@@ -10,6 +10,7 @@
 * Fixed func_tank_of and other OF tank entities firing many attacks at the same time at players if they hide behind obstacles for a few seconds (Thanks Shepard)
 * Fixed Geneworm not lighting up its eyes (Thanks Shepard)
 * Fixed Male Assassin Snipers not tracking their last shot time properly (Thanks malortie)
+* Fixed torch and medic grunts, male assassins and shock troopers continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
 
 ## Changes in V1.0.0 Release Candidate 001
 
