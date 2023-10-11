@@ -442,7 +442,7 @@ float VectorToYaw(const Vector& forward)
 		return 0;
 	}
 
-	float yaw = (atan2(forward[1], forward[0]) * 180 / PI);
+	float yaw = std::floor(atan2(forward[1], forward[0]) * 180 / PI);
 
 	if (yaw < 0)
 	{
