@@ -3172,6 +3172,11 @@ void COFMedicAlly::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_
 class COFMedicAllyRepel : public CBaseMonster
 {
 public:
+	static TYPEDESCRIPTION m_SaveData[];
+
+	bool Save(CSave& save) override;
+	bool Restore(CRestore& restore) override;
+
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	void Spawn() override;
@@ -3179,13 +3184,21 @@ public:
 	void EXPORT RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture; // Don't save, precache
 
-	//TODO: needs save/restore (not in op4)
 	int m_iBlackOrWhite;
 	int m_iszUse;
 	int m_iszUnUse;
 };
 
 LINK_ENTITY_TO_CLASS(monster_medic_ally_repel, COFMedicAllyRepel);
+
+TYPEDESCRIPTION COFMedicAllyRepel::m_SaveData[] =
+	{
+		DEFINE_FIELD(COFMedicAllyRepel, m_iBlackOrWhite, FIELD_INTEGER),
+		DEFINE_FIELD(COFMedicAllyRepel, m_iszUse, FIELD_STRING),
+		DEFINE_FIELD(COFMedicAllyRepel, m_iszUnUse, FIELD_STRING),
+};
+
+IMPLEMENT_SAVERESTORE(COFMedicAllyRepel, CBaseMonster);
 
 bool COFMedicAllyRepel::KeyValue(KeyValueData* pkvd)
 {
