@@ -2170,6 +2170,9 @@ void CBaseHGruntAlly::Killed(CBaseEntity* attacker, int iGib)
 
 BEGIN_DATAMAP(CBaseHGruntAllyRepel)
 DEFINE_FUNCTION(RepelUse),
+	DEFINE_FIELD(m_iGruntHead, FIELD_INTEGER),
+	DEFINE_FIELD(m_iszUse, FIELD_STRING),
+	DEFINE_FIELD(m_iszUnUse, FIELD_STRING),
 	END_DATAMAP();
 
 bool CBaseHGruntAllyRepel::KeyValue(KeyValueData* pkvd)
@@ -2228,8 +2231,16 @@ void CBaseHGruntAllyRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCalle
 		pGrunt->pev->spawnflags |= pev->spawnflags & (SF_MONSTER_WAIT_TILL_SEEN | SF_MONSTER_GAG | SF_MONSTER_HITMONSTERCLIP | SF_MONSTER_PRISONER | SF_SQUADMONSTER_LEADER | SF_MONSTER_PREDISASTER);
 
 		pGrunt->m_iGruntHead = m_iGruntHead;
-		pGrunt->m_iszUse = m_iszUse;
-		pGrunt->m_iszUnUse = m_iszUnUse;
+
+		if (!FStringNull(m_iszUse))
+		{
+			pGrunt->m_iszUse = m_iszUse;
+		}
+
+		if (!FStringNull(m_iszUnUse))
+		{
+			pGrunt->m_iszUnUse = m_iszUnUse;
+		}
 
 		// Run logic to set up body groups (Spawn was already called once by Create above)
 		pGrunt->Spawn();
