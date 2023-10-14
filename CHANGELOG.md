@@ -13,6 +13,7 @@
 * Fixed torch and medic grunts, male assassins and shock troopers continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
 * Fixed Gonome crashing the game if the player dies while being damaged by Gonome's chest mouth (Thanks malortie)
 * Save and restore allied grunt repel entities to ensure spawned NPCs have correct properties (Thanks malortie)
+* Fixed crash when +USEing NPCs that have just exited a scripted sequence (Thanks malortie)
 
 ## Changes in V1.0.0 Release Candidate 001
 
