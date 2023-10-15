@@ -943,10 +943,8 @@ void CAmbientMusic::Spawn()
 			pev->nextthink = gpGlobals->time + 1.0;
 		}
 	}
-	else
-	{
-		SetUse(&CAmbientMusic::TriggerUse);
-	}
+
+	SetUse(&CAmbientMusic::TriggerUse);
 }
 
 void CAmbientMusic::TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
@@ -963,6 +961,7 @@ void CAmbientMusic::TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 
 	switch (m_TargetSelector)
 	{
+	case AmbientMusicTargetSelector::Radius:
 	case AmbientMusicTargetSelector::AllPlayers:
 	{
 		for (int i = 1; i <= gpGlobals->maxClients; ++i)
@@ -978,12 +977,6 @@ void CAmbientMusic::TriggerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, US
 		{
 			executor(pActivator);
 		}
-		break;
-	}
-
-	case AmbientMusicTargetSelector::Radius:
-	{
-		Logger->error("Invalid target selector for ambient_music \"{}\"", GetTargetname());
 		break;
 	}
 	}
