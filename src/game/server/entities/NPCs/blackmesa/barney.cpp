@@ -654,6 +654,7 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	int m_iPose; // which sequence to display	-- temporary, don't need to save
+	int m_GunState = NPCWeaponState::Holstered; // Default to holstered as in the original model.
 	static const char* m_szPoses[3];
 };
 
@@ -677,6 +678,11 @@ bool CDeadBarney::KeyValue(KeyValueData* pkvd)
 		m_iPose = atoi(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq("bodystate", pkvd->szKeyName))
+	{
+		m_GunState = atoi(pkvd->szValue);
+		return true;
+	}
 
 	return CBaseMonster::KeyValue(pkvd);
 }
@@ -692,6 +698,8 @@ void CDeadBarney::Spawn()
 	pev->yaw_speed = 8;
 	pev->sequence = 0;
 	m_bloodColor = BLOOD_COLOR_RED;
+
+	SetBodygroup(GuardBodyGroup::Weapons, m_GunState);
 
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)

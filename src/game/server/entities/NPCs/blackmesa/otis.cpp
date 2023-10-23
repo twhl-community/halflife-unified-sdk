@@ -223,6 +223,9 @@ public:
 	bool KeyValue(KeyValueData* pkvd) override;
 
 	int m_iPose; // which sequence to display	-- temporary, don't need to save
+	int m_GunState = NPCWeaponState::Holstered; // Default to holstered as in the original model.
+	int m_Sleeves = OtisSleeves::Long;
+	int m_Item = OtisItem::None;
 	static const char* m_szPoses[5];
 };
 
@@ -246,6 +249,21 @@ bool CDeadOtis::KeyValue(KeyValueData* pkvd)
 		m_iPose = atoi(pkvd->szValue);
 		return true;
 	}
+	else if (FStrEq("bodystate", pkvd->szKeyName))
+	{
+		m_GunState = atoi(pkvd->szValue);
+		return true;
+	}
+	if (FStrEq("sleeves", pkvd->szKeyName))
+	{
+		m_Sleeves = atoi(pkvd->szValue);
+		return true;
+	}
+	else if (FStrEq("item", pkvd->szKeyName))
+	{
+		m_Item = atoi(pkvd->szValue);
+		return true;
+	}
 
 	return CBaseMonster::KeyValue(pkvd);
 }
@@ -261,6 +279,10 @@ void CDeadOtis::Spawn()
 	pev->yaw_speed = 8;
 	pev->sequence = 0;
 	m_bloodColor = BLOOD_COLOR_RED;
+
+	SetBodygroup(GuardBodyGroup::Weapons, m_GunState);
+	SetBodygroup(OtisBodyGroup::Sleeves, m_Sleeves);
+	SetBodygroup(OtisBodyGroup::Items, m_Item);
 
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)
