@@ -16,6 +16,11 @@ Table of contents:
 
 ## Applied to all maps
 
+### AdjustMaxRangeUpgrade
+
+Adjusts the `MaxRange` keyvalue for specific maps to fix graphical issues
+when geometry is further away than the original value.
+
 ### AdjustShotgunAnglesUpgrade
 
 Opposing Force and Blue Shift's shotgun world model has a different alignment.
@@ -26,6 +31,10 @@ This adjusts the angles to match the original model.
 
 Converts the obsolete `angle` keyvalue to `angles`.
 This is normally done by the engine, but to avoid having to account for both keyvalues in other upgrades this is done here.
+
+### ConvertBarneyModelUpgrade
+
+Converts `monster_barney_dead` entities with custom body value to use the new `bodystate` keyvalue.
 
 ### ConvertBreakableItemUpgrade
 
@@ -206,6 +215,11 @@ or entities using its model to use the new animation names.
 
 ## Blue Shift-specific
 
+### BaCanal1FixAlienSlaveSpawnsUpgrade
+
+Removes the `netname` keyvalue from the `monstermaker`s that spawn in Alien Slaves
+to prevent them from waiting for 5 seconds.
+
 ### BaOutroDisableTriggerAutoUpgrade
 
 Sets the `Remove On Fire` spawnflag on the `trigger_auto` entity
@@ -225,9 +239,17 @@ Removes the `chaptertitle` key from `worldspawn` in `ba_power2` to remove the re
 
 Changes Gina model in `ba_security2` to allow playing push cart sequence.
 
+### BaTram1FixScientistHeadUpgrade
+
+Removes the `body` keyvalue from the `monster_generic` newspaper scientist in `ba_tram1`.
+
 ### BaTram1FixSuitUpgrade
 
 Removes the HEV suit from `ba_tram1` (now given by map config).
+
+### BaTram2FixScientistSkinColorUpgrade
+
+Fixes the Luther scientist in `ba_tram2`'s reflective lab room having white hands.
 
 ### BaYard1FixDeadScientistModelUpgrade
 
