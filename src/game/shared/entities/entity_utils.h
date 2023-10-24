@@ -17,6 +17,7 @@
 
 class CBaseEntity;
 class CBasePlayer;
+struct edict_t;
 
 /**
  *	@brief Converts an entity pointer to a player pointer, returning nullptr if it isn't a player.
