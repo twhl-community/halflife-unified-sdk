@@ -1160,7 +1160,7 @@ bool COFAllyMonster::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker,
 		{
 			CBaseEntity* pFriend = FindNearestFriend(false);
 
-			if (pFriend && pFriend->IsAlive())
+			if (pFriend && pFriend->IsAlive() && pFriend->pev->deadflag == DEAD_NO)
 			{
 				// only if not dead or dying!
 				COFAllyMonster* pTalkMonster = (COFAllyMonster*)pFriend;
