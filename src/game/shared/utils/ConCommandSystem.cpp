@@ -91,7 +91,7 @@ cvar_t* ConCommandSystem::CreateCVar(std::string_view name, const char* defaultV
 		return nullptr;
 	}
 
-	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : name};
+	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : std::string{name}};
 
 	if (std::find_if(m_Cvars.begin(), m_Cvars.end(), [&](const auto& data)
 			{ return data.Name.get() == completeName; }) != m_Cvars.end())
@@ -155,7 +155,7 @@ void ConCommandSystem::CreateCommand(std::string_view name, std::function<void(c
 		return;
 	}
 
-	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : name};
+	const std::string completeName{useLibraryPrefix == CommandLibraryPrefix::Yes ? fmt::format("{}_{}", GetShortLibraryPrefix(), name) : std::string{name}};
 
 	if (m_Commands.contains(completeName))
 	{
