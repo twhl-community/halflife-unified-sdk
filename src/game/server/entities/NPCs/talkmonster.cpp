@@ -1012,7 +1012,7 @@ bool CTalkMonster::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, flo
 		{
 			CBaseEntity* pFriend = FindNearestFriend(false);
 
-			if (pFriend && pFriend->IsAlive())
+			if (pFriend && pFriend->IsAlive() && pFriend->pev->deadflag == DEAD_NO)
 			{
 				// only if not dead or dying!
 				if (CTalkMonster* pTalkMonster = pFriend->MyTalkMonsterPointer(); pTalkMonster)
