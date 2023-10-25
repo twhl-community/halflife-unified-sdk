@@ -197,8 +197,8 @@ void ServerLibrary::RunFrame()
 
 	g_Bots.RunFrame();
 
-	// If we're loading all maps then change maps after 4 seconds to give the game time to generate files.
-	if (!m_MapsToLoad.empty() && gpGlobals->time > 5)
+	// If we're loading all maps then change maps after 3 seconds to give the game time to generate files.
+	if (!m_MapsToLoad.empty() && gpGlobals->time > 4)
 	{
 		const std::string mapName = std::move(m_MapsToLoad.back());
 		m_MapsToLoad.pop_back();
@@ -667,7 +667,7 @@ void ServerLibrary::LoadAllMaps()
 {
 	if (!m_MapsToLoad.empty())
 	{
-		Con_Printf("Already loading all maps\n");
+		Con_Printf("Already loading all maps (%u remaining)\n", m_MapsToLoad.size());
 		return;
 	}
 
@@ -692,5 +692,18 @@ void ServerLibrary::LoadAllMaps()
 		g_pFileSystem->FindClose(handle);
 	}
 
-	Con_Printf("Loading %u maps one at a time to generate files\n", m_MapsToLoad.size());
+	if (!m_MapsToLoad.empty())
+	{
+		Con_Printf("Loading %u maps one at a time to generate files\n", m_MapsToLoad.size());
+
+		// Load the first map right now.
+		const std::string mapName = std::move(m_MapsToLoad.back());
+		m_MapsToLoad.pop_back();
+
+		SERVER_COMMAND(fmt::format("map \"{}\"\n", mapName).c_str());
+	}
+	else
+	{
+		Con_Printf("No maps to load\n");
+	}
 }
