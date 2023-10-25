@@ -285,8 +285,10 @@ void CTFGoalFlag::ReturnFlagThink()
 	{
 	case 1:
 		name = "ReturnedBlackMesaFlag";
+		break;
 	case 2:
 		name = "ReturnedOpposingForceFlag";
+		break;
 	}
 
 	UTIL_LogPrintf("World triggered \"%s\"\n", name);
