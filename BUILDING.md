@@ -78,6 +78,8 @@ A typical setup should look like this:
 
 ![CMake initial state](docs/images/cmake-setup1.png)
 
+If a problem occurs where CMake repeatedly fails to find third party dependencies, deleting the CMake cache and regenerating everything can help to solve problems related to cached data.
+
 ### Windows configuration
 
 Now click the `Configure` button on the bottom left part of the screen. You will see this dialog:
