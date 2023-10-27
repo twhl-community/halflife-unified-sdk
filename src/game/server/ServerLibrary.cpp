@@ -121,8 +121,12 @@ bool ServerLibrary::Initialize()
 		{ PrintMultiplayerGameModes(); },
 		CommandLibraryPrefix::No);
 
-	g_ConCommands.CreateCommand("load_all_maps", [this](const auto&)
-		{ LoadAllMaps(); });
+	g_ConCommands.CreateCommand("load_all_maps", [this](const auto& args)
+		{ LoadAllMaps(args); });
+
+	// Escape hatch in case the command is executed in error.
+	g_ConCommands.CreateCommand("stop_loading_all_maps", [this](const auto&)
+		{ m_MapsToLoad.clear(); });
 
 	g_ConCommands.RegisterChangeCallback(&sv_allowbunnyhopping, [](const auto& state)
 		{
@@ -197,13 +201,11 @@ void ServerLibrary::RunFrame()
 
 	g_Bots.RunFrame();
 
-	// If we're loading all maps then change maps after 3 seconds to give the game time to generate files.
+	// If we're loading all maps then change maps after 3 seconds (time starts at 1)
+	// to give the game time to generate files.
 	if (!m_MapsToLoad.empty() && gpGlobals->time > 4)
 	{
-		const std::string mapName = std::move(m_MapsToLoad.back());
-		m_MapsToLoad.pop_back();
-
-		CHANGE_LEVEL(mapName.c_str(), nullptr);
+		LoadNextMap();
 	}
 }
 
@@ -663,11 +665,12 @@ void ServerLibrary::SendFogMessage(CBasePlayer* player)
 	MESSAGE_END();
 }
 
-void ServerLibrary::LoadAllMaps()
+void ServerLibrary::LoadAllMaps(const CommandArgs& args)
 {
 	if (!m_MapsToLoad.empty())
 	{
-		Con_Printf("Already loading all maps (%u remaining)\n", m_MapsToLoad.size());
+		Con_Printf("Already loading all maps (%u remaining)\nUse sv_stop_loading_all_maps to stop\n",
+			m_MapsToLoad.size());
 		return;
 	}
 
@@ -690,20 +693,57 @@ void ServerLibrary::LoadAllMaps()
 		} while ((fileName = g_pFileSystem->FindNext(handle)) != nullptr);
 
 		g_pFileSystem->FindClose(handle);
+
+		// Sort in reverse order so the first map in alphabetic order is loaded first.
+		std::sort(m_MapsToLoad.begin(), m_MapsToLoad.end(), [](const auto& lhs, const auto& rhs)
+			{ return rhs < lhs; });
 	}
 
 	if (!m_MapsToLoad.empty())
 	{
+		if (args.Count() == 2)
+		{
+			const char* firstMapToLoad = args.Argument(1);
+
+			// Clear out all maps that would have been loaded before this one.
+			if (auto it = std::find(m_MapsToLoad.begin(), m_MapsToLoad.end(), firstMapToLoad);
+				it != m_MapsToLoad.end())
+			{
+				const std::size_t numberOfMapsToSkip = m_MapsToLoad.size() - (it - m_MapsToLoad.begin());
+
+				m_MapsToLoad.erase(it + 1, m_MapsToLoad.end());
+
+				Con_Printf("Skipping %u maps to start with \"%s\"\n", numberOfMapsToSkip, m_MapsToLoad.back().c_str());
+			}
+			else
+			{
+				Con_Printf("Unknown map \"%s\", starting from beginning\n", firstMapToLoad);
+			}
+		}
+
 		Con_Printf("Loading %u maps one at a time to generate files\n", m_MapsToLoad.size());
 
 		// Load the first map right now.
-		const std::string mapName = std::move(m_MapsToLoad.back());
-		m_MapsToLoad.pop_back();
-
-		SERVER_COMMAND(fmt::format("map \"{}\"\n", mapName).c_str());
+		LoadNextMap();
 	}
 	else
 	{
 		Con_Printf("No maps to load\n");
 	}
+}
+
+void ServerLibrary::LoadNextMap()
+{
+	const std::string mapName = std::move(m_MapsToLoad.back());
+	m_MapsToLoad.pop_back();
+
+	Con_Printf("Loading map \"%s\" automatically (%u left)\n", mapName.c_str(), m_MapsToLoad.size() + 1);
+
+	if (m_MapsToLoad.empty())
+	{
+		Con_Printf("Loading last map\n");
+		m_MapsToLoad.shrink_to_fit();
+	}
+
+	SERVER_COMMAND(fmt::format("map \"{}\"\n", mapName).c_str());
 }

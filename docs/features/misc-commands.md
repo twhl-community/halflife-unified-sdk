@@ -18,7 +18,21 @@ Table of contents:
 
 ### sv_load_all_maps
 
+Syntax: `sv_load_all_maps [map_name]`
+
 Loads all maps and generates the node graph for them. This allows leaving the game running on its own and can also be used to generate a log containing any errors logged by the game.
+
+The list of maps is sorted alphabetically to ensure consistent order.
+
+The optional `map_name` parameter can be used to skip to a specific map in the list.
+
+> <span style="background-color:darkseagreen; color: black">Note
+> </br>
+> Because of an [engine bug](https://github.com/ValveSoftware/halflife/issues/3409) the game will crash if too many unique models are loaded across all maps and certain other conditions are met. You will need to restart the game and continue the process by using the optional map name parameter to load all maps.</span>
+
+### sv_stop_loading_all_maps
+
+If the `sv_load_all_maps` was used to start automatically loading all maps, this command stops that process.
 
 ## Server-side variables
 

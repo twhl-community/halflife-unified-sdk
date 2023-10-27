@@ -117,7 +117,9 @@ private:
 
 	void SendFogMessage(CBasePlayer* player);
 
-	void LoadAllMaps();
+	void LoadAllMaps(const CommandArgs& args);
+
+	void LoadNextMap();
 
 private:
 	cvar_t* m_AllowDownload{};
