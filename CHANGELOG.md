@@ -12,6 +12,7 @@
 * Save and restore allied grunt repel entities to ensure spawned NPCs have correct properties (Thanks malortie)
 * Fixed crash when +USEing NPCs that have just exited a scripted sequence (Thanks malortie)
 * Fixed ally grunt monsters resetting other ally grunt monsters' dying schedule if they are both killed at the same time (Thanks FreeSlave)
+* Minor fixes to switch statements to fix incorrect fallthrough
 
 ## Changes in V1.0.0 Release Candidate 002
 
