@@ -15,6 +15,7 @@
 #include "extdll.h"
 #include "eiface.h"
 #include "util.h"
+#include "client.h"
 #include "game.h"
 #include "filesystem_utils.h"
 
@@ -1176,6 +1177,8 @@ void GameDLLInit()
 	CVAR_REGISTER(&dmjumpsound);
 
 	// END REGISTER CVARS FOR OPPOSING FORCE
+
+	InitMapLoadingUtils();
 
 	SERVER_COMMAND("exec skill.cfg\n");
 	SERVER_COMMAND("exec skillopfor.cfg\n");
