@@ -82,9 +82,23 @@ All changes from Half-Life Updated up until Beta 5 are included.
 
 # Half-Life Updated changelog
 
-## Changes in V1.0.0 Release Candidate 002
+## Changes in V1.0.0 Release Candidate 003
 
 > Note: this release candidate has not been released yet.
+
+### Bug fixes
+
+* Fixed save game system not saving arrays of EHANDLEs if the first half of the array contains null handles (mainly affected Nihilanth's spheres) [#224](https://github.com/SamVanheer/halflife-updated/issues/224) (Thanks Ronin4862)
+* Fixed player gaining health when drowning with god mode enabled and recovering health after surfacing (Thanks malortie)
+* Fixed human grunts continuing to fire for a few seconds after killing the last enemy in an area [Opposing Force Updated #100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
+* Fixed crash when +USEing NPCs that have just exited a scripted sequence (Thanks malortie)
+* Fixed talk monsters resetting other talk monsters' dying schedule if they are both killed at the same time (Thanks FreeSlave)
+
+### Features
+
+* Added sv_load_all_maps & sv_stop_loading_all_maps to help automate node graph generation
+
+## Changes in V1.0.0 Release Candidate 002
 
 ### Bug fixes
 
@@ -98,11 +112,6 @@ All changes from Half-Life Updated up until Beta 5 are included.
 * Reset current history icon slot when resetting item history HUD [#223](https://github.com/SamVanheer/halflife-updated/issues/223) (Thanks malortie)
 * Fixed Gauss gun dealing full damage when saving and loading right after starting a charged shot (Thanks Oxofemple.)
 * Prevent breakables from spawning multiple items when destroyed by gunfire and explosives at the same time (Thanks Oxofemple.)
-* Fixed save game system not saving arrays of EHANDLEs if the first half of the array contains null handles (mainly affected Nihilanth's spheres) [#224](https://github.com/SamVanheer/halflife-updated/issues/224) (Thanks Ronin4862)
-* Fixed player gaining health when drowning with god mode enabled and recovering health after surfacing (Thanks malortie)
-* Fixed human grunts continuing to fire for a few seconds after killing the last enemy in an area [Opposing Force Updated #100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
-* Fixed crash when +USEing NPCs that have just exited a scripted sequence (Thanks malortie)
-* Fixed talk monsters resetting other talk monsters' dying schedule if they are both killed at the same time (Thanks FreeSlave)
 
 ### Features
 
