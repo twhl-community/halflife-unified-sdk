@@ -27,6 +27,11 @@ Opposing Force and Blue Shift's shotgun world model has a different alignment.
 Since we're using the vanilla Half-Life model the angles need adjusting.
 This adjusts the angles to match the original model.
 
+### ChangeBell1SoundAndPitch
+
+Find all buttons/bell1.wav sounds that have a pitch set to 80.
+Change those to use an alternative sound and set their pitch to 100.
+
 ### ConvertAngleToAnglesUpgrade
 
 Converts the obsolete `angle` keyvalue to `angles`.
