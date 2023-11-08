@@ -878,7 +878,7 @@ void CHGruntAlly::IdleSound()
 //=========================================================
 void CHGruntAlly::CheckAmmo()
 {
-	if (m_cAmmoLoaded <= 0)
+	if (pev->weapons != 0 && m_cAmmoLoaded <= 0)
 	{
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
