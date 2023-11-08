@@ -93,6 +93,14 @@ public:
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void Shoot(bool firstShotInBurst);
 
+	void CheckAmmo() override
+	{
+		if (pev->weapons != 0)
+		{
+			CBaseHGruntAlly::CheckAmmo();
+		}
+	}
+
 	int m_iBrassShell;
 	int m_iShotgunShell;
 	int m_iSawShell;
