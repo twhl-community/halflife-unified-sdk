@@ -289,6 +289,12 @@ void CEagle::Reload()
 void CEagle::UpdateLaser()
 {
 #ifndef CLIENT_DLL
+	// Don't turn on the laser if we're in the middle of a reload.
+	if (m_fInReload)
+	{
+		return;
+	}
+
 	if (m_bLaserActive && m_bSpotVisible)
 	{
 		if (!m_pLaser)

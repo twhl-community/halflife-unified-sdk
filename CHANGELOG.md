@@ -14,6 +14,7 @@
 * Fixed ally grunt monsters resetting other ally grunt monsters' dying schedule if they are both killed at the same time (Thanks FreeSlave)
 * Minor fixes to switch statements to fix incorrect fallthrough
 * Added missing check to see if allied grunt has weapons before flagging self as needing to reload (Thanks FreeSlave)
+* Fixed Desert Eagle laser turning on when reloading immediately after equipping the weapon
 
 ## Changes in V1.0.0 Release Candidate 002
 
