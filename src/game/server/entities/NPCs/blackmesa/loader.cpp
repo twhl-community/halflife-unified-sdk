@@ -47,6 +47,9 @@ public:
 		// Make sure the loader stops playing these.
 		StopSound(CHAN_BODY, "ambience/warn2.wav");
 		StopSound(CHAN_BODY, "ambience/turretrot1.wav");
+
+		StopSound(CHAN_VOICE, "ambience/warn2.wav");
+		StopSound(CHAN_VOICE, "ambience/turretrot1.wav");
 	}
 
 	void SetTurnActivity();
