@@ -2,8 +2,6 @@
 
 ## Changes in V1.0.0 Release Candidate 003
 
-> Note: this release candidate has not been released yet.
-
 ### Bug fixes
 
 * Fixed Male Assassin Snipers not tracking their last shot time properly (Thanks malortie)
