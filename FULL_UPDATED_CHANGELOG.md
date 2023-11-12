@@ -36,6 +36,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 
 * Fixed Desert Eagle using wrong time base for underwater attack check (halflife issue [#1042](https://github.com/ValveSoftware/halflife/issues/1042))
 * Fixed Desert Eagle laser position not updating when holding down reload button [#95](https://github.com/SamVanheer/halflife-op4-updated/issues/95) (Thanks Ronin4862)
+* Fixed Desert Eagle laser turning on when reloading immediately after equipping the weapon
 
 ### MP5
 
@@ -73,11 +74,12 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 
 * Fixed "suspicious" keyvalue not being saved (makes certain friendly NPCs hostile) [#31](https://github.com/SamVanheer/halflife-op4-updated/issues/31)
 * Fixed repel monster entities precaching & spawning wrong entities (halflife issue [#3052](https://github.com/ValveSoftware/halflife/issues/3052))
+* Fixed ally grunt monsters resetting other ally grunt monsters' dying schedule if they are both killed at the same time (Thanks FreeSlave)
 
 ### Specific NPCs
 
 * Fixed allied human grunts using wrong death sound filenames (halflife issue [#3036](https://github.com/ValveSoftware/halflife/issues/3036)) (thanks hammermaps)
-* Fixed allied human grunts continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862)
+* Fixed allied, torch and medic grunts, male assassins and shock troopers continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
 * Fixed Shock Troopers not playing death sounds (halflife issue [#3037](https://github.com/ValveSoftware/halflife/issues/3037))
 * Fixed Voltigores not playing death sounds (halflife issue [#3039](https://github.com/ValveSoftware/halflife/issues/3039))
 * Fixed Voltigore not saving its charge beams (halflife issue [#3049](https://github.com/ValveSoftware/halflife/issues/3049))
@@ -92,10 +94,13 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 * Fixed Black Ops Osprey not firing trigger targets Resolves (halflife issue [#3261](https://github.com/ValveSoftware/halflife/issues/3261))
 * Fixed Black Ops Osprey engine damage effects showing on wrong engine (halflife issue [#3263](https://github.com/ValveSoftware/halflife/issues/3263))
 * Fixed Black Ops Apache not firing trigger targets (halflife issue [#3262](https://github.com/ValveSoftware/halflife/issues/3262))
-* Fixed npc_gonome trying to play non-existent sounds [#64](https://github.com/SamVanheer/halflife-op4-updated/issues/64)
-* Fixed human grunts being able to drop weapons in the intro map
-* Fixed Engineer not shutting off his blow torch properly [#81](https://github.com/SamVanheer/halflife-op4-updated/issues/81)
+* Fixed Gonome trying to play non-existent sounds [#64](https://github.com/SamVanheer/halflife-op4-updated/issues/64)
+* Fixed Gonome crashing the game if the player dies while being damaged by Gonome's chest mouth (Thanks malortie)
 * Fixed Gonome locking first player on the server when attacking anything [#89](https://github.com/SamVanheer/halflife-op4-updated/issues/89) (Thanks LuckNukeHunter99)
+* Fixed human grunts being able to drop weapons in the intro map
+* Save and restore allied grunt repel entities to ensure spawned NPCs have correct properties (Thanks malortie)
+* Fixed Male Assassin Snipers not tracking their last shot time properly (Thanks malortie)
+* Fixed Engineer not shutting off his blow torch properly [#81](https://github.com/SamVanheer/halflife-op4-updated/issues/81)
 
 ## User Interface
 
