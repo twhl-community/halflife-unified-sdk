@@ -444,7 +444,6 @@ public:
 	void SelectNextItem(int iItem);
 	void SelectLastItem();
 	void SelectItem(const char* pstr);
-	void SelectItem(int iId);
 
 private:
 	void DeployWeapon(CBasePlayerWeapon* weapon);
