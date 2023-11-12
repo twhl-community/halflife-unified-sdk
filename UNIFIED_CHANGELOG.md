@@ -56,7 +56,7 @@ Table of contents:
 * Reworked **game mode selection**: can be controlled by the server operators and overridden on a map-to-map basis
 * Added **barebones bot system for multiplayer testing**
 * Added `cl_custom_message_text` cvar to **display a custom message on-screen**, along with `cl_custom_message_x` and `cl_custom_message_y` to control the position on-screen (works like `game_text`)
-* Added `sv_load_all_maps` command to load all maps and generate the node graph for them (allows leaving the game running on its own, can also be used to generate a log containing any errors logged by the game)
+* Added `sv_load_all_maps` command to load all maps and generate the node graph for them (allows leaving the game running on its own, can also be used to generate a log containing any errors logged by the game) along with `stop_loading_all_maps` command to stop this process
 * Added cvars `sv_infinite_ammo` & `sv_bottomless_magazines` to override skill variables
 * Added **cheat commands that work in all gamemodes**:
 	* `cheat_god`
@@ -188,6 +188,7 @@ Table of contents:
 * Fixed Human Grunts and Male Assassins not playing MP5 attack sounds during scripted sequence
 * Fixed rats having alien gibs instead of human gibs
 * Fixed turrets and tanks continuing to target players after enabling notarget
+* Added keyvalues to set Barney & Otis corpse bodygroups
 
 ## Items And Weapons
 
@@ -209,6 +210,8 @@ Table of contents:
 * Merged `CBasePlayerItem` and `CBasePlayerWeapon` (items only work properly when they are weapons anyway, some code assumes all items are weapons and no classes inherit from `CBasePlayerItem` directly)
 * Reworked ammo type definitions so the types are explicitly defined instead of implicitly through weapons referencing them. The ammo type definition now includes the maximum capacity. Code that required the capacity to be passed in now queries the ammo type system for this information instead. The list of ammo types is sent to the client as well
 * Reworked weapon info to be networked to client through the new networking system, `WeaponList` network message removed
+* Reworked tripmine entities to use separate world model
+* Added `ITEM_FLAG_SELECTONEMPTY` flag to weapons that regenerate ammo to always be selectable and never show as red in hud history
 
 ## Audio
 
