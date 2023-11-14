@@ -70,3 +70,9 @@ Original maps can't be redistributed, and changes made to SDK code require chang
 The [MapUpgrader](docs/tools/map-upgrader.md) tool is a standalone version of the installer's map upgrade functionality. It can be used to upgrade a map to the Unified SDK, provided that the map was made for the original version of Half-Life and not another mod or game.
 
 Most modders won't need to use these tools, but they are there to streamline the development process as much as possible.
+
+### Special note about Half-Life Uplink maps
+
+The Half-Life Uplink demo isn't available on Steam so the maps are included with the Unified SDK's mod installation.
+
+When packaging the installation the packager looks in the mod directory named `valve_uplink` for the Uplink maps. You will need to take the Uplink maps and place them in `valve_uplink/maps` for this to work.
