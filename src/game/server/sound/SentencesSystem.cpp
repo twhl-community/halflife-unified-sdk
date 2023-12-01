@@ -156,14 +156,15 @@ bool SentencesParser::ParseSentences(const json& input)
 
 			for (const auto& sentenceName : groupContents)
 			{
-				if (auto sentenceIndex = m_SentenceToIndexMap.find(sentenceName.get<std::string>());
+				const std::string sentenceNameString = sentenceName.get<std::string>();
+				if (auto sentenceIndex = m_SentenceToIndexMap.find(sentenceNameString);
 					sentenceIndex != m_SentenceToIndexMap.end())
 				{
 					it->second.Sentences.push_back(static_cast<int>(sentenceIndex->second));
 				}
 				else
 				{
-					m_Logger->warn("Group \"{}\": Sentence \"{}\" not found", groupName, sentenceName);
+					m_Logger->warn("Group \"{}\": Sentence \"{}\" not found", groupName, sentenceNameString);
 				}
 			}
 		}

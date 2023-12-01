@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <fmt/format.h>
+
 enum Activity
 {
 	ACT_RESET = 0, // Set m_Activity to this invalid value to force a reset to m_IdealActivity
@@ -96,6 +98,7 @@ enum Activity
 	ACT_FLINCH_RIGHTLEG,
 };
 
+inline auto format_as(Activity a) { return fmt::underlying(a); }
 
 struct activity_map_t
 {

@@ -1300,7 +1300,7 @@ void CBaseMonster::StartTask(const Task_t* pTask)
 
 	default:
 	{
-		AILogger->warn("No StartTask entry for {}", (SHARED_TASKS)pTask->iTask);
+		AILogger->warn("No StartTask entry for {}", pTask->iTask);
 		break;
 	}
 	}
