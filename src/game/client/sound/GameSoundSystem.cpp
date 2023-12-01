@@ -638,9 +638,7 @@ void GameSoundSystem::ConfigureHRTF(bool enabled)
 
 void GameSoundSystem::SetVolume()
 {
-	// Need to multiply by 8 here to more closely match the volume used in the original engine.
-	// See SND_InitScaletable in Quake 1 for where this value is also used.
-	alListenerf(AL_GAIN, m_Volume->value * 8);
+	alListenerf(AL_GAIN, m_Volume->value);
 }
 
 std::string_view GameSoundSystem::GetSoundName(const SoundData& sound) const
