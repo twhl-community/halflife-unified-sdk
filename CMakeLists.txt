@@ -113,7 +113,7 @@ function(set_common_properties TARGET_NAME)
 		# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flifetime-dse for more information about this flag
 		# fno-gnu-unique is needed to disable a compiler optimization that prevents dlclose from unloading mod dlls,
 		# causing them to retain state and crash when the engine tries to access memory in an invalid way
-		# See https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fno-gnu-unique for more informatio about this flag
+		# See https://gcc.gnu.org/onlinedocs/gcc/Code-Gen-Options.html#index-fno-gnu-unique for more information about this flag
 		$<$<CXX_COMPILER_ID:GNU>:-flifetime-dse=1 -fno-gnu-unique>
 		
 		# Can't set warning level to W4 until the compiler can deal with std::visit containing static_assert, which currently causes false positive "Unreachable code" warnings
