@@ -26,7 +26,7 @@ FARPROC DelayLoad_LoadGameLib(const char* dllName)
 {
 	ASSERT(dllName);
 
-	const auto gameDir = FileSystem_GetGameDirectory();
+	const auto& gameDir = FileSystem_GetModDirectoryName();
 
 	const auto path = fmt::format("{}/{}", gameDir, dllName);
 

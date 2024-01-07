@@ -405,7 +405,7 @@ void LogSystem::SetFileLoggingEnabled(bool enable)
 	if (enable && !m_FileSink)
 	{
 		// Separate log files into client and server files to avoid races between the two.
-		const std::string gameDir = FileSystem_GetGameDirectory();
+		const std::string& gameDir = FileSystem_GetModDirectoryName();
 		const std::string baseFileName = fmt::format("{}/logs/{}/{}.log",
 			gameDir, GetShortLibraryPrefix(), m_Settings.LogFile.BaseFileName.value_or(DefaultBaseFileName));
 

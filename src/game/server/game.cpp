@@ -55,6 +55,28 @@ cvar_t sv_entityinfo_eager{"sv_entityinfo_eager", "1", FCVAR_SERVER};
 
 cvar_t sv_schedule_debug{"sv_schedule_debug", "0", FCVAR_SERVER};
 
+static bool SV_InitServer()
+{
+	if (!FileSystem_LoadFileSystem())
+	{
+		return false;
+	}
+
+	if (UTIL_IsValveGameDirectory())
+	{
+		g_engfuncs.pfnServerPrint("This mod has detected that it is being run from a Valve game directory which is not supported\n"
+								  "Run this mod from its intended location\n\nThe game will now shut down\n");
+		return false;
+	}
+
+	if (!g_Server.Initialize())
+	{
+		return false;
+	}
+
+	return true;
+}
+
 // Register your console variables here
 // This gets called one time when the game is initialied
 void GameDLLInit()
@@ -65,6 +87,14 @@ void GameDLLInit()
 	g_psv_aim = CVAR_GET_POINTER("sv_aim");
 	g_footsteps = CVAR_GET_POINTER("mp_footsteps");
 	g_psv_cheats = CVAR_GET_POINTER("sv_cheats");
+
+	if (!SV_InitServer())
+	{
+		g_engfuncs.pfnServerPrint("Error initializing server\n");
+		// Shut the game down as soon as possible.
+		SERVER_COMMAND("quit\n");
+		return;
+	}
 
 	CVAR_REGISTER(&displaysoundlist);
 	CVAR_REGISTER(&allow_spectators);
@@ -110,13 +140,6 @@ void GameDLLInit()
 
 	// Link user messages immediately so there are no race conditions.
 	LinkUserMessages();
-
-	if (!g_Server.Initialize())
-	{
-		// Shut the game down ASAP
-		SERVER_COMMAND("quit\n");
-		return;
-	}
 }
 
 void GameDLLShutdown()
