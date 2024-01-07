@@ -598,6 +598,23 @@ cvar_t dmjumpsound = {"sv_dmjumpsound", "1", FCVAR_SERVER};
 
 // END Opposing Force variables
 
+static bool SV_InitServer()
+{
+	if (!FileSystem_LoadFileSystem())
+	{
+		return false;
+	}
+
+	if (UTIL_IsValveGameDirectory())
+	{
+		g_engfuncs.pfnServerPrint("This mod has detected that it is being run from a Valve game directory which is not supported\n"
+			"Run this mod from its intended location\n\nThe game will now shut down\n");
+		return false;
+	}
+
+	return true;
+}
+
 // Register your console variables here
 // This gets called one time when the game is initialied
 void GameDLLInit()
@@ -609,8 +626,9 @@ void GameDLLInit()
 	g_footsteps = CVAR_GET_POINTER("mp_footsteps");
 	g_psv_cheats = CVAR_GET_POINTER("sv_cheats");
 
-	if (!FileSystem_LoadFileSystem())
+	if (!SV_InitServer())
 	{
+		g_engfuncs.pfnServerPrint("Error initializing server\n");
 		//Shut the game down as soon as possible.
 		SERVER_COMMAND("quit\n");
 		return;
