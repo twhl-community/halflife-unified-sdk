@@ -89,6 +89,7 @@ The files in this directory and subdirectories contain documentation for the Uni
 
 ## Tutorials
 
+* [Using FastDL with servers](tutorials/using-fastdl-with-servers.md)
 * [Setting up Visual Studio Code to edit PowerShell scripts](tutorials/setting-up-vscode-for-powershell.md)
 * [Setting up and using dotnet script](tutorials/setting-up-and-using-dotnet-script.md)
 * [Extracting the Opposing Force relationship table](tutorials/extracting-relationship-table.md)

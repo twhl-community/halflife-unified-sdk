@@ -26,9 +26,8 @@ To ensure the correct operation of this system the following cvars are forcibly 
 * sv_allow_dlfile
 * cl_allowdownload
 
-Two limitations currently exist:
+One limitation currently exists:
 1. You cannot connect to a dedicated server running from the same game installation as the client. This should never be a problem because the dedicated server tool distributed with the client does not work anymore, and dedicated servers should always be installed separately through SteamCMD.
-2. If multiple servers share a FastDL server and transfer the generated file to it they will conflict and use the wrong file. If this does become a problem then a possible solution is to store the file in a subdirectory named after the server IP and port: `1.2.3.4_port`. This would make the filename unique for each server. The client has the server's IP address so this should work, but whether this will actually work or not remains to be seen.
 
 The network data system uses the logger named `net_data`.
 
@@ -101,3 +100,7 @@ void AmmoTypeSystem::HandleNetworkDataBlock(NetworkDataBlock& block)
 Setting `block.ErrorMessage` to a non-empty string aborts serialization/deserialization.
 
 Any kind of JSON data type is supported, but it is recommended to keep it as simple as possible to reduce the size of the generated file.
+
+## See Also
+
+* [Using FastDL with servers](../tutorials/using-fastdl-with-servers.md)
