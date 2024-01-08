@@ -115,6 +115,11 @@ static bool CL_InitClient()
 		return false;
 	}
 
+	if (!g_Client.Initialize())
+	{
+		return false;
+	}
+
 	// get tracker interface, if any
 	return true;
 }
@@ -128,9 +133,7 @@ int DLLEXPORT Initialize(cl_enginefunc_t* pEnginefuncs, int iVersion)
 
 	memcpy(&gEngfuncs, pEnginefuncs, sizeof(cl_enginefunc_t));
 
-	const bool result = CL_InitClient() && g_Client.Initialize();
-
-	if (!result)
+	if (!CL_InitClient())
 	{
 		gEngfuncs.Con_DPrintf("Error initializing client\n");
 		gEngfuncs.pfnClientCmd("quit\n");
