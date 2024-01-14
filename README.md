@@ -13,6 +13,8 @@ The goal of the Unified SDK is to allow modders to make mods based on these game
 
 A mod installation is also provided to allow players to play these games with all bug fixes applied. It includes files that are required when making a mod based on this SDK.
 
+The Unified SDK works on the `steam_legacy` and anniversary versions of the game but requires the game to be switched to the `steam_legacy` version during installation. See the installation guide for more information.
+
 > <span style="background-color:orange; color: black">Warning
 > </br>
 > Due to how some SDK features are implemented demos will not work properly. Use an external program like OBS to record the game.</span>

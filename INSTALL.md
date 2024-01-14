@@ -6,15 +6,17 @@
 
 3. Install the Visual Studio 2022 re-distributable. You can find it in the `hlu/redist` directory.
 
-4. Install the [.NET SDK which includes the runtime](docs/dotnet-tools.md#installing-the-net-sdk). Make sure to install the latest version as the runtime is updated regularly.
+4. Install the [.NET 6 SDK which includes the runtime](docs/dotnet-tools.md#installing-the-net-sdk). Make sure to install the latest version as the runtime is updated regularly.
 
-5. Run the [ContentInstaller](docs/tools/content-installer.md) tool in a command line window:
+5. Switch Half-Life to the `steam_legacy` branch. The Unified SDK has not been updated to the anniversary version and requires the old version. This is only required during installation; after installation you can switch back to the anniversary version.
+
+6. Run the [ContentInstaller](docs/tools/content-installer.md) tool in a command line window:
 ```bat
 cd "path/to/Half-Life/directory"
 dotnet "hlu/tools/ContentInstaller.dll" --mod-directory hlu
 ```
 
-6. Restart Steam so the game is added to the list of games.
+7. Restart Steam so the game is added to the list of games.
 
 # Running the game
 

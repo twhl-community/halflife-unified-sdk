@@ -6,7 +6,7 @@ The Unified SDK uses tools written in .NET. These tools are intended to work on 
 
 ### Installing the .NET SDK
 
-.NET tools require the .NET SDK.
+.NET tools require the .NET 6 SDK.
 
 You can download the SDK here: https://dotnet.microsoft.com/en-us/download
 
