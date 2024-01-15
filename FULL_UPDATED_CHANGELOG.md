@@ -8,7 +8,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 
 ### MP5
 
-* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/SamVanheer/halflife-op4-updated/issues/78)
+* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/twhl-community/halflife-op4-updated/issues/78)
 
 ## Other
 
@@ -22,7 +22,7 @@ See the full changelog for Half-Life Updated below for changes shared with the b
 ## Project changes
 
 * Added tool to convert Blue Shift BSP files to standard Half-Life BSP format
-* Added Blue Shift FGD [#2](https://github.com/SamVanheer/halflife-bs-updated/pull/2) (Thanks [Veinhelm](https://github.com/Veinhelm))
+* Added Blue Shift FGD [#2](https://github.com/twhl-community/halflife-bs-updated/pull/2) (Thanks [Veinhelm](https://github.com/Veinhelm))
 
 ## Game installation
 

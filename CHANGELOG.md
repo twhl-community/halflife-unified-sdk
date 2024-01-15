@@ -34,14 +34,14 @@ All changes from Half-Life Updated up until Beta 14 are included.
 
 All changes from Half-Life Updated up until Beta 13 are included.
 
-* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/SamVanheer/halflife-op4-updated/issues/78) (Thanks to [Ronin4862](https://github.com/Ronin4862) for finding this, and thanks to [malortie](https://github.com/malortie) for fixing this)
+* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/twhl-community/halflife-op4-updated/issues/78) (Thanks to [Ronin4862](https://github.com/Ronin4862) for finding this, and thanks to [malortie](https://github.com/malortie) for fixing this)
 
 ## Changes in V1.0.0 Beta 009
 
 All changes from Half-Life Updated up until Beta 12 are included.
 
 * Applied bug fixing work done for Half-Life Updated to this project as well
-* Added Blue Shift FGD [#2](https://github.com/SamVanheer/halflife-bs-updated/pull/2) (Thanks [Veinhelm](https://github.com/Veinhelm))
+* Added Blue Shift FGD [#2](https://github.com/twhl-community/halflife-bs-updated/pull/2) (Thanks [Veinhelm](https://github.com/Veinhelm))
 
 ## Changes in V1.0.0 Beta 008
 
