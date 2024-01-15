@@ -406,7 +406,7 @@ Table of contents:
 
 ## Asset Changes
 
-*Main changelog*: [Assets Changelog](https://github.com/SamVanheer/halflife-unified-sdk-assets/blob/master/CHANGELOG.md)
+*Main changelog*: [Assets Changelog](https://github.com/twhl-community/halflife-unified-sdk-assets/blob/master/CHANGELOG.md)
 
 * Many models have been updated to include all data in a single file (as opposed to split into a main and texture file along with sequence group files)
 * Variants of the same model from different games and low and high definitions versions have been standardized to include the same properties

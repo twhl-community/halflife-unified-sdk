@@ -2,7 +2,7 @@
 
 The [Half-Life Unified SDK](docs/README.md#developer-resources) is a project that provides an updated version of the Half-Life SDK, with full support for the expansion packs Opposing Force and Blue Shift as well as new features.
 
-[![CI/CD](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml/badge.svg?branch=master)](https://github.com/SamVanheer/halflife-unified-sdk/actions/workflows/ci-cd.yml)
+[![CI/CD](https://github.com/twhl-community/halflife-unified-sdk/actions/workflows/ci-cd.yml/badge.svg?branch=master)](https://github.com/twhl-community/halflife-unified-sdk/actions/workflows/ci-cd.yml)
 
 The SDK provides a CMake-based project structure with support for Visual Studio 2019 and 2022 on Windows and GCC 11 on Linux, as well as many bug fixes and improvements.
 Opposing Force and Blue Shift features have been integrated with code refactored to reduce the amount of code duplication.

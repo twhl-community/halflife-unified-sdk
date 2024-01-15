@@ -39,13 +39,13 @@ Clone the repository. Since it uses submodules you will need to make sure they a
 The following git command will clone the repository with submodules into the directory `<current_dir>/halflife-unified-sdk`:
 ```sh
 cd path/to/where/you/want/source/code
-git clone --recurse-submodules https://github.com/SamVanheer/halflife-unified-sdk.git
+git clone --recurse-submodules https://github.com/twhl-community/halflife-unified-sdk.git
 ```
 
 It is recommended to put the source code directory in a directory of its own:
 ```sh
 cd path/to/directory/halflife-unified-sdk_dev
-git clone --recurse-submodules https://github.com/SamVanheer/halflife-unified-sdk.git
+git clone --recurse-submodules https://github.com/twhl-community/halflife-unified-sdk.git
 ```
 
 This makes it easier to group related directories and files together.
