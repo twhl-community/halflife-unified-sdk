@@ -11,7 +11,7 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 ### Bug fixes
 
 * Fixed Male Assassin Snipers not tracking their last shot time properly (Thanks malortie)
-* Fixed torch and medic grunts, male assassins and shock troopers continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
+* Fixed torch and medic grunts, male assassins and shock troopers continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/twhl-community/halflife-op4-updated/issues/100) (Thanks Ronin4862 and malortie)
 * Fixed Gonome crashing the game if the player dies while being damaged by Gonome's chest mouth (Thanks malortie)
 * Save and restore allied grunt repel entities to ensure spawned NPCs have correct properties (Thanks malortie)
 * Fixed crash when +USEing NPCs that have just exited a scripted sequence (Thanks malortie)
@@ -24,7 +24,7 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 
 ### Bug fixes
 
-* Fixed electrified wire damage being frametime-dependent [#102](https://github.com/SamVanheer/halflife-op4-updated/issues/102) (Thanks malortie)
+* Fixed electrified wire damage being frametime-dependent [#102](https://github.com/twhl-community/halflife-op4-updated/issues/102) (Thanks malortie)
 * Fixed func_tank_of and other OF tank entities firing many attacks at the same time at players if they hide behind obstacles for a few seconds (Thanks Shepard)
 * Fixed Geneworm not lighting up its eyes (Thanks Shepard)
 
@@ -32,47 +32,47 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 
 ### Bug fixes
 
-* Force Pitworm animations to interpolate to fix stuttering movement [Unified SDK #434](SamVanheer/halflife-unified-sdk#434) (Thanks [malortie](https://github.com/malortie))
+* Force Pitworm animations to interpolate to fix stuttering movement [Unified SDK #434](twhl-community/halflife-unified-sdk#434) (Thanks [malortie](https://github.com/malortie))
 * Implemented snow footsteps and impact sounds, changed snow material type ID to `O` to match Opposing Force
 * Added missing EXPORT to a few Opposing Force entities
 * Fixed M249 using wrong spread in singleplayer when standing still and ducking
 * Fixed Capture The Flag items crashing on respawn
 * Fixed Health Charger recharge time not using the correct value in Co-op
-* Fixed Desert Eagle laser position not updating when holding down reload button [#95](https://github.com/SamVanheer/halflife-op4-updated/issues/95) (Thanks Ronin4862)
-* Fixed Voltigore creating beams on death connecting to wrong entity [#97](https://github.com/SamVanheer/halflife-op4-updated/issues/97) (Thanks LambdaLuke87)
+* Fixed Desert Eagle laser position not updating when holding down reload button [#95](https://github.com/twhl-community/halflife-op4-updated/issues/95) (Thanks Ronin4862)
+* Fixed Voltigore creating beams on death connecting to wrong entity [#97](https://github.com/twhl-community/halflife-op4-updated/issues/97) (Thanks LambdaLuke87)
 * Fixed ropes breaking at high framerates
-* Fixed allied human grunts continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/SamVanheer/halflife-op4-updated/issues/100) (Thanks Ronin4862)
+* Fixed allied human grunts continuing to fire for a few seconds after killing the last enemy in an area [#100](https://github.com/twhl-community/halflife-op4-updated/issues/100) (Thanks Ronin4862)
 
 ## Changes in V1.0.0 Beta 011
 
 ### Bug fixes
 
-* Fixed trigger_ctfgeneric printing wrong targetname in log [#87](https://github.com/SamVanheer/halflife-op4-updated/issues/87)
-* Fixed incorrect team check in SendTeamStatInfo [#88](https://github.com/SamVanheer/halflife-op4-updated/issues/88)
-* Fixed Gonome locking first player on the server when attacking anything [#89](https://github.com/SamVanheer/halflife-op4-updated/issues/89) (Thanks LuckNukeHunter99)
-* Fixed Voltigore beam attack not updating beam attachment positions as it moves [#90](https://github.com/SamVanheer/halflife-op4-updated/issues/90) (Thanks LuckNukeHunter99)
-* Fixed Baby Voltigore melee distance being twice its intended distance [#91](https://github.com/SamVanheer/halflife-op4-updated/issues/91) (Thanks LuckNukeHunter99)
-* Fixed typo in Pit Drone sound name [#92](https://github.com/SamVanheer/halflife-op4-updated/issues/92) (Thanks λλλλλλ)
-* Fix Penguin grenade not using correct spawn angles [#93](https://github.com/SamVanheer/halflife-op4-updated/issues/93) (Thanks LuckNukeHunter99)
+* Fixed trigger_ctfgeneric printing wrong targetname in log [#87](https://github.com/twhl-community/halflife-op4-updated/issues/87)
+* Fixed incorrect team check in SendTeamStatInfo [#88](https://github.com/twhl-community/halflife-op4-updated/issues/88)
+* Fixed Gonome locking first player on the server when attacking anything [#89](https://github.com/twhl-community/halflife-op4-updated/issues/89) (Thanks LuckNukeHunter99)
+* Fixed Voltigore beam attack not updating beam attachment positions as it moves [#90](https://github.com/twhl-community/halflife-op4-updated/issues/90) (Thanks LuckNukeHunter99)
+* Fixed Baby Voltigore melee distance being twice its intended distance [#91](https://github.com/twhl-community/halflife-op4-updated/issues/91) (Thanks LuckNukeHunter99)
+* Fixed typo in Pit Drone sound name [#92](https://github.com/twhl-community/halflife-op4-updated/issues/92) (Thanks λλλλλλ)
+* Fix Penguin grenade not using correct spawn angles [#93](https://github.com/twhl-community/halflife-op4-updated/issues/93) (Thanks LuckNukeHunter99)
 
 ## Changes in V1.0.0 Beta 010
 
 ### Bug fixes
 
-* Fixed Shock Trooper health not matching original game [#74](https://github.com/SamVanheer/halflife-op4-updated/issues/74) (Thanks [Ronin4862](https://github.com/Ronin4862))
-* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/SamVanheer/halflife-op4-updated/issues/78) (Thanks to [Ronin4862](https://github.com/Ronin4862) for finding this, and thanks to [malortie](https://github.com/malortie) for fixing this)
+* Fixed Shock Trooper health not matching original game [#74](https://github.com/twhl-community/halflife-op4-updated/issues/74) (Thanks [Ronin4862](https://github.com/Ronin4862))
+* Fixed MP5 shooting animations sometimes playing a deploy animation [#78](https://github.com/twhl-community/halflife-op4-updated/issues/78) (Thanks to [Ronin4862](https://github.com/Ronin4862) for finding this, and thanks to [malortie](https://github.com/malortie) for fixing this)
 * Fixed Shock Trooper weapon body being set incorrectly, removed some unused constants
-* Fixed Engineer not shutting off his blow torch properly [#81](https://github.com/SamVanheer/halflife-op4-updated/issues/81) (Thanks [Ronin4862](https://github.com/Ronin4862))
-* Fixed NPC fired 556 and 762 bullets not creating bullet decals half the time (halflife issue [#383](https://github.com/ValveSoftware/halflife/issues/383) and Updated issue [#163](https://github.com/SamVanheer/halflife-updated/issues/163)) (Thanks [Ronin4862](https://github.com/Ronin4862) and [Matthaiks](https://github.com/Matthaiks))
+* Fixed Engineer not shutting off his blow torch properly [#81](https://github.com/twhl-community/halflife-op4-updated/issues/81) (Thanks [Ronin4862](https://github.com/Ronin4862))
+* Fixed NPC fired 556 and 762 bullets not creating bullet decals half the time (halflife issue [#383](https://github.com/ValveSoftware/halflife/issues/383) and Updated issue [#163](https://github.com/twhl-community/halflife-updated/issues/163)) (Thanks [Ronin4862](https://github.com/Ronin4862) and [Matthaiks](https://github.com/Matthaiks))
 * Fixed domain errors in func_tank_of (halflife issue [#3303](https://github.com/ValveSoftware/halflife/issues/3303)) (Thanks pat and [a1batross](https://github.com/a1batross))
 
 ## Changes in V1.0.0 Beta 009
 
 ### Bug fixes
 
-* Fixed Gonome calculating gut throw direction incorrectly [#69](https://github.com/SamVanheer/halflife-op4-updated/issues/69) (Thanks orav104)
-* Fixed tentacle height values being incorrect for Opposing Force [#70](https://github.com/SamVanheer/halflife-op4-updated/issues/70)
-* Fixed info_ctfspawn_pickup not being called info_ctfspawn_powerup [#71](https://github.com/SamVanheer/halflife-op4-updated/issues/71) (Thanks Suparsonik)
+* Fixed Gonome calculating gut throw direction incorrectly [#69](https://github.com/twhl-community/halflife-op4-updated/issues/69) (Thanks orav104)
+* Fixed tentacle height values being incorrect for Opposing Force [#70](https://github.com/twhl-community/halflife-op4-updated/issues/70)
+* Fixed info_ctfspawn_pickup not being called info_ctfspawn_powerup [#71](https://github.com/twhl-community/halflife-op4-updated/issues/71) (Thanks Suparsonik)
 * Changed Displacer room type from float to int
 * Fixed human grunts being able to drop weapons in the intro map
 
@@ -84,17 +84,17 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 
 ### Bug fixes
 
-* Fixed typo in shephard player model name [#66](https://github.com/SamVanheer/halflife-op4-updated/issues/66)
-* Fixed clients not getting ScoreInfo message for new players immediately in CTF [#67](https://github.com/SamVanheer/halflife-op4-updated/issues/67)
-* Fixed crashes when GetClientColor returns null in CTF [#68](https://github.com/SamVanheer/halflife-op4-updated/issues/68)
+* Fixed typo in shephard player model name [#66](https://github.com/twhl-community/halflife-op4-updated/issues/66)
+* Fixed clients not getting ScoreInfo message for new players immediately in CTF [#67](https://github.com/twhl-community/halflife-op4-updated/issues/67)
+* Fixed crashes when GetClientColor returns null in CTF [#68](https://github.com/twhl-community/halflife-op4-updated/issues/68)
 
 ## Changes in V1.0.0 Beta 007
 
 ### Bug fixes
 
-* Fixed not being able to open team menu after a full CTF round has been played [#63](https://github.com/SamVanheer/halflife-op4-updated/issues/63)
-* Fixed npc_gonome trying to play non-existent sounds [#64](https://github.com/SamVanheer/halflife-op4-updated/issues/64)
-* Fixed monster_tentacle missing spawnflag 64 (different model option) [#65](https://github.com/SamVanheer/halflife-op4-updated/issues/65) (Thanks malortie)
+* Fixed not being able to open team menu after a full CTF round has been played [#63](https://github.com/twhl-community/halflife-op4-updated/issues/63)
+* Fixed npc_gonome trying to play non-existent sounds [#64](https://github.com/twhl-community/halflife-op4-updated/issues/64)
+* Fixed monster_tentacle missing spawnflag 64 (different model option) [#65](https://github.com/twhl-community/halflife-op4-updated/issues/65) (Thanks malortie)
 
 ## Changes in V1.0.0 Beta 006
 
@@ -105,16 +105,16 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 * Fixed Black Ops Osprey not firing trigger targets Resolves (halflife issue [#3261](https://github.com/ValveSoftware/halflife/issues/3261))
 * Fixed Black Ops Osprey engine damage effects showing on wrong engine (halflife issue [#3263](https://github.com/ValveSoftware/halflife/issues/3263))
 * Fixed Black Ops Apache not firing trigger targets (halflife issue [#3262](https://github.com/ValveSoftware/halflife/issues/3262))
-* Fixed Otis Using Barney Voice Lines [#62](https://github.com/SamVanheer/halflife-op4-updated/issues/62) (Thanks OpenRift412)
+* Fixed Otis Using Barney Voice Lines [#62](https://github.com/twhl-community/halflife-op4-updated/issues/62) (Thanks OpenRift412)
 
 ## Changes in V1.0.0 Beta 005
 
 * Show pickup icons in HUD for all weapons (halflife issue [#3137](https://github.com/ValveSoftware/halflife/issues/3137))
-* Fixed game crashing when loading singleplayer map due to null scoreboard pointer [#59](https://github.com/SamVanheer/halflife-op4-updated/issues/59)
+* Fixed game crashing when loading singleplayer map due to null scoreboard pointer [#59](https://github.com/twhl-community/halflife-op4-updated/issues/59)
 * Fixed pipe wrench big swing attack not cancelling when the wrench is unequipped (halflife issue [#3253](https://github.com/ValveSoftware/halflife/issues/3253))
-* Fixed player saytext color being incorrect in deathmatch games [#60](https://github.com/SamVanheer/halflife-op4-updated/issues/60)
+* Fixed player saytext color being incorrect in deathmatch games [#60](https://github.com/twhl-community/halflife-op4-updated/issues/60)
 * Fixed FL_FAKECLIENT flag being cleared in some places (halflife issue [#3256](https://github.com/ValveSoftware/halflife/issues/3256))
-* Fixed TeamInfo message being sent to wrong player when initializing player hud in CTF gamemode [#61](https://github.com/SamVanheer/halflife-op4-updated/issues/61)
+* Fixed TeamInfo message being sent to wrong player when initializing player hud in CTF gamemode [#61](https://github.com/twhl-community/halflife-op4-updated/issues/61)
 * Fixed Black Ops Osprey not interpolating (halflife issue [#3228](https://github.com/ValveSoftware/halflife/issues/3228))
 
 ## Changes in V1.0.0 Beta 004
@@ -130,32 +130,32 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 
 #### Bugs that only existed in this project
 
-* Fixed CTF gamerules sending health value incorrectly [#36](https://github.com/SamVanheer/halflife-op4-updated/issues/36)
-* Fixed CTF jump pack item not playing sound when long jumping [#37](https://github.com/SamVanheer/halflife-op4-updated/issues/37)
-* Fixed CTF backpack not doubling clip size for most weapons [#38](https://github.com/SamVanheer/halflife-op4-updated/issues/38)
-* Fixed CTF backpack sound still playing when not giving ammo [#39](https://github.com/SamVanheer/halflife-op4-updated/issues/39)
-* Fixed FOV being set to 90 when first spawning in CTF gamemode [#40](https://github.com/SamVanheer/halflife-op4-updated/issues/40)
-* Fixed incorrect strncpy [#45](https://github.com/SamVanheer/halflife-op4-updated/issues/45)
-* Fixed player being invisible on first spawn in CTF gamemode [#48](https://github.com/SamVanheer/halflife-op4-updated/issues/48)
-* Fixed player CTF team being reset [#50](https://github.com/SamVanheer/halflife-op4-updated/issues/50)
-* Fixed Black Mesa team getting 10 points on flag pickup in CTF [#52](https://github.com/SamVanheer/halflife-op4-updated/issues/52)
-* Fixed VGUI1 menus using wrong border color [#56](https://github.com/SamVanheer/halflife-op4-updated/issues/56)
-* Fixed not being able to open team menu after closing it [#57](https://github.com/SamVanheer/halflife-op4-updated/issues/57)
-* Fixed HUD scoreboard not working properly in CTF [#49](https://github.com/SamVanheer/halflife-op4-updated/issues/49) and [#51](https://github.com/SamVanheer/halflife-op4-updated/issues/51)
-* Fixed VGUI1 scoreboard not working properly [#43](https://github.com/SamVanheer/halflife-op4-updated/issues/43), [#44](https://github.com/SamVanheer/halflife-op4-updated/issues/44), [#42](https://github.com/SamVanheer/halflife-op4-updated/issues/42), [#47](https://github.com/SamVanheer/halflife-op4-updated/issues/47), [#53](https://github.com/SamVanheer/halflife-op4-updated/issues/53), [#54](https://github.com/SamVanheer/halflife-op4-updated/issues/54) and [#55](https://github.com/SamVanheer/halflife-op4-updated/issues/55)
+* Fixed CTF gamerules sending health value incorrectly [#36](https://github.com/twhl-community/halflife-op4-updated/issues/36)
+* Fixed CTF jump pack item not playing sound when long jumping [#37](https://github.com/twhl-community/halflife-op4-updated/issues/37)
+* Fixed CTF backpack not doubling clip size for most weapons [#38](https://github.com/twhl-community/halflife-op4-updated/issues/38)
+* Fixed CTF backpack sound still playing when not giving ammo [#39](https://github.com/twhl-community/halflife-op4-updated/issues/39)
+* Fixed FOV being set to 90 when first spawning in CTF gamemode [#40](https://github.com/twhl-community/halflife-op4-updated/issues/40)
+* Fixed incorrect strncpy [#45](https://github.com/twhl-community/halflife-op4-updated/issues/45)
+* Fixed player being invisible on first spawn in CTF gamemode [#48](https://github.com/twhl-community/halflife-op4-updated/issues/48)
+* Fixed player CTF team being reset [#50](https://github.com/twhl-community/halflife-op4-updated/issues/50)
+* Fixed Black Mesa team getting 10 points on flag pickup in CTF [#52](https://github.com/twhl-community/halflife-op4-updated/issues/52)
+* Fixed VGUI1 menus using wrong border color [#56](https://github.com/twhl-community/halflife-op4-updated/issues/56)
+* Fixed not being able to open team menu after closing it [#57](https://github.com/twhl-community/halflife-op4-updated/issues/57)
+* Fixed HUD scoreboard not working properly in CTF [#49](https://github.com/twhl-community/halflife-op4-updated/issues/49) and [#51](https://github.com/twhl-community/halflife-op4-updated/issues/51)
+* Fixed VGUI1 scoreboard not working properly [#43](https://github.com/twhl-community/halflife-op4-updated/issues/43), [#44](https://github.com/twhl-community/halflife-op4-updated/issues/44), [#42](https://github.com/twhl-community/halflife-op4-updated/issues/42), [#47](https://github.com/twhl-community/halflife-op4-updated/issues/47), [#53](https://github.com/twhl-community/halflife-op4-updated/issues/53), [#54](https://github.com/twhl-community/halflife-op4-updated/issues/54) and [#55](https://github.com/twhl-community/halflife-op4-updated/issues/55)
 
 ### UX improvements
 
-* Added missing titles.txt entries for observer mode [#41](https://github.com/SamVanheer/halflife-op4-updated/issues/41)
-* Added missing options to Create Server Game tab [#46](https://github.com/SamVanheer/halflife-op4-updated/issues/46)
+* Added missing titles.txt entries for observer mode [#41](https://github.com/twhl-community/halflife-op4-updated/issues/41)
+* Added missing options to Create Server Game tab [#46](https://github.com/twhl-community/halflife-op4-updated/issues/46)
 
 ## Changes in V1.0.0 Beta 003
 
-* Fixed incorrect header include guard in CRopeSample.h [#29](https://github.com/SamVanheer/halflife-op4-updated/issues/29)
-* Fixed uses of bool in rope code that should be BOOL [#30](https://github.com/SamVanheer/halflife-op4-updated/issues/30)
-* Fixed "suspicious" keyvalue not being saved (makes certain friendly NPCs hostile) [#31](https://github.com/SamVanheer/halflife-op4-updated/issues/31)
-* Fixed cleansuit scientist using wrong skill value for health [#32](https://github.com/SamVanheer/halflife-op4-updated/issues/32)
-* Fixed cleansuit scientist using wrong skill value to heal characters [#33](https://github.com/SamVanheer/halflife-op4-updated/issues/33)
+* Fixed incorrect header include guard in CRopeSample.h [#29](https://github.com/twhl-community/halflife-op4-updated/issues/29)
+* Fixed uses of bool in rope code that should be BOOL [#30](https://github.com/twhl-community/halflife-op4-updated/issues/30)
+* Fixed "suspicious" keyvalue not being saved (makes certain friendly NPCs hostile) [#31](https://github.com/twhl-community/halflife-op4-updated/issues/31)
+* Fixed cleansuit scientist using wrong skill value for health [#32](https://github.com/twhl-community/halflife-op4-updated/issues/32)
+* Fixed cleansuit scientist using wrong skill value to heal characters [#33](https://github.com/twhl-community/halflife-op4-updated/issues/33)
     * Note: cleansuit scientists in vanilla Opposing Force cannot heal characters
 * Added missing hud item color checks for when night vision is on
 * Added missing autoaim update to Displacer and Shock Rifle
@@ -166,11 +166,11 @@ All changes from Half-Life Updated up until V1.0.0 are included.
 * Disabled ally grunt player kicking behavior
 * Removed incorrect class scope specifiers
 * Applied refactoring work done for Half-Life Updated to this project as well
-* Fixed Knife not dealing correct damage amount [#35](https://github.com/SamVanheer/halflife-op4-updated/issues/35)
+* Fixed Knife not dealing correct damage amount [#35](https://github.com/twhl-community/halflife-op4-updated/issues/35)
 
 ## Changes in V1.0.0 Beta 002
 
-All changes from Half-Life Updated up until Beta 6 are included: https://github.com/SamVanheer/halflife-updated/wiki/Changelog#changes-in-v100-beta-006
+All changes from Half-Life Updated up until Beta 6 are included: https://github.com/twhl-community/halflife-updated/wiki/Changelog#changes-in-v100-beta-006
 
 * Updated Linux Makefiles to include all Opposing Force files
 
