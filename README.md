@@ -1,5 +1,3 @@
-# **Note**: The Unified SDK is still in development and not ready for use beyond pre-alpha testing and feedback. Do not attempt to use it to make a mod! **Take this warning seriously.**
-
 # Half-Life Unified SDK
 
 The [Half-Life Unified SDK](docs/README.md#developer-resources) is a project that provides an updated version of the Half-Life SDK, with full support for the expansion packs Opposing Force and Blue Shift as well as new features.
