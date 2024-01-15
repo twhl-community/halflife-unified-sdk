@@ -1,5 +1,11 @@
 # Half-Life: Opposing Force Updated changelog
 
+## Changes in V1.0.0
+
+All changes from Half-Life Updated up until V1.0.0 are included.
+
+* Applied bug fixing work done for Half-Life Updated to this project as well
+
 ## Changes in V1.0.0 Release Candidate 003
 
 ### Bug fixes
