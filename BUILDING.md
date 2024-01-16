@@ -21,7 +21,7 @@ The minimum requirements for this project are:
         * C++ profiling tools
         * Windows 10 SDK (select the latest version)
 
-Note: vcpkg uses the latest version of Visual Studio installed on your system to compile dependencies. Using an older version of Visual Studio to compile the SDK itself may cause compiler errors.
+> **Note**: vcpkg uses the latest version of Visual Studio installed on your system to compile dependencies. Using an older version of Visual Studio to compile the SDK itself may cause compiler errors.
 
 ### For Linux development
 
