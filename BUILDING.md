@@ -7,7 +7,7 @@ All instructions for Linux development are written to apply to Ubuntu. Substitut
 ## Minimum requirements
 
 The minimum requirements for this project are:
-* [CMake 3.23 or newer](https://cmake.org/download/)
+* [CMake 3.23 or newer](https://cmake.org/download/) (Note: avoid versions 3.28 and newer for now as it fails to download vcpkg dependencies. See [this](https://github.com/microsoft/vcpkg/issues/33904) issue for more information)
 
 ### For Windows development
 
