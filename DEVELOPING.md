@@ -1,5 +1,3 @@
-# **Note**: The Unified SDK is still in development and not ready for use beyond alpha testing and feedback.
-
 # Developing with the Unified SDK
 
 ## Prerequisite knowledge
