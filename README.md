@@ -7,6 +7,8 @@ The [Half-Life Unified SDK](docs/README.md#developer-resources) is a project tha
 The SDK provides a CMake-based project structure with support for Visual Studio 2019 and 2022 on Windows and GCC 11 on Linux, as well as many bug fixes and improvements.
 Opposing Force and Blue Shift features have been integrated with code refactored to reduce the amount of code duplication.
 
+**You will need a strong grasp of of C++, build systems like Visual Studio or Make (depending on the platform you're developing for), CMake, command line interfaces and version control systems (Git in particular) to make a mod with this SDK. If you do not have experience with these technologies then you will have a very hard time getting started.**
+
 The goal of the Unified SDK is to allow modders to make mods based on these games, while providing bug fixes that could be applied to the official games as well in addition to bug fixes that would be a breaking change. Check out the documentation linked below for a list of features.
 
 A mod installation is also provided to allow players to play these games with all bug fixes applied. It includes files that are required when making a mod based on this SDK.

@@ -2,7 +2,7 @@
 
 ## Prerequisite knowledge
 
-You will need a working knowledge of command line interfaces, CMake and C++ to make a mod with this SDK.
+You will need a strong grasp of of C++, build systems like Visual Studio or Make (depending on the platform you're developing for), CMake, command line interfaces and version control systems (Git in particular) to make a mod with this SDK.
 
 Various configuration files use JSON so an understanding of its syntax is recommended.
 
