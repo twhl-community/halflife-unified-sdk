@@ -56,10 +56,18 @@ struct ReplacementMap;
 
 enum USE_TYPE : int
 {
+	USE_UNSET = -1,
 	USE_OFF = 0,
 	USE_ON = 1,
 	USE_SET = 2,
-	USE_TOGGLE = 3
+	USE_TOGGLE = 3,
+	USE_KILL = 4,
+	USE_SAME = 5,
+	USE_OPPOSITE = 6,
+	USE_TOUCH = 7,
+	USE_UNKNOWN = 8,	// Just in case i want to add anything more in the future.
+	USE_SAVE = 8,
+	USE_RESTORE = 9
 };
 
 // people gib if their health is <= this at the time of death
@@ -617,6 +625,10 @@ public:
 	 *	@details The entity's angles affect this offset.
 	 */
 	Vector m_SoundOffset{};
+
+	USE_TYPE m_UseType = USE_UNSET; // If not a negative integer, this entity will trigger it's target with this USE_TYPE
+	USE_TYPE m_UseTypeLast = USE_TOGGLE; // Not for a direct usage, FireTargets function will modify this at any time
+	float m_UseValue; // If using USE_SET, this will be the float value to send, reserved for future usage on logic entities
 };
 
 inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent->edict()); }

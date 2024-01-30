@@ -109,6 +109,34 @@ void CBaseEntity::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, floa
 	}
 }
 
+namespace subs
+{
+	const char* UseType( USE_TYPE UseType )
+	{
+		switch( UseType )
+		{
+			case USE_OFF:		return "USE_OFF (0)";
+			case USE_ON:		return "USE_ON (1)";
+			case USE_SET:		return "USE_SET (2)";
+			case USE_TOGGLE:	return "USE_TOGGLE (3)";
+			case USE_KILL:		return "USE_KILL (4)";
+			case USE_SAME:		return "USE_SAME (5)";
+			case USE_OPPOSITE:	return "USE_OPPOSITE (6)";
+			case USE_TOUCH:		return "USE_TOUCH (7)";
+			case USE_SAVE:		return "USE_SAVE (8)";
+			case USE_RESTORE:	return "USE_RESTORE (9)";
+		}
+		return "USE_UNKNOWN";
+	}
+
+	const char* UseName( CBaseEntity* pEnt )
+	{
+		return ( pEnt->IsPlayer() ? STRING( pEnt->pev->netname ) :
+					!FStringNull( pEnt->pev->targetname ) ? STRING( pEnt->pev->targetname ) :
+						pEnt ? STRING( pEnt->pev->classname ) : "NULL" );
+	}
+}
+
 void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
 	if (!targetName)
@@ -116,14 +144,76 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 
 	CBaseEntity::IOLogger->debug("Firing: ({})", targetName);
 
+	const char* s2 = targetName;
+	const char* s3 = subs::UseName( pActivator );
+	const char* s4 = subs::UseName( pCaller );
+
 	CBaseEntity* target = nullptr;
 
 	while ((target = UTIL_FindEntityByTargetname(target, targetName, pActivator, pCaller)) != nullptr)
 	{
 		if (target && (target->pev->flags & FL_KILLME) == 0) // Don't use dying ents
 		{
-			CBaseEntity::IOLogger->debug("Found: {}, firing ({})", STRING(target->pev->classname), targetName);
-			target->Use(pActivator, pCaller, useType, value);
+			const char* s1 = STRING( target->pev->classname );
+
+			if( pCaller && pCaller->m_UseType > USE_UNSET && pCaller->m_UseType < USE_UNKNOWN )
+			{
+				target->m_UseTypeLast = pCaller->m_UseType; // Get the USE_TYPE that caller received.
+
+				/*
+				*	I want to do these two but right now i don't have the knowledge for it
+				*	This *should* be compatible in SP if the player does a save restore
+				*	it would be cool if USE_SAVE saves this entity in a separated file than the player's loads
+				*	and then USE_RESTORE reads that file, USE_RESTORE should do nothing if the entity isn't saved first and print a debug message
+				*/
+
+				if( pCaller->m_UseType == USE_TOUCH )
+				{
+					CBaseEntity::IOLogger->debug( "{} {}->Touch( {} )", s1, s2, s3 );
+					target->Touch( pActivator );
+				}
+				else if( pCaller->m_UseType == USE_KILL )
+				{
+					CBaseEntity::IOLogger->debug( "{} {}->UpdateOnRemove()", s1, s2 );
+					UTIL_Remove( target );
+				}
+				else
+				{
+					// Get the USE_TYPE that caller received.
+					if( pCaller->m_UseType == USE_SAME )
+					{
+						target->m_UseTypeLast = ( pCaller->m_UseTypeLast != USE_SAME && pCaller->m_UseTypeLast != USE_OPPOSITE ? pCaller->m_UseTypeLast : USE_TOGGLE );
+						CBaseEntity::IOLogger->debug( "{} {}->Use( {}, {}, {} > {}, 0 )", s1, s2, s3, s4, subs::UseType( pCaller->m_UseType ), subs::UseType( target->m_UseTypeLast ) );
+					}
+					// Switch between USE_OFF and USE_ON, else just send USE_TOGGLE
+					else if( pCaller->m_UseType == USE_OPPOSITE )
+					{
+						target->m_UseTypeLast = ( pCaller->m_UseTypeLast == USE_ON ? USE_OFF : pCaller->m_UseTypeLast == USE_OFF ? USE_ON : USE_TOGGLE );
+						CBaseEntity::IOLogger->debug( "{} {}->Use( {}, {}, {} > {}, 0 )", s1, s2, s3, s4, subs::UseType( pCaller->m_UseType ), subs::UseType( target->m_UseTypeLast ) );
+					}
+					// Send the set float value.
+					else if( pCaller->m_UseType == USE_SET )
+					{
+						if( pCaller->m_UseValue )
+						{
+							value = pCaller->m_UseValue;
+						}
+						// pass value to debug. -Mikk
+						CBaseEntity::IOLogger->debug( "{} {}->Use( {}, {}, {}, {} )", s1, s2, s3, s4, subs::UseType( target->m_UseTypeLast ), value );
+					}
+					else
+					{
+						CBaseEntity::IOLogger->debug( "{} {}->Use( {}, {}, {}, 0 )", s1, s2, s3, s4, subs::UseType( target->m_UseTypeLast ) );
+					}
+
+					target->Use( pActivator, pCaller, target->m_UseTypeLast, value );
+				}
+			}
+			else
+			{
+				CBaseEntity::IOLogger->debug( "{} {}->Use( {}, {}, {}, 0 )", s1, s2, s3, s4, subs::UseType( useType ) );
+				target->Use( pActivator, pCaller, useType, value );
+			}
 		}
 	}
 }
@@ -151,6 +241,9 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity* pActivator, USE_TYPE useType, float
 		pTemp->SetThink(&CBaseDelay::DelayThink);
 
 		// Save the useType
+		pTemp->m_UseType = m_UseType;
+		pTemp->m_UseTypeLast = m_UseTypeLast;
+		pTemp->m_UseValue = m_UseValue;
 		pTemp->pev->button = (int)useType;
 		pTemp->m_iszKillTarget = m_iszKillTarget;
 		pTemp->m_flDelay = 0; // prevent "recursion"

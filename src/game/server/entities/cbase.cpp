@@ -591,6 +591,16 @@ bool CBaseEntity::RequiredKeyValue(KeyValueData* pkvd)
 
 		return true;
 	}
+	else if( FStrEq( pkvd->szKeyName, "m_UseType" ) && atoi( pkvd->szValue ) > USE_UNSET && atoi( pkvd->szValue ) < USE_UNKNOWN )
+	{
+		m_UseType = static_cast<USE_TYPE>( atoi( pkvd->szValue ) );
+		return true;
+	}
+	else if( FStrEq( pkvd->szKeyName, "m_UseValue" ) )
+	{
+		m_UseValue = atof( pkvd->szValue );
+		return true;
+	}
 
 	return false;
 }
