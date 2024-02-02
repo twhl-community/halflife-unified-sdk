@@ -60,7 +60,7 @@ bool CLogicSetCVar::KeyValue(KeyValueData* pkvd)
 
 void CLogicSetCVar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 	{
 		return;
 	}
@@ -158,7 +158,7 @@ bool CLogicIsSkill::KeyValue(KeyValueData* pkvd)
 
 void CLogicIsSkill::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 	{
 		return;
 	}
@@ -217,7 +217,7 @@ void CLogicSetSkill::Spawn()
 
 void CLogicSetSkill::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 	{
 		return;
 	}
@@ -279,7 +279,7 @@ void CLogicSetSkillVar::Spawn()
 
 void CLogicSetSkillVar::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 	{
 		return;
 	}

@@ -482,7 +482,7 @@ void CTriggerSave::Spawn()
 
 void CTriggerSave::SaveTouch(CBaseEntity* pOther)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pOther))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pOther, m_UseLocked))
 		return;
 
 	// Only save on clients

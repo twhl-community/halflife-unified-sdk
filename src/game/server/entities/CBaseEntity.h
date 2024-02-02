@@ -54,6 +54,14 @@ struct ReplacementMap;
 // UNDONE: This will ignore transition volumes (trigger_transition), but not the PVS!!!
 #define FCAP_FORCE_TRANSITION 0x00000080 // ALWAYS goes across transitions
 
+enum USE_VALUE : int
+{
+	// Bit fields
+	USE_VALUE_LOCK_USE = 1,
+	USE_VALUE_LOCK_TOUCH = 2,
+	USE_VALUE_LOCK_MASTER = 4
+};
+
 enum USE_TYPE : int
 {
 	USE_UNSET = -1,
@@ -65,9 +73,9 @@ enum USE_TYPE : int
 	USE_SAME = 5,
 	USE_OPPOSITE = 6,
 	USE_TOUCH = 7,
-	USE_UNKNOWN = 8,	// Just in case i want to add anything more in the future.
-	USE_SAVE = 8,
-	USE_RESTORE = 9
+	USE_LOCK = 8,
+	USE_UNLOCK = 9,
+	USE_UNKNOWN = 10
 };
 
 // people gib if their health is <= this at the time of death
@@ -629,6 +637,7 @@ public:
 	USE_TYPE m_UseType = USE_UNSET; // If not a negative integer, this entity will trigger it's target with this USE_TYPE
 	USE_TYPE m_UseTypeLast = USE_TOGGLE; // Not for a direct usage, FireTargets function will modify this at any time
 	float m_UseValue; // If using USE_SET, this will be the float value to send, reserved for future usage on logic entities
+	int m_UseLocked; // Bit for USE_VALUE fields for USE_LOCK / USE_UNLOCK
 };
 
 inline bool FNullEnt(CBaseEntity* ent) { return (ent == nullptr) || FNullEnt(ent->edict()); }

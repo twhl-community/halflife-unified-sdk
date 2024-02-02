@@ -29,7 +29,7 @@ void CHUDIconTrigger::Spawn()
 
 void CHUDIconTrigger::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (m_flNextActiveTime <= gpGlobals->time && UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (m_flNextActiveTime <= gpGlobals->time && UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 	{
 		if (!FStringNull(pev->noise))
 			EmitSound(CHAN_VOICE, STRING(pev->noise), VOL_NORM, ATTN_NORM);

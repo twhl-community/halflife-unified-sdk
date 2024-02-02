@@ -218,7 +218,7 @@ void CTriggerRelay::Spawn()
 
 void CTriggerRelay::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 	{
 		return;
 	}

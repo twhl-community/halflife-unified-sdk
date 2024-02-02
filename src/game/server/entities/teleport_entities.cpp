@@ -87,7 +87,7 @@ void CTriggerTeleport::TeleportTouch(CBaseEntity* pOther)
 	if (!FBitSet(pOther->pev->flags, FL_CLIENT | FL_MONSTER))
 		return;
 
-	if (!UTIL_IsMasterTriggered(m_sMaster, pOther))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pOther, m_UseLocked))
 		return;
 
 	// No target to teleport to.
@@ -170,7 +170,7 @@ void CPointTeleport::TeleportUse(CBaseEntity* pActivator, CBaseEntity* pCaller, 
 		return;
 	}
 
-	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 		return;
 
 	// Figure out who to teleport

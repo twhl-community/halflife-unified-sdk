@@ -44,7 +44,7 @@ bool CRuleEntity::CanFireForActivator(CBaseEntity* pActivator)
 {
 	if (!FStringNull(m_sMaster))
 	{
-		if (UTIL_IsMasterTriggered(m_sMaster, pActivator))
+		if (UTIL_IsMasterTriggered(m_sMaster, pActivator, m_UseLocked))
 			return true;
 		else
 			return false;

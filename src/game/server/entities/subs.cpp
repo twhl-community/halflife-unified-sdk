@@ -123,8 +123,8 @@ namespace subs
 			case USE_SAME:		return "USE_SAME (5)";
 			case USE_OPPOSITE:	return "USE_OPPOSITE (6)";
 			case USE_TOUCH:		return "USE_TOUCH (7)";
-			case USE_SAVE:		return "USE_SAVE (8)";
-			case USE_RESTORE:	return "USE_RESTORE (9)";
+			case USE_LOCK:		return "USE_LOCK (8)";
+			case USE_UNLOCK:	return "USE_UNLOCK (9)";
 		}
 		return "USE_UNKNOWN";
 	}
@@ -134,6 +134,17 @@ namespace subs
 		return ( pEnt->IsPlayer() ? STRING( pEnt->pev->netname ) :
 					!FStringNull( pEnt->pev->targetname ) ? STRING( pEnt->pev->targetname ) :
 						pEnt ? STRING( pEnt->pev->classname ) : "NULL" );
+	}
+
+	const char* UseLock( USE_VALUE value )
+	{
+		switch( value )
+		{
+			case USE_VALUE_LOCK_MASTER:	return "/Any/ (Master)";
+			case USE_VALUE_LOCK_TOUCH:	return "Touch";
+			case USE_VALUE_LOCK_USE:	return "Use";
+		}
+		return "USE_VALUE_UNKNOWN";
 	}
 }
 
@@ -156,18 +167,32 @@ void FireTargets(const char* targetName, CBaseEntity* pActivator, CBaseEntity* p
 		{
 			const char* s1 = STRING( target->pev->classname );
 
+			if( FBitSet( target->m_UseLocked, USE_VALUE_LOCK_USE ) && pCaller->m_UseType != USE_UNLOCK )
+				continue; // Do this check in here or we won't be able to unlock :aaagaben:
+
 			if( pCaller && pCaller->m_UseType > USE_UNSET && pCaller->m_UseType < USE_UNKNOWN )
 			{
 				target->m_UseTypeLast = pCaller->m_UseType; // Get the USE_TYPE that caller received.
 
-				/*
-				*	I want to do these two but right now i don't have the knowledge for it
-				*	This *should* be compatible in SP if the player does a save restore
-				*	it would be cool if USE_SAVE saves this entity in a separated file than the player's loads
-				*	and then USE_RESTORE reads that file, USE_RESTORE should do nothing if the entity isn't saved first and print a debug message
-				*/
+				if( pCaller->m_UseType == USE_LOCK || pCaller->m_UseType == USE_UNLOCK )
+				{
+					USE_VALUE UseValue = static_cast<USE_VALUE>( (int)pCaller->m_UseValue );
 
-				if( pCaller->m_UseType == USE_TOUCH )
+					if( UseValue > 0 )
+					{
+						if( pCaller->m_UseType == USE_UNLOCK )
+						{
+							CBaseEntity::IOLogger->debug( "{} {}->{} Un-Locked. will receive calls now", s1, s2, subs::UseLock( UseValue ) );
+							ClearBits( target->m_UseLocked, UseValue );
+						}
+						else
+						{
+							CBaseEntity::IOLogger->debug( "{} {}->{} Locked. won't receive any calls until get {}", s1, s2, subs::UseLock( UseValue ), subs::UseType( USE_UNLOCK ) );
+							SetBits( target->m_UseLocked, UseValue );
+						}
+					}
+				}
+				else if( pCaller->m_UseType == USE_TOUCH && !FBitSet( target->m_UseLocked, USE_VALUE_LOCK_TOUCH ) )
 				{
 					CBaseEntity::IOLogger->debug( "{} {}->Touch( {} )", s1, s2, s3 );
 					target->Touch( pActivator );

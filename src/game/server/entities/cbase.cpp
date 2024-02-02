@@ -168,7 +168,7 @@ void DispatchTouch(edict_t* pentTouched, edict_t* pentOther)
 	CBaseEntity* pEntity = (CBaseEntity*)GET_PRIVATE(pentTouched);
 	CBaseEntity* pOther = (CBaseEntity*)GET_PRIVATE(pentOther);
 
-	if (pEntity && pOther && ((pEntity->pev->flags | pOther->pev->flags) & FL_KILLME) == 0)
+	if (pEntity && pOther && ((pEntity->pev->flags | pOther->pev->flags) & FL_KILLME) == 0 && !FBitSet( pEntity->m_UseLocked, USE_VALUE_LOCK_TOUCH ) )
 		pEntity->Touch(pOther);
 }
 
@@ -823,7 +823,9 @@ bool CBaseEntity::IsDormant()
 
 bool CBaseEntity::IsLockedByMaster()
 {
-	return !FStringNull(m_sMaster) && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator);
+	if( FBitSet( m_UseLocked, USE_VALUE_LOCK_MASTER ) )
+		return true;
+	return !FStringNull(m_sMaster) && !UTIL_IsMasterTriggered(m_sMaster, m_hActivator, m_UseLocked);
 }
 
 bool CBaseEntity::IsInWorld()

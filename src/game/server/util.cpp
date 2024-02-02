@@ -913,8 +913,12 @@ Vector UTIL_GetAimVector(edict_t* pent, float flSpeed)
 	return tmp;
 }
 
-bool UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity* pActivator)
+bool UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity* pActivator, int UseLock)
 {
+	// Hack for USE_LOCK at Master
+	if( FBitSet( UseLock, USE_VALUE_LOCK_MASTER ) )
+		return false;
+
 	if (!FStringNull(sMaster))
 	{
 		auto master = UTIL_FindEntityByTargetname(nullptr, STRING(sMaster));

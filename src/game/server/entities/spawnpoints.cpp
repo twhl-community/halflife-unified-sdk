@@ -21,7 +21,7 @@ LINK_ENTITY_TO_CLASS(info_player_deathmatch, CBaseDMStart);
 
 bool CBaseDMStart::IsTriggered(CBaseEntity* pEntity)
 {
-	return UTIL_IsMasterTriggered(m_sMaster, pEntity);
+	return UTIL_IsMasterTriggered(m_sMaster, pEntity, m_UseLocked);
 }
 
 /**
