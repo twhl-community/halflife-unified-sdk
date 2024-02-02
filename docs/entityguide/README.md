@@ -25,6 +25,7 @@ Consult TWHL's entity guide for more complete information about existing entitie
 * [player_hasweapon](entities/player_hasweapon.md)
 * [point_teleport](entities/point_teleport.md)
 * [trigger_changekeyvalue](entities/trigger_changekeyvalue.md)
+* [trigger_playerfreeze](entities/trigger_playerfreeze.md)
 
 ## Modified entities
 
