@@ -156,6 +156,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool KeyValue(KeyValueData* pkvd) override;
+	bool SharedKeyValue( const char* szKey ) override;
 	void Activate() override;
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
@@ -377,6 +378,13 @@ bool CBigMomma::KeyValue(KeyValueData* pkvd)
 	return CBaseMonster::KeyValue(pkvd);
 }
 
+bool CBigMomma :: SharedKeyValue( const char* szKey )
+{
+	return ( FStrEq( szKey, "model_replacement_filename" )
+		  || FStrEq( szKey, "sound_replacement_filename" )
+	);
+}
+
 void CBigMomma::SetYawSpeed()
 {
 	int ys;
@@ -562,6 +570,8 @@ void CBigMomma::LayHeadcrab()
 
 	MaybeSetChildClassification(pChild);
 
+	UTIL_InitializeKeyValues( pChild, m_SharedKey, m_SharedValue, m_SharedKeyValues );
+
 	DispatchSpawn(pChild->edict());
 
 	pChild->pev->spawnflags |= SF_MONSTER_FALL_TO_GROUND;
@@ -641,7 +651,7 @@ void CBigMomma::Precache()
 	PRECACHE_SOUND_ARRAY(pPainSounds);
 	PRECACHE_SOUND_ARRAY(pFootSounds);
 
-	UTIL_PrecacheOther(BIG_CHILDCLASS);
+	UTIL_PrecacheOther( BIG_CHILDCLASS, m_SharedKey, m_SharedValue, m_SharedKeyValues );
 
 	// TEMP: Squid
 	PrecacheModel("sprites/mommaspit.spr");				   // spit projectile.
@@ -1092,6 +1102,9 @@ void CBMortar::Animate()
 CBMortar* CBMortar::Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity)
 {
 	CBMortar* pSpit = g_EntityDictionary->Create<CBMortar>("bmortar");
+
+	UTIL_InitializeKeyValues( static_cast<CBaseEntity*>( pSpit ), owner->m_SharedKey, owner->m_SharedValue, owner->m_SharedKeyValues );
+
 	pSpit->Spawn();
 
 	pSpit->SetOrigin(vecStart);
