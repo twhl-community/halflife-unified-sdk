@@ -150,6 +150,13 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 	if (!pEntity)
 		return;
 
+	if( pEntity->SharedKeyValue( pkvd->szKeyName ) )
+	{
+		pEntity->m_SharedKey[pEntity->m_SharedKeyValues] = ALLOC_STRING(pkvd->szKeyName);
+		pEntity->m_SharedValue[pEntity->m_SharedKeyValues] = ALLOC_STRING(pkvd->szValue);
+		pEntity->m_SharedKeyValues++;
+	}
+
 	pkvd->fHandled = static_cast<int32>(pEntity->RequiredKeyValue(pkvd));
 
 	if (pkvd->fHandled != 0)
