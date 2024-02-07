@@ -38,6 +38,8 @@ class CTalkMonster;
 class CItemCTF;
 struct ReplacementMap;
 
+#define SHARED_KEYVALUE_MAX 32 // Max number of shared keyvalues to save
+
 #define MAX_PATH_SIZE 10 // max number of nodes available for a path.
 
 // These are caps bits to indicate what an object's capabilities (currently used for save/restore and level transitions)
@@ -207,8 +209,8 @@ public:
 	 */
 	bool RequiredKeyValue(KeyValueData* pkvd);
 
-	string_t m_SharedKey[32];
-	string_t m_SharedValue[32];
+	string_t m_SharedKey[SHARED_KEYVALUE_MAX];
+	string_t m_SharedValue[SHARED_KEYVALUE_MAX];
 	int m_SharedKeyValues;
 	// Return true to store the key-value
 	virtual bool SharedKeyValue( const char* szKey ){ return false; };

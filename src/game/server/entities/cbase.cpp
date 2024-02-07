@@ -150,7 +150,7 @@ void DispatchKeyValue(edict_t* pentKeyvalue, KeyValueData* pkvd)
 	if (!pEntity)
 		return;
 
-	if( pEntity->SharedKeyValue( pkvd->szKeyName ) )
+	if( pEntity->m_SharedKeyValues <= SHARED_KEYVALUE_MAX && pEntity->SharedKeyValue( pkvd->szKeyName ) )
 	{
 		pEntity->m_SharedKey[pEntity->m_SharedKeyValues] = ALLOC_STRING(pkvd->szKeyName);
 		pEntity->m_SharedValue[pEntity->m_SharedKeyValues] = ALLOC_STRING(pkvd->szValue);
