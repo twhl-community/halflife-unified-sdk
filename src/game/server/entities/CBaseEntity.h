@@ -207,6 +207,12 @@ public:
 	 */
 	bool RequiredKeyValue(KeyValueData* pkvd);
 
+	string_t m_SharedKey[32];
+	string_t m_SharedValue[32];
+	int m_SharedKeyValues;
+	// Return true to store the key-value
+	virtual bool SharedKeyValue( const char* szKey ){ return false; };
+
 	void LoadReplacementFiles();
 
 	/**
