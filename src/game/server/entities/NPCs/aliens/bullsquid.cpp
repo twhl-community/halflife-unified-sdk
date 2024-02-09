@@ -93,6 +93,9 @@ void CSquidSpit::Animate()
 void CSquidSpit::Shoot(CBaseEntity* owner, Vector vecStart, Vector vecVelocity)
 {
 	CSquidSpit* pSpit = g_EntityDictionary->Create<CSquidSpit>("squidspit");
+
+	UTIL_InitializeKeyValues( static_cast<CBaseEntity*>( pSpit ), owner->m_SharedKey, owner->m_SharedValue, owner->m_SharedKeyValues );
+
 	pSpit->Spawn();
 
 	pSpit->SetOrigin(vecStart);
@@ -176,6 +179,7 @@ public:
 	void Precache() override;
 	void SetYawSpeed() override;
 	int ISoundMask() override;
+	bool SharedKeyValue( const char* szKey ) override;
 	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
 	void IdleSound() override;
 	void PainSound() override;
@@ -397,6 +401,13 @@ int CBullsquid::ISoundMask()
 		   bits_SOUND_MEAT |
 		   bits_SOUND_GARBAGE |
 		   bits_SOUND_PLAYER;
+}
+
+bool CBullsquid :: SharedKeyValue( const char* szKey )
+{
+	return ( FStrEq( szKey, "model_replacement_filename" )
+		  || FStrEq( szKey, "sound_replacement_filename" )
+	);
 }
 
 #define SQUID_ATTN_IDLE (float)1.5
