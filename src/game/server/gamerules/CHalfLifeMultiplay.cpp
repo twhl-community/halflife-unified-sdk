@@ -576,7 +576,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer* pVictim, CBaseEntity* pKiller,
 	else
 	{
 		// killed by the world
-		Logger->trace("{} committed suicide with committed suicide with \"{}\" (world)", PlayerLogInfo{*pVictim}, killer_weapon_name);
+		Logger->trace("{} committed suicide with \"{}\" (world)", PlayerLogInfo{*pVictim}, killer_weapon_name);
 	}
 
 	MESSAGE_BEGIN(MSG_SPEC, SVC_DIRECTOR);
