@@ -2,18 +2,29 @@
 
 ## Prerequisite knowledge
 
-You will need a strong grasp of of C++, build systems like Visual Studio or Make (depending on the platform you're developing for), CMake, command line interfaces and version control systems (Git in particular) to make a mod with this SDK.
+You will need a strong grasp of of C++, build systems like Visual Studio or Make (depending on the platform you're developing for), CMake, command line interfaces, version control systems (Git in particular) and package managers (vcpkg in particular).
 
 Various configuration files use JSON so an understanding of its syntax is recommended.
 
 Tools and scripts are written in C# so you will need to have an understanding of its syntax to modify them.
 
+This project uses vcpkg in manifest mode to acquire most third party dependencies, with the exception of dependencies shipped with the game itself (vgui1 and SDL2). You should use vcpkg to add any dependencies you need. If a dependency is not provided by vcpkg's own registry you can add it to the local filesystem registry in `vcpkg-configuration.json`.
+
+Note that the OpenAL library is a custom build that renames the dynamic library name to avoid conflicting with the engine's use of OpenAL on Linux. If you update OpenAL you must also update the patch used to rename the library.
+
+Also note that Github Actions performs a shallow clone of the vcpkg repository. When updating vcpkg make sure all dependencies are using the latest version, otherwise Github Actions will fail to locate the package information.
+
+You can use the local registry to reference an older version by copying the older version package definition from the vcpkg registry to the local registry, but do make note of transitive dependencies to avoid using multiple conflicting versions of the same package (e.g. `spdlog` references `fmtlib` which this project also directly references).
+
+Consult the vcpkg documentation before changing anything to ensure you understand how it works and how your changes will affect the project.
+ 
 Resources to learn these things:
 * [Command line](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
 * [CMake](https://cliutils.gitlab.io/modern-cmake/)
 * [C++](https://www.learncpp.com/)
 * [C#](https://learn.microsoft.com/en-us/dotnet/csharp/)
 * [JSON](https://www.w3schools.com/js/js_json_syntax.asp)
+* [vcpkg](https://vcpkg.io/en/getting-started)
 
 > **Make sure to learn these things first so you understand how this SDK works!**
 

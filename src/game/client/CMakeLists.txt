@@ -1,32 +1,36 @@
 include(../shared/game_shared.cmake)
 
-if (UNIX)
-	# Copy libraries provided by the game to the build directory so we can point the compiler and linker to the files.
-	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
-	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
-endif()
-
 find_package(OpenGL REQUIRED)
 
+# Begin special case stuff for dynamic libraries included with the game
+# vgui and SDL2 are dynamic libraries that are load-time linked by the client
+# For Windows this requires us to link with the import libraries
+# For Linux this requires the .so files to be located next to the client
+# so that the path embedded in the resulting client.so is a filename without any path component to it,
+# so that when the library is loaded its path is resolved relative to the executable (hl_linux)
+# The actual .so files are next to hl_linux so that's where the paths must point to.
+# This is how it was done in the original Linux makefiles as well
+# DO NOT DO THIS FOR ANY OTHER LIBRARIES YOU USE! If you must ship a dynamic library you should use the same approach used for OpenAL.
+
 add_library(vgui SHARED IMPORTED)
+add_library(SDL2 SHARED IMPORTED)
+
+target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/include)
+target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/include)
 
 if (WIN32)
 	set_target_properties(vgui PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/lib/win32_vc6/vgui.lib")
-else()
-	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
-endif()
-
-target_include_directories(vgui INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../utils/vgui/include)
-
-add_library(SDL2 SHARED IMPORTED)
-
-if (WIN32)
 	set_target_properties(SDL2 PROPERTIES IMPORTED_IMPLIB "${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/lib/SDL2.lib")
 else()
+	# Copy libraries provided by the game to the build directory so we can point the compiler and linker to the files.
+	configure_file(../../../utils/vgui/lib/linux/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX} COPYONLY)
+	configure_file(../../../external/SDL2/lib/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 ${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0 COPYONLY)
+	
+	set_target_properties(vgui PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/vgui${CMAKE_SHARED_LIBRARY_SUFFIX}")
 	set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/libSDL2-2.0${CMAKE_SHARED_LIBRARY_SUFFIX}.0")
 endif()
 
-target_include_directories(SDL2 INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/SDL2/include)
+# End special case stuff for dynamic libraries included with the game
 
 add_library(client SHARED)
 
