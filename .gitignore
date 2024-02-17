@@ -1,2 +1,10 @@
 # Allow Half-Life-specific files that would otherwise be ignored
 !utils/procinfo/lib/win32_vc6/procinfo.lib
+
+# Idk, weird crap
+build/*
+.vs/*
+.vscode/*
+src/.vscode/*
+out/*
+src/fgd/halflife-unified.fgd
