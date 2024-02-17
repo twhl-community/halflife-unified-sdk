@@ -607,10 +607,12 @@ public:
 	string_t m_ModelReplacementFileName;
 	string_t m_SoundReplacementFileName;
 	string_t m_SentenceReplacementFileName;
+	string_t m_ConfigReplacementFileName;
 
 	const ReplacementMap* m_ModelReplacement{};
 	const ReplacementMap* m_SoundReplacement{};
 	const ReplacementMap* m_SentenceReplacement{};
+	const ReplacementMap* m_ConfigReplacement{};
 
 	Vector m_CustomHullMin{vec3_origin};
 	Vector m_CustomHullMax{vec3_origin};
