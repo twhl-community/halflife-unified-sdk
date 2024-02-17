@@ -240,6 +240,8 @@ CShockBeam* CShockBeam::CreateShockBeam(const Vector& vecOrigin, const Vector& v
 {
 	auto pBeam = g_EntityDictionary->Create<CShockBeam>("shock_beam");
 
+	UTIL_InitializeKeyValues( static_cast<CBaseEntity*>( pBeam ), pOwner->m_SharedKey, pOwner->m_SharedValue, pOwner->m_SharedKeyValues );
+
 	pBeam->pev->angles = vecAngles;
 	pBeam->pev->angles.x = -pBeam->pev->angles.x;
 

@@ -3129,6 +3129,7 @@ CBaseEntity* CBaseMonster::DropItem(const char* pszItemName, const Vector& vecPo
 
 	if (entity)
 	{
+		UTIL_InitializeKeyValues( entity, m_SharedKey, m_SharedValue, m_SharedKeyValues );
 		entity->SetOwner(this);
 		entity->pev->origin = vecPos;
 		entity->pev->angles = vecAng;
