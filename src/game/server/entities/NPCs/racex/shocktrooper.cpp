@@ -92,6 +92,7 @@ class CShockTrooper : public CSquadMonster
 	DECLARE_CUSTOM_SCHEDULES();
 
 public:
+	bool SharedKeyValue( const char* szKey ) override;
 	void OnCreate() override;
 	void Spawn() override;
 	void Precache() override;
@@ -263,6 +264,13 @@ enum
 	ShockTrooper_SENT_CHARGE,
 	ShockTrooper_SENT_TAUNT,
 } ShockTrooper_SENTENCE_TYPES;
+
+bool CShockTrooper :: SharedKeyValue( const char* szKey )
+{
+	return ( FStrEq( szKey, "model_replacement_filename" )
+		  || FStrEq( szKey, "sound_replacement_filename" )
+	);
+}
 
 void CShockTrooper::OnCreate()
 {
@@ -915,7 +923,7 @@ void CShockTrooper::Precache()
 	else
 		m_voicePitch = 100;
 
-	UTIL_PrecacheOther("monster_shockroach");
+	UTIL_PrecacheOther( "monster_shockroach", m_SharedKey, m_SharedValue, m_SharedKeyValues );
 
 	iShockTrooperMuzzleFlash = PrecacheModel("sprites/muzzle_shock.spr");
 }
@@ -2118,6 +2126,7 @@ class CShockTrooperRepel : public CBaseMonster
 	DECLARE_DATAMAP();
 
 public:
+	bool SharedKeyValue( const char* szKey ) override;
 	void Spawn() override;
 	void Precache() override;
 	void RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
@@ -2130,6 +2139,11 @@ DEFINE_FUNCTION(RepelUse),
 
 LINK_ENTITY_TO_CLASS(monster_shocktrooper_repel, CShockTrooperRepel);
 
+bool CShockTrooperRepel :: SharedKeyValue( const char* szKey )
+{
+	return true; // Inherits everything
+}
+
 void CShockTrooperRepel::Spawn()
 {
 	Precache();
@@ -2140,7 +2154,7 @@ void CShockTrooperRepel::Spawn()
 
 void CShockTrooperRepel::Precache()
 {
-	UTIL_PrecacheOther("monster_shocktrooper");
+	UTIL_PrecacheOther( "monster_shocktrooper", m_SharedKey, m_SharedValue, m_SharedKeyValues );
 	m_iSpriteTexture = PrecacheModel("sprites/rope.spr");
 }
 
@@ -2153,7 +2167,9 @@ void CShockTrooperRepel::RepelUse(CBaseEntity* pActivator, CBaseEntity* pCaller,
 		return nullptr;
 	*/
 
-	CBaseEntity* pEntity = Create("monster_shocktrooper", pev->origin, pev->angles);
+	CBaseEntity* pEntity = Create("monster_shocktrooper", pev->origin, pev->angles, this, false );
+	UTIL_InitializeKeyValues( pEntity, m_SharedKey, m_SharedValue, m_SharedKeyValues );
+	DispatchSpawn( pEntity->edict() );
 	CBaseMonster* pGrunt = pEntity->MyMonsterPointer();
 	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
