@@ -201,7 +201,7 @@ Available in map configuration files.
 
 #### See Also
 
-* [Hud replacement system](hud-replacement-system.md)
+* [Hud sprite system](hud-sprite-system.md)
 
 ### HudColor
 
