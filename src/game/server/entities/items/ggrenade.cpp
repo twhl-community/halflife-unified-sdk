@@ -262,7 +262,10 @@ void CGrenade::BounceTouch(CBaseEntity* pOther)
 	if (pev->framerate > 1.0)
 		pev->framerate = 1;
 	else if (pev->framerate < 0.5)
+	{
 		pev->framerate = 0;
+		pev->frame = 0;
+	}
 }
 
 void CGrenade::SlideTouch(CBaseEntity* pOther)

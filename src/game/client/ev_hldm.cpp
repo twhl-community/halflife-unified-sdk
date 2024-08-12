@@ -68,6 +68,12 @@ static int g_tracerCount[MAX_PLAYERS];
 void V_PunchAxis(int axis, float punch);
 
 extern cvar_t* cl_lw;
+extern cvar_t* r_decals;
+
+static inline bool EV_HLDM_IsBSPModel(physent_t* pe)
+{
+	return pe != nullptr && (pe->solid == SOLID_BSP || pe->movetype == MOVETYPE_PUSHSTEP);
+}
 
 // play a strike sound based on the texture that was hit by the attack traceline.  VecSrc/VecEnd are the
 // original traceline endpoints used by the attacker, iBulletType is the type of bullet that hit the texture.
@@ -213,6 +219,9 @@ char* EV_HLDM_DamageDecal(physent_t* pe)
 	static char decalname[32];
 	int idx;
 
+	if (pe->rendermode == kRenderTransAlpha)
+		return nullptr;
+
 	if (pe->classnumber == 1)
 	{
 		idx = gEngfuncs.pfnRandomLong(0, 2);
@@ -233,7 +242,6 @@ char* EV_HLDM_DamageDecal(physent_t* pe)
 void EV_HLDM_GunshotDecalTrace(pmtrace_t* pTrace, char* decalName)
 {
 	int iRand;
-	physent_t* pe;
 
 	gEngfuncs.pEfxAPI->R_BulletImpactParticles(pTrace->endpos);
 
@@ -260,17 +268,12 @@ void EV_HLDM_GunshotDecalTrace(pmtrace_t* pTrace, char* decalName)
 		}
 	}
 
-	pe = gEngfuncs.pEventAPI->EV_GetPhysent(pTrace->ent);
-
 	// Only decal brush models such as the world etc.
-	if (decalName && '\0' != decalName[0] && pe && (pe->solid == SOLID_BSP || pe->movetype == MOVETYPE_PUSHSTEP))
+	if (decalName && '\0' != decalName[0] && r_decals->value > 0)
 	{
-		if (0 != r_decals->value)
-		{
-			gEngfuncs.pEfxAPI->R_DecalShoot(
-				gEngfuncs.pEfxAPI->Draw_DecalIndex(gEngfuncs.pEfxAPI->Draw_DecalIndexFromName(decalName)),
-				gEngfuncs.pEventAPI->EV_IndexFromTrace(pTrace), 0, pTrace->endpos, 0);
-		}
+		gEngfuncs.pEfxAPI->R_DecalShoot(
+			gEngfuncs.pEfxAPI->Draw_DecalIndex(gEngfuncs.pEfxAPI->Draw_DecalIndexFromName(decalName)),
+			gEngfuncs.pEventAPI->EV_IndexFromTrace(pTrace), 0, pTrace->endpos, 0);
 	}
 }
 
@@ -280,7 +283,7 @@ void EV_HLDM_DecalGunshot(pmtrace_t* pTrace, int iBulletType)
 
 	pe = gEngfuncs.pEventAPI->EV_GetPhysent(pTrace->ent);
 
-	if (pe && pe->solid == SOLID_BSP)
+	if (EV_HLDM_IsBSPModel(pe))
 	{
 		switch (iBulletType)
 		{
@@ -958,7 +961,7 @@ void EV_FireGauss(event_args_t* args)
 		if (pEntity == nullptr)
 			break;
 
-		if (pEntity->solid == SOLID_BSP)
+		if (EV_HLDM_IsBSPModel(pEntity))
 		{
 			float n;
 
@@ -1206,7 +1209,7 @@ void EV_FireCrossbow2(event_args_t* args)
 		physent_t* pe = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
 
 		// Not the world, let's assume we hit something organic ( dog, cat, uncle joe, etc ).
-		if (pe->solid != SOLID_BSP)
+		if (!EV_HLDM_IsBSPModel(pe))
 		{
 			switch (gEngfuncs.pfnRandomLong(0, 1))
 			{

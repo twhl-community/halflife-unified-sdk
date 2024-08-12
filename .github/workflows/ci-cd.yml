@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           
@@ -46,7 +46,7 @@ jobs:
         run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Linux-x86
           path: ${{env.GAME_NAME}}
@@ -56,7 +56,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       
@@ -81,7 +81,7 @@ jobs:
         run: cmake --install ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
         
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Win32
           path: ${{env.GAME_NAME}}

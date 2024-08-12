@@ -765,6 +765,8 @@ public:
 	// breakables use an overridden takedamage
 	bool TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float flDamage, int bitsDamageType) override;
 
+	int DamageDecal(int bitsDamageType) override;
+
 	static const char* m_soundNames[3];
 	int m_lastSound; // no need to save/restore, just keeps the same sound from playing twice in a row
 	float m_maxSpeed;
@@ -957,4 +959,12 @@ bool CPushable::TakeDamage(CBaseEntity* inflictor, CBaseEntity* attacker, float 
 		return CBreakable::TakeDamage(inflictor, attacker, flDamage, bitsDamageType);
 
 	return true;
+}
+
+int CPushable::DamageDecal(int bitsDamageType)
+{
+	if (FBitSet(pev->spawnflags, SF_PUSH_BREAKABLE))
+		return CBreakable::DamageDecal(bitsDamageType);
+
+	return CBaseEntity::DamageDecal(bitsDamageType);
 }
