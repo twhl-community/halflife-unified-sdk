@@ -157,6 +157,8 @@ void CApache::Killed(CBaseEntity* attacker, int iGib)
 	{
 		m_flNextRocket = gpGlobals->time + 15.0;
 	}
+
+	MaybeNotifyOwnerOfDeath();
 }
 
 void CApache::DyingThink()
