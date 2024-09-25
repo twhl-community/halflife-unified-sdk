@@ -355,6 +355,8 @@ void CBarnacle::Killed(CBaseEntity* attacker, int iGib)
 
 	pev->nextthink = gpGlobals->time + 0.1;
 	SetThink(&CBarnacle::WaitTillDead);
+
+	MaybeNotifyOwnerOfDeath();
 }
 
 void CBarnacle::WaitTillDead()

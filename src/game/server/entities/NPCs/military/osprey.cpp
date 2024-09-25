@@ -481,6 +481,8 @@ void COsprey::Killed(CBaseEntity* attacker, int iGib)
 	pev->deadflag = DEAD_DYING;
 
 	m_startTime = gpGlobals->time + 4.0;
+
+	MaybeNotifyOwnerOfDeath();
 }
 
 void COsprey::CrashTouch(CBaseEntity* pOther)
